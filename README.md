@@ -41,3 +41,12 @@ npm run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 # VueDeeplJson
+
+
+## Setup
+
+Start by create a .env
+
+Go on https://www.deepl.com/docs-api and create an account to get an API key
+
+Check .env.example to add your API key 
