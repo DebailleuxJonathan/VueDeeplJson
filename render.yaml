@@ -3,5 +3,5 @@ services:
     name: nuxt-js
     env: node
     plan: starter
-    buildCommand: yarn; yarn build
-    startCommand: yarn start
+    buildCommand: npm run build
+    startCommand: npm run dev
