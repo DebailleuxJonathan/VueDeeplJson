@@ -68,13 +68,13 @@ const copy = (text: string) => {
       />
       <div class="absolute top-0 right-0 flex flex-col gap-2 p-2">
         <div class="flex gap-2 w-full justify-end items-center">
-          <p v-if="isCopy" class="text-green-500">Texte copié !</p>
+          <p v-if="isCopy" class="text-amber-500">Texte copié !</p>
           <button class="w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow" @click="copy(value)">
             <ClipboardIcon class="w-5 h-5"/>
           </button>
         </div>
         <div class="flex gap-2 w-full justify-end items-center">
-          <p v-if="isDownload" class="text-green-500">Texte téléchargé !</p>
+          <p v-if="isDownload" class="text-blue-500">Texte téléchargé !</p>
           <button
               class="w-max p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md cursor-pointer shadow"
               @click="download"
