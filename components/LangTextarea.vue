@@ -47,17 +47,19 @@ const copy = (text: string) => {
 <template>
   <div class="flex flex-col gap-3 h-full w-full">
     <LangDropdown :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
-    <div class="w-full flex gap-2 items-center">
-      <div class="w-max p-2 border border-gray-200 rounded-md cursor-pointer" @click="copy(value)">
-        <ClipboardIcon class="w-5 h-5"/>
+    <div class="relative h-full">
+      <textarea
+          :placeholder="props.placeholder"
+          v-model="value"
+          type="json"
+          class="w-full h-full border border-gray-200 rounded-md p-1"
+      />
+      <div class="absolute top-0 right-0 m-auto flex gap-2 items-center p-2">
+        <p v-if="isCopy" class="text-green-500">Texte copié !</p>
+        <div class="w-max p-2 border border-gray-200 rounded-md cursor-pointer" @click="copy(value)">
+          <ClipboardIcon class="w-5 h-5"/>
+        </div>
       </div>
-      <p v-if="isCopy" class="text-green-500">Texte copié !</p>
     </div>
-    <textarea
-        :placeholder="props.placeholder"
-        v-model="value"
-        type="json"
-        class="w-full h-96 border border-gray-200 rounded-md p-1"
-    />
   </div>
 </template>
