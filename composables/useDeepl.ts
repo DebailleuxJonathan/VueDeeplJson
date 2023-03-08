@@ -3,6 +3,8 @@ import {ref} from 'vue'
 const useDeepl = () => {
     const translatedDatas = ref()
     const addTranslate = async (text: string, sourceLang: string, targetLang: string) => {
+        console.log(text)
+        console.log(targetLang)
         try {
             const test: any = await $fetch('/api/translate', {
                 method: "post", body: {
@@ -11,6 +13,7 @@ const useDeepl = () => {
                     targetLang: targetLang
                 }
             })
+            console.log(test)
             translatedDatas.value = test
             return test
         } catch (e) {

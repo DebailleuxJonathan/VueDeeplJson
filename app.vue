@@ -48,9 +48,9 @@ const updateTargetLang = (lang: Lang, index: number) => {
 
 const multipleTranslate = async () => {
   try {
-    const newJson = JSON.parse(jsonText.value)
-    isDisabled.value = true
     for (const element of translatedLanguages.value) {
+      const newJson = JSON.parse(jsonText.value)
+      isDisabled.value = true
       element.isLoaded = false
       await translate(newJson, element.lang)
       element.text = JSON.stringify(newJson, null, 2);
@@ -146,49 +146,70 @@ const upload = (event: any) => {
 <template>
   <div class="p-5">
     <h1 class="text-2xl font-semibold">Traduction JSON Deepl</h1>
-    <div class="mt-8 flex gap-3 h-96">
-      <LangTextarea
-          class="w-2/3"
-          v-model="jsonText"
-          @update:lang="updateSourceLang"
-          :language="sourceLang"
-          title="Langue de base"
-          :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
-          @input="errors.jsonFormat = ''"
-      />
-      <div class="flex flex-col justify-end gap-3">
-        <button
-            :disabled="isDisabled"
-            class="border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 hover:bg-gray-50 w-2/3"
-            :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
-        >
-          Traduire
-        </button>
-        <button
-            :disabled="isDisabled"
-            @click="addTranslatedText"
-            v-if="Object.keys(Lang).length - 1 > translatedLanguages.length"
-            class="border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 gap-3 hover:bg-gray-50 w-2/3"
-            :class="isDisabled && 'bg-gray-50 cursor-wait'"
-        >
-          Ajouter un textarea
-        </button>
-        <p>Ajouter un fichier JSON</p>
-        <input ref="file" @change="upload($event)" type="file">
+    <div class="flex flex-col md:flex-row gap-4 mt-8">
+      <div class="w-full">
+        <div class="flex gap-3 h-96">
+          <LangTextarea
+              v-model="jsonText"
+              @update:lang="updateSourceLang"
+              :language="sourceLang"
+              title="Langue de base"
+              :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
+              @input="errors.jsonFormat = ''"
+          />
+        </div>
+        <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
+        <div class="flex flex-col gap-3 mt-3">
+          <div class="flex gap-3">
+            <button
+                :disabled="isDisabled"
+                class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50"
+                :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
+            >
+              Traduire
+            </button>
+            <button
+                :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                @click="addTranslatedText"
+                class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50"
+                :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
+            >
+              Ajouter un textarea
+            </button>
+          </div>
+          <div class="relative h-56 bg-gray-50 border border-gray-300 rounded-md">
+            <input
+                class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
+                ref="file"
+                accept='application/json'
+                @change="upload($event)"
+                type="file"
+            >
+            <div class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
+              <p class="z-20">Sélectionner ou glisser un fichier</p>
+              <span class="z-20 text-xs">au format JSON</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="w-full">
+        <div class="grid grid-rows-2 grid-cols-1 gap-3 w-full">
+          <div class="h-96" v-for="(textarea, index) in translatedLanguages">
+            <LangTextarea
+                v-model="textarea.text"
+                @update:lang="updateTargetLang($event, index)"
+                @focus="$event.target.select()"
+                :language="textarea.lang"
+                :is-loaded="textarea.isLoaded"
+                title="Traduction"
+            />
+          </div>
+        </div>
+
       </div>
     </div>
-    <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
-    <div class="grid grid-cols-2 auto-rows-auto gap-3 w-full mt-5">
-      <div class="h-96" v-for="(textarea, index) in translatedLanguages">
-        <LangTextarea
-            v-model="textarea.text"
-            @update:lang="updateTargetLang($event, index)"
-            @focus="$event.target.select()"
-            :language="textarea.lang"
-            :is-loaded="textarea.isLoaded"
-            title="Traduction"
-        />
-      </div>
-    </div>
+
+
   </div>
 </template>
