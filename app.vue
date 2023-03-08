@@ -5,6 +5,7 @@ import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
 
 const {addTranslate} = useDeepl()
+
 const jsonText = ref('')
 
 const sourceLang = ref(Lang.FR)
@@ -122,7 +123,25 @@ const placeholder = {
   ]
 }
 
+const upload = (event: any) => {
+  const file = event.target.files[0]
+  if (!file) {
+    return
+  }
 
+  if (['application/json'].includes(file.type)) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (reader.result) {
+        jsonText.value = reader.result.toString()
+      }
+    }
+    reader.readAsText(file)
+  } else {
+    alert('Mauvais format de fichier')
+  }
+
+}
 </script>
 <template>
   <div class="p-5">
@@ -140,7 +159,7 @@ const placeholder = {
       <div class="flex flex-col justify-end gap-3">
         <button
             :disabled="isDisabled"
-            class="border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 hover:bg-gray-50"
+            class="border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 hover:bg-gray-50 w-2/3"
             :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
         >
           Traduire
@@ -149,11 +168,13 @@ const placeholder = {
             :disabled="isDisabled"
             @click="addTranslatedText"
             v-if="Object.keys(Lang).length - 1 > translatedLanguages.length"
-            class="flex border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 gap-3 hover:bg-gray-50"
+            class="border border-gray-200 shadow-sm rounded-lg cursor-pointer p-2 gap-3 hover:bg-gray-50 w-2/3"
             :class="isDisabled && 'bg-gray-50 cursor-wait'"
         >
           Ajouter un textarea
         </button>
+        <p>Ajouter un fichier JSON</p>
+        <input ref="file" @change="upload($event)" type="file">
       </div>
     </div>
     <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
@@ -162,6 +183,7 @@ const placeholder = {
         <LangTextarea
             v-model="textarea.text"
             @update:lang="updateTargetLang($event, index)"
+            @focus="$event.target.select()"
             :language="textarea.lang"
             :is-loaded="textarea.isLoaded"
             title="Traduction"
