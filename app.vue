@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import useDeepl from "~/composables/useDeepl";
+import useDownloadFile from "~/composables/downloadFile";
 import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
+import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 
 const {addTranslate} = useDeepl()
+const {downloadFile} = useDownloadFile()
 
 const jsonText = ref('')
 
@@ -123,6 +126,36 @@ const placeholder = {
   ]
 }
 
+const isTextareasEmpty = computed(() => {
+  for (let i = 0; i < translatedLanguages.value.length; i++) {
+    if (translatedLanguages.value[i].text !== '') {
+      return false
+    }
+  }
+  return true
+})
+
+const totalJsonFile = computed(() => {
+  const totalJson = []
+  try {
+    if (jsonText.value) {
+      totalJson.push({
+        lang: sourceLang.value,
+        ...JSON.parse(jsonText.value)
+      })
+      for (const el in translatedLanguages.value) {
+        totalJson.push({
+          lang: translatedLanguages.value[el].lang,
+          ...JSON.parse(translatedLanguages.value[el].text)
+        })
+      }
+      return totalJson
+    }
+  } catch (e) {
+    return "Problème dans l'un des formats JSON"
+  }
+})
+
 const upload = (event: any) => {
   const file = event.target.files[0]
   if (!file) {
@@ -140,7 +173,6 @@ const upload = (event: any) => {
   } else {
     alert('Mauvais format de fichier')
   }
-
 }
 </script>
 <template>
@@ -160,22 +192,35 @@ const upload = (event: any) => {
         </div>
         <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
         <div class="flex flex-col gap-3 mt-3">
-          <div class="flex gap-3">
-            <button
-                :disabled="isDisabled"
-                class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50"
-                :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
-            >
-              Traduire
-            </button>
-            <button
-                :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
-                @click="addTranslatedText"
-                class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50"
-                :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
-            >
-              Ajouter un textarea
-            </button>
+          <div class="flex flex-col lg:flex-row gap-3 justify-between">
+            <div class="flex gap-3">
+              <button
+                  :disabled="isDisabled"
+                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
+              >
+                Traduire
+              </button>
+              <button
+                  :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                  @click="addTranslatedText"
+                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
+              >
+                Ajouter un textarea
+              </button>
+            </div>
+            <div>
+              <button
+                  :disabled="isTextareasEmpty"
+                  @click="downloadFile(totalJsonFile)"
+                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-gray-50"
+                  :class="isTextareasEmpty && 'bg-gray-50 text-gray-400 cursor-not-allowed'"
+              >
+                <ArrowDownTrayIcon class="w-5 h-5"/>
+                Télécharger
+              </button>
+            </div>
           </div>
           <div class="relative h-56 bg-gray-50 border border-gray-300 rounded-md">
             <input
@@ -185,12 +230,12 @@ const upload = (event: any) => {
                 @change="upload($event)"
                 type="file"
             >
-            <div class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
+            <div
+                class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
               <p class="z-20">Sélectionner ou glisser un fichier</p>
               <span class="z-20 text-xs">au format JSON</span>
             </div>
           </div>
-
         </div>
       </div>
       <div class="w-full">
@@ -206,10 +251,7 @@ const upload = (event: any) => {
             />
           </div>
         </div>
-
       </div>
     </div>
-
-
   </div>
 </template>

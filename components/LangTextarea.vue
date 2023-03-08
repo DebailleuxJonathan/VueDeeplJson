@@ -1,6 +1,7 @@
 <script setup lang='ts'>
 import {ref, watch} from "vue";
-import {ClipboardIcon} from "@heroicons/vue/24/outline"
+import {ClipboardIcon, ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
+import useDownloadFile from "~/composables/downloadFile";
 
 const props = withDefaults(defineProps<{
   language: string
@@ -12,6 +13,8 @@ const props = withDefaults(defineProps<{
   isLoaded: true,
   placeholder: ''
 })
+
+const { downloadFile } = useDownloadFile()
 
 const lang = ref(props.language)
 
@@ -34,6 +37,15 @@ const value = computed({
 })
 
 const isCopy = ref(false)
+const isDownload = ref(false)
+
+const download = () => {
+  isDownload.value = true
+  downloadFile(value.value)
+  setTimeout(() => {
+    isDownload.value = false
+  }, 2000)
+}
 
 const copy = (text: string) => {
   navigator.clipboard.writeText(text)
@@ -54,10 +66,23 @@ const copy = (text: string) => {
           type="json"
           class="w-full h-full border border-gray-200 rounded-md p-1"
       />
-      <div class="absolute top-0 right-0 m-auto flex gap-2 items-center p-2">
-        <p v-if="isCopy" class="text-green-500">Texte copié !</p>
-        <div class="w-max p-2 border border-gray-200 rounded-md cursor-pointer" @click="copy(value)">
-          <ClipboardIcon class="w-5 h-5"/>
+      <div class="absolute top-0 right-0 flex flex-col gap-2 p-2">
+        <div class="flex gap-2 w-full justify-end items-center">
+          <p v-if="isCopy" class="text-green-500">Texte copié !</p>
+          <button class="w-max p-2 border border-gray-200 rounded-md cursor-pointer" @click="copy(value)">
+            <ClipboardIcon class="w-5 h-5"/>
+          </button>
+        </div>
+        <div class="flex gap-2 w-full justify-end items-center">
+          <p v-if="isDownload" class="text-green-500">Texte téléchargé !</p>
+          <button
+              class="w-max p-2 border border-gray-200 rounded-md cursor-pointer"
+              @click="download"
+              :disabled="value === ''"
+              :class="value === '' && 'bg-gray-50 text-gray-400 cursor-not-allowed'"
+          >
+            <ArrowDownTrayIcon class="w-5 h-5"/>
+          </button>
         </div>
       </div>
     </div>
