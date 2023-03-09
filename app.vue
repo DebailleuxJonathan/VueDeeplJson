@@ -5,9 +5,11 @@ import useDownloadFile from "~/composables/downloadFile";
 import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
 import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
+import useConvertToJson from "~/composables/convertToJson";
 
 const {addTranslate} = useDeepl()
 const {downloadFile} = useDownloadFile()
+const {csvToJson} = useConvertToJson()
 
 const jsonText = ref('')
 
@@ -61,7 +63,20 @@ const multipleTranslate = async () => {
     }
     isDisabled.value = false
   } catch (e) {
-    errors.value.jsonFormat = 'Format du JSON incorrect'
+    try {
+      const newJson = JSON.parse(csvToJson(jsonText.value))
+      jsonText.value = JSON.stringify(newJson, null, 2)
+      for (const element of translatedLanguages.value) {
+        isDisabled.value = true
+        element.isLoaded = false
+        await translate(newJson, element.lang)
+        element.text = JSON.stringify(newJson, null, 2);
+        element.isLoaded = true
+      }
+      isDisabled.value = false
+    } catch (e) {
+      errors.value.jsonFormat = 'Format du JSON incorrect'
+    }
   }
 
 }
@@ -162,7 +177,7 @@ const upload = (event: any) => {
     return
   }
 
-  if (['application/json'].includes(file.type)) {
+  if (['application/json', 'text/csv'].includes(file.type)) {
     const reader = new FileReader()
     reader.onload = () => {
       if (reader.result) {
@@ -226,14 +241,14 @@ const upload = (event: any) => {
             <input
                 class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
                 ref="file"
-                accept='application/json'
+                accept='application/json, text/csv'
                 @change="upload($event)"
                 type="file"
             >
             <div
                 class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
               <p class="z-20">Sélectionner ou glisser un fichier</p>
-              <span class="z-20 text-xs">au format JSON</span>
+              <span class="z-20 text-xs">au format .json / .csv</span>
             </div>
           </div>
         </div>
