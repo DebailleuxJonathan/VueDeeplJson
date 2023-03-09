@@ -2,7 +2,6 @@ import {createError, defineEventHandler, readBody, sendError} from "h3";
 
 interface translatedText {
     translations: getTranslatedText[]
-
 }
 
 interface getTranslatedText {

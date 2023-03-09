@@ -2,13 +2,14 @@
 import {Lang, LangName} from "~/types/lang";
 import {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions} from "@headlessui/vue";
 import {ChevronUpDownIcon, CheckIcon} from '@heroicons/vue/20/solid'
+import useDeepl from "~/composables/useDeepl";
 
-const people = Lang
+const {languages} = useDeepl()
 
 const props = withDefaults(defineProps<{
-  lang: string,
+  lang?: string,
   isLoaded?: boolean
-  title: string
+  title?: string
 }>(), {
   isLoaded: true
 })
@@ -33,10 +34,10 @@ const props = withDefaults(defineProps<{
                   leave-to-class="opacity-0">
         <ListboxOptions
             class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          <ListboxOption as="template" v-for="person in people" :key="person.id" :value="person"
+          <ListboxOption as="template" v-for="language in languages" :key="language" :value="language.language"
                          v-slot="{ active, selected }">
             <li :class="[active ? 'bg-indigo-600 text-white' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">
-              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ `${person} - ${LangName[person]}` }}</span>
+              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ `${language.language} - ${language.name}` }}</span>
 
               <span v-if="selected"
                     :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">

@@ -6,37 +6,58 @@ import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
 import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 
-const {addTranslate} = useDeepl()
+const {addTranslate, languages} = useDeepl()
 const {downloadFile} = useDownloadFile()
+
 
 const jsonText = ref('')
 
-const sourceLang = ref(Lang.FR)
+const getLanguage = (lang: string) => {
+  return languages.value?.find((language: any) => language.language === lang)?.language
+}
+
+const sourceLang = ref(getLanguage('FR'))
 const index = ref(1)
 const errors = ref<any>({
   jsonFormat: ''
 })
 
+
 const isDisabled = ref(false)
 const translatedLanguages = ref([
   {
-    lang: Object.keys(Lang)[index.value],
+    lang: getLanguage('EN-GB'),
     text: '',
     isLoaded: true
   },
   {
-    lang: Object.keys(Lang)[index.value + 1],
+    lang: getLanguage('ES'),
     text: '',
     isLoaded: true
   }
 ])
 
-const startIndex = ref(translatedLanguages.value.length)
+// const startIndex = ref(translatedLanguages.value.length)
+
+const testIndex = () => {
+  const languageIndex: any = ref(languages.value)
+  const test = translatedLanguages.value.filter((e) => languageIndex.value?.findIndex((obj: any) => obj.language === e.lang))
+  for (const truc in test) {
+    const machin = languageIndex.value?.findIndex((obj: any) => obj.language === test[truc].lang);
+    if (machin !== -1) {
+      languageIndex.value?.splice(machin, 1);
+    }
+  }
+
+  return languageIndex.value
+}
+
+const startIndex = ref(-1)
 
 const addTranslatedText = async () => {
   startIndex.value++
   translatedLanguages.value.push({
-    lang: Object.keys(Lang)[startIndex.value],
+    lang: testIndex()[startIndex.value].language,
     text: '',
     isLoaded: true
   })
@@ -74,14 +95,14 @@ const translate = async (json: any, e: any) => {
       for (const element of json[prop]) {
         const index1: number = json[prop].indexOf(element);
         if (typeof element === 'string') {
-          const res = await addTranslate(element, sourceLang.value, e)
+          const res: any = await addTranslate(element, sourceLang.value, e)
           json[prop][index1] = res.text
         } else if (typeof element === 'object') {
           await translate(element, e);
         }
       }
     } else if (typeof json[prop] === 'string') {
-      const res = await addTranslate(json[prop], sourceLang.value, e)
+      const res: any = await addTranslate(json[prop], sourceLang.value, e)
       json[prop] = res.text
     }
   }
@@ -202,10 +223,10 @@ const upload = (event: any) => {
                 Traduire
               </button>
               <button
-                  :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                  :disabled="isDisabled || !(testIndex().length - 1 > translatedLanguages.length)"
                   @click="addTranslatedText"
                   class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(testIndex().length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
               >
                 Ajouter un textarea
               </button>

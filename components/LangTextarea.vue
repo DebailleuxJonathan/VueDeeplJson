@@ -4,10 +4,10 @@ import {ClipboardIcon, ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
 
 const props = withDefaults(defineProps<{
-  language: string
+  language?: string
   modelValue: string
   isLoaded?: boolean
-  title: string
+  title?: string
   placeholder?: string
 }>(), {
   isLoaded: true,
@@ -24,8 +24,11 @@ const emit = defineEmits<{
 }>()
 
 watch(lang, () => {
-  emit('update:lang', lang.value)
+  if (lang.value){
+    emit('update:lang', lang.value)
+  }
 })
+
 
 const value = computed({
   get() {
