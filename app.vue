@@ -6,6 +6,7 @@ import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
 import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 import useConvertToJson from "~/composables/convertToJson";
+import FormatDropdown from "~/components/FormatDropdown.vue";
 
 const {addTranslate} = useDeepl()
 const {downloadFile} = useDownloadFile()
@@ -35,6 +36,8 @@ const translatedLanguages = ref([
 
 const startIndex = ref(translatedLanguages.value.length)
 
+const format = ref('json')
+
 const addTranslatedText = async () => {
   startIndex.value++
   translatedLanguages.value.push({
@@ -52,17 +55,21 @@ const updateTargetLang = (lang: Lang, index: number) => {
 }
 
 const multipleTranslate = async () => {
-  try {
-    for (const element of translatedLanguages.value) {
-      const newJson = JSON.parse(jsonText.value)
-      isDisabled.value = true
-      element.isLoaded = false
-      await translate(newJson, element.lang)
-      element.text = JSON.stringify(newJson, null, 2);
-      element.isLoaded = true
+  if(format.value === 'json') {
+    try {
+      for (const element of translatedLanguages.value) {
+        const newJson = JSON.parse(jsonText.value)
+        isDisabled.value = true
+        element.isLoaded = false
+        await translate(newJson, element.lang)
+        element.text = JSON.stringify(newJson, null, 2);
+        element.isLoaded = true
+      }
+      isDisabled.value = false
+    } catch (e) {
+      errors.value.jsonFormat = 'Format du JSON incorrect'
     }
-    isDisabled.value = false
-  } catch (e) {
+  } else if(format.value === 'csv') {
     try {
       const newJson = JSON.parse(csvToJson(jsonText.value))
       jsonText.value = JSON.stringify(newJson, null, 2)
@@ -75,7 +82,7 @@ const multipleTranslate = async () => {
       }
       isDisabled.value = false
     } catch (e) {
-      errors.value.jsonFormat = 'Format du JSON incorrect'
+      errors.value.jsonFormat = 'Format du CSV incorrect'
     }
   }
 
@@ -224,6 +231,7 @@ const upload = (event: any) => {
               >
                 Ajouter un textarea
               </button>
+              <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format" />
             </div>
             <div>
               <button
