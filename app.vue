@@ -185,7 +185,7 @@ const upload = (event: any) => {
               v-model="jsonText"
               @update:lang="updateSourceLang"
               :language="sourceLang"
-              title="Langue de base"
+              title="Langue choisie"
               :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
               @input="errors.jsonFormat = ''"
           />
@@ -196,7 +196,7 @@ const upload = (event: any) => {
             <div class="flex gap-3">
               <button
                   :disabled="isDisabled"
-                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50"
+                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
                   :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
               >
                 Traduire
@@ -204,7 +204,7 @@ const upload = (event: any) => {
               <button
                   :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
                   @click="addTranslatedText"
-                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50"
+                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
               >
                 Ajouter un textarea
@@ -214,15 +214,15 @@ const upload = (event: any) => {
               <button
                   :disabled="isTextareasEmpty"
                   @click="downloadFile(totalJsonFile)"
-                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-gray-50"
-                  :class="isTextareasEmpty && 'bg-gray-50 text-gray-400 cursor-not-allowed'"
+                  class="border bg-blue-500 text-white shadow-sm rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
+                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 cursor-not-allowed'"
               >
                 <ArrowDownTrayIcon class="w-5 h-5"/>
                 Télécharger
               </button>
             </div>
           </div>
-          <div class="relative h-56 bg-gray-50 border border-gray-300 rounded-md">
+          <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
             <input
                 class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
                 ref="file"
@@ -247,7 +247,7 @@ const upload = (event: any) => {
                 @focus="$event.target.select()"
                 :language="textarea.lang"
                 :is-loaded="textarea.isLoaded"
-                title="Traduction"
+                :title="`Traduction ${sourceLang} - ${textarea.lang}`"
             />
           </div>
         </div>
