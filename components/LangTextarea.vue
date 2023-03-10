@@ -41,7 +41,7 @@ const isDownload = ref(false)
 
 const download = () => {
   isDownload.value = true
-  downloadFile(value.value)
+  downloadFile(JSON.parse(value.value))
   setTimeout(() => {
     isDownload.value = false
   }, 2000)
