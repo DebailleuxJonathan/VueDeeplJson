@@ -64,7 +64,7 @@ const copy = (text: string) => {
           :placeholder="props.placeholder"
           v-model="value"
           type="json"
-          class="w-full h-full border border-gray-200 rounded-md py-1.5 pl-3 shadow"
+          class="w-full h-full border border-gray-200 rounded-md py-1.5 pl-3 resize-none shadow"
       />
       <div class="absolute top-0 right-0 flex flex-col gap-2 p-2">
         <div class="flex gap-2 w-full justify-end items-center">

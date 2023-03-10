@@ -53,60 +53,95 @@ const updateSourceLang = (lang: Lang) => {
 const updateTargetLang = (lang: Lang, index: number) => {
   translatedLanguages.value[index].lang = lang
 }
+const array:any = ref([])
 
 const multipleTranslate = async () => {
-  if(format.value === 'json') {
+  if (format.value === 'json') {
     try {
       for (const element of translatedLanguages.value) {
         const newJson = JSON.parse(jsonText.value)
         isDisabled.value = true
         element.isLoaded = false
-        await translate(newJson, element.lang)
+        await getWordTranslatable(newJson, element.lang)
+        const res = await addTranslate(array.value, sourceLang.value,  element.lang)
+        const testSplit = res.text.split('; ')
+        await translate(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
         element.isLoaded = true
+        array.value = []
       }
       isDisabled.value = false
     } catch (e) {
       errors.value.jsonFormat = 'Format du JSON incorrect'
     }
-  } else if(format.value === 'csv') {
+  } else if (format.value === 'csv') {
     try {
       const newJson = JSON.parse(csvToJson(jsonText.value))
       jsonText.value = JSON.stringify(newJson, null, 2)
       for (const element of translatedLanguages.value) {
         isDisabled.value = true
         element.isLoaded = false
-        await translate(newJson, element.lang)
+        await getWordTranslatable(newJson, element.lang)
+        const res = await addTranslate(array.value, sourceLang.value,  element.lang)
+        const testSplit = res.text.split('; ')
+        await translate(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
         element.isLoaded = true
+        array.value = []
       }
       isDisabled.value = false
     } catch (e) {
       errors.value.jsonFormat = 'Format du CSV incorrect'
     }
   }
-
 }
 
-const translate = async (json: any, e: any) => {
+const getWordTranslatable = async (json: any, e: any) => {
   for (const prop in json) {
     if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
-      await translate(json[prop], e);
-    } else if (Array.isArray(json[prop])) {
+      await getWordTranslatable(json[prop], e);
+    }
+    else if (Array.isArray(json[prop])) {
+      for (const element of json[prop]) {
+        if (typeof element === 'string') {
+          array.value.push(element)
+        }
+        else if (typeof element === 'object') {
+          await getWordTranslatable(element, e);
+        }
+      }
+    }
+    else if (typeof json[prop] === 'string') {
+      array.value.push(json[prop])
+    }
+  }
+}
+
+let indexTranslate = 0
+
+const translate = (json: any, split: any) => {
+  for (const prop in json) {
+    if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
+      translate(json[prop], split)
+    }
+    else if (Array.isArray(json[prop])){
       for (const element of json[prop]) {
         const index1: number = json[prop].indexOf(element);
         if (typeof element === 'string') {
-          const res = await addTranslate(element, sourceLang.value, e)
-          json[prop][index1] = res.text
-        } else if (typeof element === 'object') {
-          await translate(element, e);
+          json[prop][index1] = split[indexTranslate]
+          indexTranslate++
+        }
+        else if (typeof element === 'object') {
+          translate(element, split)
         }
       }
-    } else if (typeof json[prop] === 'string') {
-      const res = await addTranslate(json[prop], sourceLang.value, e)
-      json[prop] = res.text
     }
+    else if(typeof json[prop] === "string") {
+      json[prop] = split[indexTranslate]
+    }
+    indexTranslate++
   }
+  indexTranslate = 0
 }
 
 const objectToTranslate = {
@@ -135,7 +170,7 @@ const objectToTranslate = {
       ]
     }
   ]
-};
+}
 
 const placeholder = {
   "test": "Coucou",
@@ -143,7 +178,7 @@ const placeholder = {
     {
       "name": "Fraise",
       "age": "dix-huit",
-      "secretIdentity": "Scorpion",
+      "secretIdentity": "Scorpion"
     }
   ]
 }
@@ -192,6 +227,13 @@ const upload = (event: any) => {
       }
     }
     reader.readAsText(file)
+
+    switch (file.type) {
+      case 'application/json':
+        return format.value = 'json'
+      case 'text/csv':
+        return format.value = 'csv'
+    }
   } else {
     alert('Mauvais format de fichier')
   }
@@ -218,7 +260,7 @@ const upload = (event: any) => {
             <div class="flex gap-3">
               <button
                   :disabled="isDisabled"
-                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
+                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
                   :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
               >
                 Traduire
@@ -226,19 +268,19 @@ const upload = (event: any) => {
               <button
                   :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
                   @click="addTranslatedText"
-                  class="border border-gray-200 shadow-sm rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
+                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
               >
-                Ajouter un textarea
+                Ajouter un champ
               </button>
-              <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format" />
+              <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
             </div>
             <div>
               <button
                   :disabled="isTextareasEmpty"
                   @click="downloadFile(totalJsonFile)"
-                  class="border bg-blue-500 text-white shadow-sm rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
-                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 cursor-not-allowed'"
+                  class="border bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
+                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
               >
                 <ArrowDownTrayIcon class="w-5 h-5"/>
                 Télécharger
