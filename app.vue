@@ -244,61 +244,64 @@ const upload = (event: any) => {
     <h1 class="text-2xl font-semibold">Traduction JSON Deepl</h1>
     <div class="flex flex-col md:flex-row gap-4 mt-8">
       <div class="w-full">
-        <div class="flex gap-3 h-96">
-          <LangTextarea
-              v-model="jsonText"
-              @update:lang="updateSourceLang"
-              :language="sourceLang"
-              title="Langue choisie"
-              :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
-              @input="errors.jsonFormat = ''"
-          />
-        </div>
-        <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
-        <div class="flex flex-col gap-3 mt-3">
-          <div class="flex flex-col lg:flex-row gap-3 justify-between">
-            <div class="flex gap-3">
-              <button
-                  :disabled="isDisabled"
-                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
-              >
-                Traduire
-              </button>
-              <button
-                  :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
-                  @click="addTranslatedText"
-                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
-              >
-                Ajouter un champ
-              </button>
-              <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
-            </div>
-            <div>
-              <button
-                  :disabled="isTextareasEmpty"
-                  @click="downloadFile(totalJsonFile)"
-                  class="border bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
-                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-              >
-                <ArrowDownTrayIcon class="w-5 h-5"/>
-                Télécharger
-              </button>
-            </div>
+        <div class="sticky top-0">
+
+          <div class="flex gap-3 h-96">
+            <LangTextarea
+                v-model="jsonText"
+                @update:lang="updateSourceLang"
+                :language="sourceLang"
+                title="Langue choisie"
+                :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
+                @input="errors.jsonFormat = ''"
+            />
           </div>
-          <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
-            <input
-                class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
-                ref="file"
-                accept='application/json, text/csv'
-                @change="upload($event)"
-                type="file"
-            >
-            <div
-                class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
-              <p class="z-20">Sélectionner ou glisser un fichier</p>
-              <span class="z-20 text-xs">au format .json / .csv</span>
+          <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
+          <div class="flex flex-col gap-3 mt-3">
+            <div class="flex flex-col lg:flex-row gap-3 justify-between">
+              <div class="flex flex-col sm:flex-row gap-3">
+                <button
+                    :disabled="isDisabled"
+                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
+                >
+                  Traduire
+                </button>
+                <button
+                    :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                    @click="addTranslatedText"
+                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
+                >
+                  Ajouter un champ
+                </button>
+                <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
+              </div>
+              <div>
+                <button
+                    :disabled="isTextareasEmpty"
+                    @click="downloadFile(totalJsonFile)"
+                    class="border bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
+                    :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                >
+                  <ArrowDownTrayIcon class="w-5 h-5"/>
+                  Télécharger
+                </button>
+              </div>
+            </div>
+            <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
+              <input
+                  class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
+                  ref="file"
+                  accept='application/json, text/csv'
+                  @change="upload($event)"
+                  type="file"
+              >
+              <div
+                  class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
+                <p class="z-20">Sélectionner ou glisser un fichier</p>
+                <span class="z-20 text-xs">au format .json / .csv</span>
+              </div>
             </div>
           </div>
         </div>
