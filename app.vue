@@ -53,7 +53,7 @@ const updateSourceLang = (lang: Lang) => {
 const updateTargetLang = (lang: Lang, index: number) => {
   translatedLanguages.value[index].lang = lang
 }
-const array:any = ref([])
+const array: any = ref([])
 
 const multipleTranslate = async () => {
   if (format.value === 'json') {
@@ -63,7 +63,7 @@ const multipleTranslate = async () => {
         isDisabled.value = true
         element.isLoaded = false
         await getWordTranslatable(newJson, element.lang)
-        const res = await addTranslate(array.value, sourceLang.value,  element.lang)
+        const res = await addTranslate(array.value, sourceLang.value, element.lang)
         const testSplit = res.text.split('; ')
         await translate(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
@@ -82,7 +82,7 @@ const multipleTranslate = async () => {
         isDisabled.value = true
         element.isLoaded = false
         await getWordTranslatable(newJson, element.lang)
-        const res = await addTranslate(array.value, sourceLang.value,  element.lang)
+        const res = await addTranslate(array.value, sourceLang.value, element.lang)
         const testSplit = res.text.split('; ')
         await translate(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
@@ -100,18 +100,15 @@ const getWordTranslatable = async (json: any, e: any) => {
   for (const prop in json) {
     if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
       await getWordTranslatable(json[prop], e);
-    }
-    else if (Array.isArray(json[prop])) {
+    } else if (Array.isArray(json[prop])) {
       for (const element of json[prop]) {
         if (typeof element === 'string') {
           array.value.push(element)
-        }
-        else if (typeof element === 'object') {
+        } else if (typeof element === 'object') {
           await getWordTranslatable(element, e);
         }
       }
-    }
-    else if (typeof json[prop] === 'string') {
+    } else if (typeof json[prop] === 'string') {
       array.value.push(json[prop])
     }
   }
@@ -123,20 +120,17 @@ const translate = (json: any, split: any) => {
   for (const prop in json) {
     if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
       translate(json[prop], split)
-    }
-    else if (Array.isArray(json[prop])){
+    } else if (Array.isArray(json[prop])) {
       for (const element of json[prop]) {
         const index1: number = json[prop].indexOf(element);
         if (typeof element === 'string') {
           json[prop][index1] = split[indexTranslate]
           indexTranslate++
-        }
-        else if (typeof element === 'object') {
+        } else if (typeof element === 'object') {
           translate(element, split)
         }
       }
-    }
-    else if(typeof json[prop] === "string") {
+    } else if (typeof json[prop] === "string") {
       json[prop] = split[indexTranslate]
     }
     indexTranslate++
@@ -209,7 +203,7 @@ const totalJsonFile = computed(() => {
       return totalJson
     }
   } catch (e) {
-    return "Problème dans l'un des formats JSON"
+    alert("Problème dans l'un des formats JSON")
   }
 })
 
@@ -238,6 +232,7 @@ const upload = (event: any) => {
     alert('Mauvais format de fichier')
   }
 }
+
 </script>
 <template>
   <div class="p-5">
@@ -245,8 +240,7 @@ const upload = (event: any) => {
     <div class="flex flex-col md:flex-row gap-4 mt-8">
       <div class="w-full">
         <div class="sticky top-0">
-
-          <div class="flex gap-3 h-96">
+          <div class="flex gap-3">
             <LangTextarea
                 v-model="jsonText"
                 @update:lang="updateSourceLang"
@@ -257,31 +251,32 @@ const upload = (event: any) => {
             />
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
-          <div class="flex flex-col gap-3 mt-3">
+          <div class="flex flex-col gap-4 mt-4">
             <div class="flex flex-col lg:flex-row gap-3 justify-between">
               <div class="flex flex-col sm:flex-row gap-3">
                 <button
-                    :disabled="isDisabled"
-                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 hover:bg-gray-50 shadow"
-                    :class="isDisabled && 'bg-gray-50 cursor-wait'" @click="multipleTranslate"
+                    :disabled="isDisabled || !jsonText"
+                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                    @click="multipleTranslate"
                 >
                   Traduire
                 </button>
                 <button
                     :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
                     @click="addTranslatedText"
-                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3  gap-3 hover:bg-gray-50 shadow"
-                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 cursor-not-allowed'"
+                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                 >
                   Ajouter un champ
                 </button>
                 <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
               </div>
-              <div>
+              <div class="w-full sm:w-max">
                 <button
                     :disabled="isTextareasEmpty"
                     @click="downloadFile(totalJsonFile)"
-                    class="border bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex gap-3 hover:bg-blue-600 shadow"
+                    class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300"
                     :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                 >
                   <ArrowDownTrayIcon class="w-5 h-5"/>
@@ -307,8 +302,8 @@ const upload = (event: any) => {
         </div>
       </div>
       <div class="w-full">
-        <div class="grid grid-rows-2 grid-cols-1 gap-3 w-full">
-          <div class="h-96" v-for="(textarea, index) in translatedLanguages">
+        <div class="grid grid-rows-2 grid-cols-1 w-full">
+          <div class="" v-for="(textarea, index) in translatedLanguages">
             <LangTextarea
                 v-model="textarea.text"
                 @update:lang="updateTargetLang($event, index)"
