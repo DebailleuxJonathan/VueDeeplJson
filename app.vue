@@ -4,7 +4,7 @@ import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
-import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
+import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import useConvertToJson from "~/composables/convertToJson";
 import FormatDropdown from "~/components/FormatDropdown.vue";
 
@@ -265,10 +265,11 @@ const upload = (event: any) => {
                 <button
                     :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
                     @click="addTranslatedText"
-                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
-                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                    class="flex items-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                 >
-                  Ajouter un champ
+                  <PlusIcon class="w-5 h-5"/>
+                  {{translatedLanguages.length + ' traductions'}}
                 </button>
                 <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
               </div>

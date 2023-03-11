@@ -14,7 +14,7 @@ const props = defineProps<{
     <div class="relative">
       <ListboxButton
           class="relative flex py-2 px-3 justify-between items-center w-full text-left text-gray-900 gap-6 bg-white rounded-lg ring-1 ring-inset ring-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 shadow">
-        <p class="block truncate py-px">{{ props.format }}</p>
+        <p class="block truncate py-px">{{ 'Format : ' + props.format }}</p>
         <p class="pointer-events-none right-0 flex items-center">
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
         </p>

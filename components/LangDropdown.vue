@@ -17,10 +17,6 @@ const props = withDefaults(defineProps<{
 </script>
 <template>
   <Listbox as="div" v-model="props.lang">
-    <div class="flex justify-between">
-      <ListboxLabel v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">En attente...
-      </ListboxLabel>
-    </div>
     <div class="z-50 relative">
       <ListboxButton
           class="relative w-full cursor-pointer rounded-lg bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow ring-1 ring-inset ring-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -29,35 +25,6 @@ const props = withDefaults(defineProps<{
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
         </span>
       </ListboxButton>
-      <div class="top-0 right-0 flex gap-2 py-2">
-        <div class="flex gap-2 w-full justify-end items-center">
-          <p v-if="isCopy" :class="isAnimationCopy && 'active'"
-             class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded">
-            Texte copié !</p>
-          <button
-              :disabled="value === ''"
-              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-              class="z-40 w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow transition-all duration-300"
-              @click="copy(value)"
-          >
-            <ClipboardIcon class="w-5 h-5"/>
-          </button>
-        </div>
-        <div class="flex gap-2 w-full justify-end items-center">
-          <p v-if="isDownload" :class="isAnimationDownload && 'active'"
-             class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded">
-            Texte téléchargé !</p>
-          <button
-              class="z-40 w-max p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md cursor-pointer shadow transition-all duration-300"
-              @click="download"
-              :disabled="value === ''"
-              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-          >
-            <ArrowDownTrayIcon class="w-5 h-5"/>
-          </button>
-        </div>
-      </div>
-
       <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100"
                   leave-to-class="opacity-0">
         <ListboxOptions
