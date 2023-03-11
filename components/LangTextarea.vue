@@ -114,7 +114,7 @@ const copy = async (text: string) => {
           :placeholder="props.placeholder"
           v-model="value"
           type="json"
-          class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none z-30 shadow-inner"
+          class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner"
       />
       </div>
     </div>

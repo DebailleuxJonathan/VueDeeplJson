@@ -251,6 +251,30 @@ const upload = (event: any) => {
             />
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
+          <div class="relative flex items-center gap-3 overflow-x-auto max-w-2xl sticky top-0 z-50">
+            <button
+                :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                @click="addTranslatedText"
+                class="mt-2 p-2 flex items-center bg-white border border-gray-300 rounded-lg cursor-pointer gap-3 hover:bg-gray-50 h-max"
+                :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+            >
+              <PlusIcon class="w-5 h-5"/>
+            </button>
+            <ul class="flex overflow-hidden w-max pb-2">
+              <li class="pr-2" v-for="(textarea, index) in translatedLanguages">
+                <div class="bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex">
+                  {{ `${sourceLang} - ${textarea.lang}` }}
+                  <span v-if="index === translatedLanguages.length - 1 && index > 1"
+                        class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+
           <div class="flex flex-col gap-4 mt-4">
             <div class="flex flex-col lg:flex-row gap-3 justify-between">
               <div class="flex flex-col sm:flex-row gap-3">
@@ -269,9 +293,9 @@ const upload = (event: any) => {
                     :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                 >
                   <PlusIcon class="w-5 h-5"/>
-                  {{translatedLanguages.length + ' traductions'}}
+                  {{ translatedLanguages.length + ' traductions' }}
                 </button>
-                <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
+                <FormatDropdown class="cursor-pointer rounded-md" :format="format" v-model="format"/>
               </div>
               <div class="w-full sm:w-max">
                 <button
@@ -303,7 +327,7 @@ const upload = (event: any) => {
         </div>
       </div>
       <div class="w-full">
-        <div class="grid grid-rows-2 grid-cols-1 w-full">
+        <div class="flex flex-col w-full">
           <div class="" v-for="(textarea, index) in translatedLanguages">
             <LangTextarea
                 v-model="textarea.text"
