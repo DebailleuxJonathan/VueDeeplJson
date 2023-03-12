@@ -19,11 +19,10 @@ const props = defineProps<{
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
         </p>
       </ListboxButton>
-
       <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100"
                   leave-to-class="opacity-0">
         <ListboxOptions
-            class="absolute mt-1 z-10 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            class="absolute mt-1 z-30 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
           <ListboxOption as="template" v-for="person in people" :key="person" :value="person"
                          v-slot="{ active, selected }">
             <li :class="[active ? 'bg-indigo-600 text-white' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">

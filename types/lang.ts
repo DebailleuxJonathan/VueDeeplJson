@@ -2,8 +2,7 @@ export enum Lang {
     FR = "FR",
     EN = "EN",
     ES = "ES",
-    DE = "DE",
-    JA = "JA"
+    DE = "DE"
 }
 
 
