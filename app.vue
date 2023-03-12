@@ -4,7 +4,7 @@ import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import LangTextarea from "~/components/LangTextarea.vue";
 import {Lang} from "~/types/lang";
-import {ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
+import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import useConvertToJson from "~/composables/convertToJson";
 import FormatDropdown from "~/components/FormatDropdown.vue";
 
@@ -45,6 +45,9 @@ const addTranslatedText = async () => {
     text: '',
     isLoaded: true
   })
+  setTimeout(() => {
+    scrollToElement(tags.value[startIndex.value - 1])
+  }, 50)
 }
 
 const updateSourceLang = (lang: Lang) => {
@@ -137,6 +140,9 @@ const translate = (json: any, split: any) => {
   }
   indexTranslate = 0
 }
+
+const textareas: any = ref([])
+const tags: any = ref([])
 
 const objectToTranslate = {
   "test": "Coucou",
@@ -233,11 +239,15 @@ const upload = (event: any) => {
   }
 }
 
+const scrollToElement = (element: HTMLElement) => {
+  element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+}
+
 </script>
 <template>
   <div class="p-5">
     <h1 class="text-2xl font-semibold">Traduction JSON Deepl</h1>
-    <div class="flex flex-col md:flex-row gap-4 mt-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
         <div class="sticky top-0">
           <div class="flex gap-3">
@@ -251,39 +261,57 @@ const upload = (event: any) => {
             />
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
-          <div class="flex flex-col gap-4 mt-4">
-            <div class="flex flex-col lg:flex-row gap-3 justify-between">
-              <div class="flex flex-col sm:flex-row gap-3">
-                <button
-                    :disabled="isDisabled || !jsonText"
-                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
-                    :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-                    @click="multipleTranslate"
-                >
-                  Traduire
-                </button>
-                <button
-                    :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
-                    @click="addTranslatedText"
-                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
-                    :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-                >
-                  Ajouter un champ
-                </button>
-                <FormatDropdown class="z-50 cursor-pointer rounded-md" :format="format" v-model="format"/>
-              </div>
-              <div class="w-full sm:w-max">
-                <button
-                    :disabled="isTextareasEmpty"
-                    @click="downloadFile(totalJsonFile)"
-                    class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300"
-                    :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
-                >
-                  <ArrowDownTrayIcon class="w-5 h-5"/>
-                  Télécharger
-                </button>
-              </div>
+          <div class="relative flex items-center w-full gap-3 top-0 z-50">
+            <ul class="flex overflow-x-auto w-full pb-2">
+              <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
+                  v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
+                <div
+                    class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
+                  {{ `${sourceLang} - ${textarea.lang}` }}
+                  <span v-if="index === translatedLanguages.length - 1 && index > 1"
+                        class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="flex flex-col w-full lg:flex-row gap-3 justify-between">
+            <div class="w-full flex-wrap flex flex-col sm:flex-row gap-3">
+              <button
+                  :disabled="isDisabled || !jsonText"
+                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  @click="multipleTranslate"
+              >
+                Traduire
+              </button>
+              <button
+                  :disabled="isDisabled || !(Object.keys(Lang).length - 1 > translatedLanguages.length)"
+                  @click="addTranslatedText"
+                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(Object.keys(Lang).length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+              >
+                <PlusIcon class="w-5 h-5"/>
+                {{ 'traductions' }}
+              </button>
+              <FormatDropdown class="cursor-pointer rounded-md" :format="format" v-model="format"/>
             </div>
+            <div class="w-full sm:w-max">
+              <button
+                  :disabled="isTextareasEmpty"
+                  @click="downloadFile(totalJsonFile)"
+                  class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300"
+                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+              >
+                <ArrowDownTrayIcon class="w-5 h-5"/>
+                Télécharger
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-col gap-4 mt-4">
             <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
               <input
                   class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
@@ -302,8 +330,8 @@ const upload = (event: any) => {
         </div>
       </div>
       <div class="w-full">
-        <div class="grid grid-rows-2 grid-cols-1 w-full">
-          <div class="" v-for="(textarea, index) in translatedLanguages">
+        <div class="flex flex-col w-full">
+          <div :ref="el => { textareas[index] = el }" v-for="(textarea, index) in translatedLanguages">
             <LangTextarea
                 v-model="textarea.text"
                 @update:lang="updateTargetLang($event, index)"
