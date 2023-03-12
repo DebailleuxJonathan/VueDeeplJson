@@ -68,7 +68,7 @@ const multipleTranslate = async () => {
         await getWordTranslatable(newJson, element.lang)
         const res = await addTranslate(array.value, sourceLang.value, element.lang)
         const testSplit = res.text.split('; ')
-        await translate(newJson, testSplit)
+        await replaceJSONValuesWithArray(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
         element.isLoaded = true
         array.value = []
@@ -87,7 +87,7 @@ const multipleTranslate = async () => {
         await getWordTranslatable(newJson, element.lang)
         const res = await addTranslate(array.value, sourceLang.value, element.lang)
         const testSplit = res.text.split('; ')
-        await translate(newJson, testSplit)
+        await replaceJSONValuesWithArray(newJson, testSplit)
         element.text = JSON.stringify(newJson, null, 2);
         element.isLoaded = true
         array.value = []
@@ -117,29 +117,30 @@ const getWordTranslatable = async (json: any, e: any) => {
   }
 }
 
-let indexTranslate = 0
-
-const translate = (json: any, split: any) => {
-  for (const prop in json) {
-    if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
-      translate(json[prop], split)
-    } else if (Array.isArray(json[prop])) {
-      for (const element of json[prop]) {
-        const index1: number = json[prop].indexOf(element);
-        if (typeof element === 'string') {
-          json[prop][index1] = split[indexTranslate]
-          indexTranslate++
-        } else if (typeof element === 'object') {
-          translate(element, split)
+const replaceJSONValuesWithArray = (json: any, arr: any) => {
+  let index = 0;
+  const translate = (obj: any) => {
+    for (const prop in obj) {
+      if (typeof obj[prop] === "object" && !Array.isArray(obj[prop])) {
+        translate(obj[prop]);
+      } else if (Array.isArray(obj[prop])) {
+        for (let i = 0; i < obj[prop].length; i++) {
+          if (typeof obj[prop][i] === 'object') {
+            translate(obj[prop][i]);
+          } else {
+            obj[prop][i] = arr[index];
+            index++;
+          }
         }
+      } else if (typeof obj[prop] === "string") {
+        obj[prop] = arr[index];
+        index++;
       }
-    } else if (typeof json[prop] === "string") {
-      json[prop] = split[indexTranslate]
     }
-    indexTranslate++
-  }
-  indexTranslate = 0
-}
+  };
+  translate(json);
+  return json;
+};
 
 const textareas: any = ref([])
 const tags: any = ref([])
