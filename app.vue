@@ -56,7 +56,6 @@ const updateSourceLang = (lang: Lang) => {
 const updateTargetLang = (lang: Lang, index: number) => {
   translatedLanguages.value[index].lang = lang
 }
-const array: any = ref([])
 
 const multipleTranslate = async () => {
   if (format.value === 'json') {
@@ -65,13 +64,9 @@ const multipleTranslate = async () => {
         const newJson = JSON.parse(jsonText.value)
         isDisabled.value = true
         element.isLoaded = false
-        await getWordTranslatable(newJson, element.lang)
-        const res = await addTranslate(array.value, sourceLang.value, element.lang)
-        const testSplit = res.text.split('; ')
-        await replaceJSONValuesWithArray(newJson, testSplit)
-        element.text = JSON.stringify(newJson, null, 2);
+        const res = await addTranslate(newJson, sourceLang.value, element.lang)
+        element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
-        array.value = []
       }
       isDisabled.value = false
     } catch (e) {
@@ -84,13 +79,9 @@ const multipleTranslate = async () => {
       for (const element of translatedLanguages.value) {
         isDisabled.value = true
         element.isLoaded = false
-        await getWordTranslatable(newJson, element.lang)
-        const res = await addTranslate(array.value, sourceLang.value, element.lang)
-        const testSplit = res.text.split('; ')
-        await replaceJSONValuesWithArray(newJson, testSplit)
-        element.text = JSON.stringify(newJson, null, 2);
+        const res = await addTranslate(newJson, sourceLang.value, element.lang)
+        element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
-        array.value = []
       }
       isDisabled.value = false
     } catch (e) {
@@ -98,49 +89,6 @@ const multipleTranslate = async () => {
     }
   }
 }
-
-const getWordTranslatable = async (json: any, e: any) => {
-  for (const prop in json) {
-    if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
-      await getWordTranslatable(json[prop], e);
-    } else if (Array.isArray(json[prop])) {
-      for (const element of json[prop]) {
-        if (typeof element === 'string') {
-          array.value.push(element)
-        } else if (typeof element === 'object') {
-          await getWordTranslatable(element, e);
-        }
-      }
-    } else if (typeof json[prop] === 'string') {
-      array.value.push(json[prop])
-    }
-  }
-}
-
-const replaceJSONValuesWithArray = (json: any, arr: any) => {
-  let index = 0;
-  const translate = (obj: any) => {
-    for (const prop in obj) {
-      if (typeof obj[prop] === "object" && !Array.isArray(obj[prop])) {
-        translate(obj[prop]);
-      } else if (Array.isArray(obj[prop])) {
-        for (let i = 0; i < obj[prop].length; i++) {
-          if (typeof obj[prop][i] === 'object') {
-            translate(obj[prop][i]);
-          } else {
-            obj[prop][i] = arr[index];
-            index++;
-          }
-        }
-      } else if (typeof obj[prop] === "string") {
-        obj[prop] = arr[index];
-        index++;
-      }
-    }
-  };
-  translate(json);
-  return json;
-};
 
 const textareas: any = ref([])
 const tags: any = ref([])
