@@ -24,7 +24,28 @@ export default defineEventHandler(async (e) => {
             sendError(e, todoNotFoundError)
         }
 
-        const formatBody = body.text.join('; ').toString()
+        const words: string[] = []
+        const getWordTranslatable = async (json: any, targetLang: string) => {
+            for (const prop in json) {
+                if (typeof json[prop] === "object" && !Array.isArray(json[prop])) {
+                    await getWordTranslatable(json[prop], targetLang);
+                } else if (Array.isArray(json[prop])) {
+                    for (const element of json[prop]) {
+                        if (typeof element === 'string') {
+                            words.push(element)
+                        } else if (typeof element === 'object') {
+                            await getWordTranslatable(element, targetLang);
+                        }
+                    }
+                } else if (typeof json[prop] === 'string') {
+                    words.push(json[prop])
+                }
+            }
+        }
+
+        await getWordTranslatable(body.text, body.targetLang)
+
+        const formatBody = words.join('; ').toString()
 
         const translatedText: translatedText = await $fetch('https://api-free.deepl.com/v2/translate', {
             method: "post", params: {
@@ -35,6 +56,32 @@ export default defineEventHandler(async (e) => {
             }
         })
 
-        return translatedText.translations[0]
+        const splitTranslatedText = translatedText.translations[0].text.split('; ')
+        const replaceJSONValuesWithArray = (json: any, splitTranslatedText: string[]) => {
+            let index = 0;
+            const translate = (obj: any) => {
+                for (const prop in obj) {
+                    if (typeof obj[prop] === "object" && !Array.isArray(obj[prop])) {
+                        translate(obj[prop]);
+                    } else if (Array.isArray(obj[prop])) {
+                        for (let i = 0; i < obj[prop].length; i++) {
+                            if (typeof obj[prop][i] === 'object') {
+                                translate(obj[prop][i]);
+                            } else {
+                                obj[prop][i] = splitTranslatedText[index];
+                                index++;
+                            }
+                        }
+                    } else if (typeof obj[prop] === "string") {
+                        obj[prop] = splitTranslatedText[index];
+                        index++;
+                    }
+                }
+            };
+            translate(json);
+            return json;
+        };
+
+        return replaceJSONValuesWithArray(body.text, splitTranslatedText)
     }
 })
