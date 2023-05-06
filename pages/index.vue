@@ -1,41 +1,62 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script setup lang='ts'>
+import {useLanguages} from "~/composables/languages";
+import {ref} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
-import LangTextarea from "~/components/LangTextarea.vue";
-import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import useConvertToJson from "~/composables/convertToJson";
+import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import FormatDropdown from "~/components/FormatDropdown.vue";
-import useLanguages from "~/composables/languages";
+import Languages from "~/types/lang";
 
+const {fetchLanguages, data, getLang} = useLanguages()
 const {addTranslate} = useDeepl()
 const {downloadFile} = useDownloadFile()
 const {csvToJson} = useConvertToJson()
-const {localStorage, getLang} = useLanguages()
 
+const translatedLanguages: any = ref([])
+const sourceLang: any = ref(null)
 const jsonText = ref('')
-
-const sourceLang = ref(getLang('FR'))
-
 const index = ref(1)
 const errors = ref<any>({
   jsonFormat: ''
 })
-
-
 const isDisabled = ref(false)
-const translatedLanguages = ref([
-  {
-    lang: getLang('EN'),
-    text: '',
-    isLoaded: true
-  },
-  {
-    lang: getLang('ES'),
-    text: '',
-    isLoaded: true
+const listLanguages = ref<Languages[]>([])
+
+onMounted(async () => {
+  await fetchLanguages()
+  listLanguages.value = data.value
+
+  translatedLanguages.value = [
+    {
+      lang: await getLang(listLanguages.value, 'EN-GB'),
+      text: '',
+      isLoaded: true
+    },
+    {
+      lang: await getLang(listLanguages.value, 'ES'),
+      text: '',
+      isLoaded: true
+    }
+  ]
+
+  sourceLang.value = await getLang(listLanguages.value, 'FR')
+})
+
+const isTextareasEmpty = computed(() => {
+  for (let i = 0; i < translatedLanguages.value.length; i++) {
+    if (translatedLanguages.value[i].text !== '') {
+      return false
+    }
   }
-])
+  return true
+})
+
+const updateSourceLang = async (lang: string) => {
+  if (listLanguages.value) {
+    sourceLang.value = await getLang(listLanguages.value, lang)
+  }
+}
 
 const startIndex = ref(translatedLanguages.value.length)
 
@@ -43,8 +64,9 @@ const format = ref('json')
 
 const addTranslatedText = async () => {
   startIndex.value++
+
   translatedLanguages.value.push({
-    lang: localStorage.value[startIndex.value].language,
+    lang: listLanguages.value[startIndex.value],
     text: '',
     isLoaded: true
   })
@@ -53,12 +75,8 @@ const addTranslatedText = async () => {
   }, 50)
 }
 
-const updateSourceLang = (lang: string) => {
-  sourceLang.value = getLang(lang)
-}
-const updateTargetLang = (lang: string, index: number) => {
-  console.log(lang)
-  translatedLanguages.value[index].lang = getLang(lang)
+const updateTargetLang = async (lang: Languages, index: number) => {
+  translatedLanguages.value[index].lang = await getLang(listLanguages.value, lang)
 }
 
 const multipleTranslate = async () => {
@@ -68,7 +86,7 @@ const multipleTranslate = async () => {
         const newJson = JSON.parse(jsonText.value)
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang)
+        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
       }
@@ -83,7 +101,7 @@ const multipleTranslate = async () => {
       for (const element of translatedLanguages.value) {
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang)
+        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
       }
@@ -95,6 +113,7 @@ const multipleTranslate = async () => {
 }
 
 const textareas: any = ref([])
+
 const tags: any = ref([])
 
 const objectToTranslate = {
@@ -135,15 +154,6 @@ const placeholder = {
     }
   ]
 }
-
-const isTextareasEmpty = computed(() => {
-  for (let i = 0; i < translatedLanguages.value.length; i++) {
-    if (translatedLanguages.value[i].text !== '') {
-      return false
-    }
-  }
-  return true
-})
 
 const totalJsonFile = computed(() => {
   const totalJson = []
@@ -198,16 +208,18 @@ const scrollToElement = (element: HTMLElement) => {
 
 </script>
 <template>
-  <div v-if="localStorage.length > 0" class="p-5">
+  <div v-if="listLanguages?.length > 0" class="p-5">
     <h1 class="text-2xl font-semibold">Traduction JSON Deepl</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
         <div class="sticky top-0">
           <div class="flex gap-3">
             <LangTextarea
+                v-if="sourceLang"
                 v-model="jsonText"
                 @update:lang="updateSourceLang"
-                :language="sourceLang.language"
+                :language="sourceLang"
+                :data="listLanguages"
                 title="Langue choisie"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
                 @input="errors.jsonFormat = ''"
@@ -218,15 +230,17 @@ const scrollToElement = (element: HTMLElement) => {
             <ul class="flex overflow-x-auto w-full pb-2">
               <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
                   v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
-                <div
-                    class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
-                  {{ `${sourceLang.language} - ${textarea.lang.language}` }}
-                  <span v-if="index === translatedLanguages.length - 1 && index > 1"
-                        class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                <div v-if="textarea && sourceLang">
+                  <div
+                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
+                    {{ `${sourceLang.language} / ${textarea.lang.language}` }}
+                    <span v-if="index === translatedLanguages.length - 1 && index > 1"
+                          class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
                     <span
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
                   </span>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -242,10 +256,10 @@ const scrollToElement = (element: HTMLElement) => {
                 Traduire
               </button>
               <button
-                  :disabled="isDisabled || !(localStorage.length - 1 > translatedLanguages.length)"
+                  :disabled="isDisabled || !(listLanguages.length - 1 > translatedLanguages.length)"
                   @click="addTranslatedText"
                   class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(localStorage.length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(listLanguages.length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
               >
                 <PlusIcon class="w-5 h-5"/>
                 {{ 'traductions' }}
@@ -285,14 +299,18 @@ const scrollToElement = (element: HTMLElement) => {
       <div class="w-full">
         <div class="flex flex-col w-full">
           <div :ref="el => { textareas[index] = el }" v-for="(textarea, index) in translatedLanguages">
-            <LangTextarea
-                v-model="textarea.text"
-                @update:lang="updateTargetLang($event, index)"
-                @focus="$event.target.select()"
-                :language="textarea.lang.language"
-                :is-loaded="textarea.isLoaded"
-                :title="`Traduction ${sourceLang.language} - ${textarea.lang.language}`"
-            />
+            <div v-if="textarea && sourceLang">
+              <LangTextarea
+                  v-if="textarea"
+                  :data="listLanguages"
+                  v-model="textarea.text"
+                  @update:lang="updateTargetLang($event, index)"
+                  @focus="$event.target.select()"
+                  :language="textarea.lang"
+                  :is-loaded="textarea.isLoaded"
+                  :title="`Traduction ${sourceLang.language} / ${textarea.lang.language}`"
+              />
+            </div>
           </div>
         </div>
       </div>

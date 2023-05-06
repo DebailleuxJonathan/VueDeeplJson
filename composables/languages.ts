@@ -1,33 +1,35 @@
-import {useLocalStorage} from '@vueuse/core'
-import useDeepl from "./useDeepl";
+import {ref} from 'vue'
 import Languages from "~/types/lang";
+import useLocalStorage from "~/composables/localStorage";
 
-const useLanguages = () => {
+export const useLanguages = () => {
+    const data: any = ref(null)
+    const {languages} = useLocalStorage()
+    const cachedData = languages.value
 
-    const localStorage: any = useLocalStorage('languages', [])
+    const fetchLanguages = async () => {
+        if (cachedData.length > 0) {
+            data.value = cachedData
+        } else {
+            const res = await $fetch('/api/languages', {
+                method: "get"
+            })
 
-    const {fetchLanguages} = useDeepl()
-
-    const test = async () => {
-        if (Object.keys(localStorage.value).length === 0) {
-            const res: any = await fetchLanguages()
-            localStorage.value = res
+            data.value = res
+            languages.value = res
         }
     }
 
-    test()
-
-    const getLang = (lang: string) => {
-        if (localStorage.value.length > 0) {
-            return localStorage.value.find((key: Languages) => key.language === lang)
+    const getLang = async (res: any, lang: any) => {
+        if (res.length > 0) {
+            return res.find((key: Languages) => key.language === (typeof lang === "string" ? lang : lang.language))
         }
     }
-
 
     return {
-        localStorage,
+        data,
+        fetchLanguages,
+        languages,
         getLang
     }
 }
-
-export default useLanguages

@@ -2,13 +2,15 @@
 import {ref, watch} from "vue";
 import {ClipboardIcon, ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
+import Languages from "~/types/lang";
 
 const props = withDefaults(defineProps<{
-  language: string
+  language: any
   modelValue: string
   isLoaded?: boolean
   title: string
   placeholder?: string
+  data: Languages[]
 }>(), {
   isLoaded: true,
   placeholder: ''
@@ -69,7 +71,7 @@ const copy = async (text: string) => {
 
 </script>
 <template>
-  <div class="flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow">
+  <div v-if="props.language" class="flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow">
     <div class="flex w-full justify-between items-center">
       <h1 class="p-2">{{ props.title }}</h1>
       <p v-if="isCopy" :class="isAnimationCopy && 'active'"
@@ -83,7 +85,7 @@ const copy = async (text: string) => {
     </div>
     <div class="flex flex-col lg:flex-row gap-4 w-full">
       <div class="flex gap-3 flex-col">
-        <LangDropdown :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
+        <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
         <div class="flex gap-3 w-max">
           <div class="flex flex-col gap-4 w-full justify-end items-center">
             <button

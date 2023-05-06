@@ -1,4 +1,3 @@
-
 const useDeepl = () => {
     const addTranslate: any = async (text: any, sourceLang: string, targetLang: string) => {
         try {
@@ -14,19 +13,8 @@ const useDeepl = () => {
         }
     }
 
-    const fetchLanguages = async <T>(): Promise<T> => {
-        try {
-            return await $fetch('/api/languages', {
-                method: "get"
-            })
-        } catch (e: any) {
-            return e.message
-        }
-    }
-
     return {
         addTranslate,
-        fetchLanguages
     }
 }
 
