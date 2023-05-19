@@ -1,15 +1,5 @@
-export enum Lang {
-    FR = "FR",
-    EN = "EN",
-    ES = "ES",
-    DE = "DE"
-}
-
-
-export const LangName = {
-    FR : "Français",
-    EN : "English",
-    ES : "Español",
-    DE : "Deutch",
-    JA: "Japan"
+export default interface Languages {
+    language: string
+    name: string
+    supports_formality: boolean
 }
