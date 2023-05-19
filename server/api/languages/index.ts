@@ -10,8 +10,6 @@ export default defineEventHandler(async (e) => {
             }
         })
 
-        console.log(languages)
-
         return languages
     }
 })
