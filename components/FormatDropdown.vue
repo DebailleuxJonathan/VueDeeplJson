@@ -1,20 +1,22 @@
 <script setup lang='ts'>
-import {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions} from "@headlessui/vue";
+import {Listbox, ListboxButton, ListboxOption, ListboxOptions} from "@headlessui/vue";
 import {ChevronUpDownIcon, CheckIcon} from '@heroicons/vue/20/solid'
 
-const people = ['json', 'csv']
+const formats = ['json', 'csv']
 
 const props = defineProps<{
   format: string
 }>()
 
+const format = ref(props.format)
+
 </script>
 <template>
-  <Listbox as="div" v-model="props.format">
+  <Listbox as="div" v-model="format">
     <div class="relative">
       <ListboxButton
           class="relative flex py-2 px-3 justify-between items-center w-full text-left text-gray-900 gap-6 bg-white rounded-lg ring-1 ring-inset ring-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 shadow">
-        <p class="block truncate py-px">{{ 'Format : ' + props.format }}</p>
+        <p class="block truncate py-px">{{ 'Format : ' + format }}</p>
         <p class="pointer-events-none right-0 flex items-center">
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true"/>
         </p>
@@ -23,10 +25,10 @@ const props = defineProps<{
                   leave-to-class="opacity-0">
         <ListboxOptions
             class="absolute mt-1 z-30 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          <ListboxOption as="template" v-for="person in people" :key="person" :value="person"
+          <ListboxOption as="template" v-for="formatType in formats" :key="formatType" :value="formatType"
                          v-slot="{ active, selected }">
             <li :class="[active ? 'bg-indigo-600 text-white' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">
-              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ person }}</span>
+              <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">{{ formatType }}</span>
 
               <span v-if="selected"
                     :class="[active ? 'text-white' : 'text-indigo-600', 'absolute inset-y-0 right-0 flex items-center pr-4']">

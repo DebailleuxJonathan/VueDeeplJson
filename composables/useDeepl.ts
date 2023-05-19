@@ -12,8 +12,9 @@ const useDeepl = () => {
             console.log(e)
         }
     }
+
     return {
-        addTranslate
+        addTranslate,
     }
 }
 
