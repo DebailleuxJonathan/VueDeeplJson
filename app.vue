@@ -201,6 +201,7 @@ const scrollToElement = (element: HTMLElement) => {
         <div class="sticky top-0">
           <div class="flex gap-3">
             <LangTextarea
+                id="sourceLangTitle"
                 v-model="jsonText"
                 @update:lang="updateSourceLang"
                 :language="sourceLang"
