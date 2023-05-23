@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import {useLanguages} from "~/composables/languages";
-import {ref} from "vue";
+import {ref, computed, onMounted} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
