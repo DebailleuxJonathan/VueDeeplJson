@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import {ref, watch} from "vue";
+import {ref, watch, computed} from "vue";
 import {ClipboardIcon, ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
 import Languages from "~/types/lang";

@@ -45,7 +45,7 @@ export default defineEventHandler(async (e) => {
 
         await getWordTranslatable(body.text, body.targetLang)
 
-        const formatBody = words.join('; ').toString()
+        const formatBody = words.join('/;/ ').toString()
 
         const translatedText: translatedText = await $fetch('https://api-free.deepl.com/v2/translate', {
             method: "post", params: {
@@ -56,7 +56,7 @@ export default defineEventHandler(async (e) => {
             }
         })
 
-        const splitTranslatedText = translatedText.translations[0].text.split('; ')
+        const splitTranslatedText = translatedText.translations[0].text.split('/;/ ')
         const replaceJSONValuesWithArray = (json: any, splitTranslatedText: string[]) => {
             let index = 0;
             const translate = (obj: any) => {

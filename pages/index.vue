@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import {useLanguages} from "~/composables/languages";
-import {ref} from "vue";
+import {ref, computed, onMounted} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
@@ -216,6 +216,7 @@ const scrollToElement = (element: HTMLElement) => {
           <div class="flex gap-3">
             <LangTextarea
                 v-if="sourceLang"
+                id="sourceLangTitle"
                 v-model="jsonText"
                 @update:lang="updateSourceLang"
                 :language="sourceLang"
