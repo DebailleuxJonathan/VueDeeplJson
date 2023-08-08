@@ -71,7 +71,8 @@ const copy = async (text: string) => {
 
 </script>
 <template>
-  <div v-if="props.language" class="flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow">
+  <div v-if="props.language"
+       class="z-10 flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow">
     <div class="flex w-full justify-between items-center">
       <h1 class="p-2">{{ props.title }}</h1>
       <p v-if="isCopy" :class="isAnimationCopy && 'active'"
@@ -116,7 +117,7 @@ const copy = async (text: string) => {
           :placeholder="props.placeholder"
           v-model="value"
           type="json"
-          class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner"
+          class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10"
       />
       </div>
     </div>

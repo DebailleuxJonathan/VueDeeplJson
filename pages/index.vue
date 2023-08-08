@@ -7,6 +7,7 @@ import useConvertToJson from "~/composables/convertToJson";
 import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import FormatDropdown from "~/components/FormatDropdown.vue";
 import Languages from "~/types/lang";
+import ErrorPopup from "~/components/ErrorPopup.vue";
 
 const {fetchLanguages, data, getLang} = useLanguages()
 const {addTranslate} = useDeepl()
@@ -16,16 +17,19 @@ const {csvToJson} = useConvertToJson()
 const translatedLanguages: any = ref([])
 const sourceLang: any = ref(null)
 const jsonText = ref('')
-const index = ref(1)
+const errorJsonFormatCount = ref(0)
 const errors = ref<any>({
   jsonFormat: ''
 })
 const isDisabled = ref(false)
 const listLanguages = ref<Languages[]>([])
+const tagsListLanguages = ref<Languages[]>([])
+const languagesUsed = ref<string[]>([])
 
 onMounted(async () => {
   await fetchLanguages()
   listLanguages.value = data.value
+  tagsListLanguages.value = [...listLanguages.value]
 
   translatedLanguages.value = [
     {
@@ -41,7 +45,17 @@ onMounted(async () => {
   ]
 
   sourceLang.value = await getLang(listLanguages.value, 'FR')
+
+  languagesUsed.value.push('FR', 'EN-GB', 'ES')
+  for (const languageUsed of languagesUsed.value) {
+    removeLanguage(languageUsed)
+  }
 })
+
+const removeLanguage = (languageUsed: string) => {
+  const remove = tagsListLanguages.value.findIndex(language => language.language === languageUsed)
+  tagsListLanguages.value.splice(remove, 1)
+}
 
 const isTextareasEmpty = computed(() => {
   for (let i = 0; i < translatedLanguages.value.length; i++) {
@@ -63,20 +77,27 @@ const startIndex = ref(translatedLanguages.value.length)
 const format = ref('json')
 
 const addTranslatedText = async () => {
-  startIndex.value++
+  languagesUsed.value.push(tagsListLanguages.value[startIndex.value].language)
 
   translatedLanguages.value.push({
-    lang: listLanguages.value[startIndex.value],
+    lang: tagsListLanguages.value[startIndex.value],
     text: '',
     isLoaded: true
   })
+
+  startIndex.value++
+
   setTimeout(() => {
-    scrollToElement(tags.value[startIndex.value - 1])
+    scrollToElement(tags.value[startIndex.value + 1])
   }, 50)
 }
 
 const updateTargetLang = async (lang: Languages, index: number) => {
   translatedLanguages.value[index].lang = await getLang(listLanguages.value, lang)
+  let mapTranslatedLanguage = translatedLanguages.value.map(translatedLanguage => translatedLanguage.lang.language);
+  const sortTranslatedLanguage = listLanguages.value.filter(objet => !mapTranslatedLanguage.includes(objet.language));
+  listLanguages.value = sortTranslatedLanguage.filter(objet => sourceLang.value.language !== objet.language);
+  tagsListLanguages.value = listLanguages.value
 }
 
 const multipleTranslate = async () => {
@@ -90,8 +111,10 @@ const multipleTranslate = async () => {
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
       }
+      jsonText.value = JSON.stringify(JSON.parse(jsonText.value), null, 2)
       isDisabled.value = false
     } catch (e) {
+      errorJsonFormatCount.value++
       errors.value.jsonFormat = 'Format du JSON incorrect'
     }
   } else if (format.value === 'csv') {
@@ -206,10 +229,29 @@ const scrollToElement = (element: HTMLElement) => {
   element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 }
 
+const advertisement = 'Si vous rencontrez des difficultés pour formater votre JSON voilà quelques conseils :'
+const steps: string[] = [
+  'Commencez votre objet par {}',
+  'Les \'\' doivent être remplacés par des ""',
+  'N\'oubliez pas les virgules à la fin des lignes sauf pour la dernière ligne',
+  'Voici un exemple pour vous aider: ',
+  `${JSON.stringify(placeholder, null, 2)}`
+]
+
 </script>
 <template>
+  <ErrorPopup
+      @reset-counter="() => errorJsonFormatCount = 0"
+      :is-visible="errorJsonFormatCount > 1"
+      :description="advertisement"
+      :steps="steps"
+      title="Note:"
+  />
   <div v-if="listLanguages?.length > 0" class="p-5">
-    <h1 class="text-2xl font-semibold">Traduction JSON Deepl</h1>
+    <div class="w-full p-4 bg-gray-100 rounded-sm">
+      <h1 class="text-4xl font-bold">Traduction JSON Deepl</h1>
+      <p class="font-light">Traduisez vos json en toute simplicité</p>
+    </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
         <div class="sticky top-0">
@@ -227,26 +269,7 @@ const scrollToElement = (element: HTMLElement) => {
             />
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
-          <div class="relative flex items-center w-full gap-3 top-0 z-50">
-            <ul class="flex overflow-x-auto w-full pb-2">
-              <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
-                  v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
-                <div v-if="textarea && sourceLang">
-                  <div
-                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
-                    {{ `${sourceLang.language} / ${textarea.lang.language}` }}
-                    <span v-if="index === translatedLanguages.length - 1 && index > 1"
-                          class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
-                  </span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <div class="flex flex-col w-full lg:flex-row gap-3 justify-between">
+          <div class="flex flex-col w-full lg:flex-row gap-3 justify-between mt-4">
             <div class="w-full flex-wrap flex flex-col sm:flex-row gap-3">
               <button
                   :disabled="isDisabled || !jsonText"
@@ -257,10 +280,10 @@ const scrollToElement = (element: HTMLElement) => {
                 Traduire
               </button>
               <button
-                  :disabled="isDisabled || !(listLanguages.length - 1 > translatedLanguages.length)"
+                  :disabled="isDisabled || !(translatedLanguages.length - 2 < tagsListLanguages.length)"
                   @click="addTranslatedText"
                   class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(listLanguages.length - 1 > translatedLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(translatedLanguages.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
               >
                 <PlusIcon class="w-5 h-5"/>
                 {{ 'traductions' }}
@@ -278,6 +301,25 @@ const scrollToElement = (element: HTMLElement) => {
                 Télécharger
               </button>
             </div>
+          </div>
+          <div class="relative flex items-center w-full gap-3 top-0 z-40">
+            <ul class="flex overflow-x-auto w-full">
+              <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
+                  v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
+                <div v-if="textarea && sourceLang">
+                  <div
+                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
+                    {{ `${sourceLang.language} / ${textarea.lang.language}` }}
+                    <span v-if="index === translatedLanguages.length - 1 && index > 1"
+                          class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                  </span>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
           <div class="flex flex-col gap-4 mt-4">
             <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
