@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON çevirisi",
+    "subtitle": "Json'ınızı kolaylıkla çevirin"
+  },
+  "textarea": {
+    "titleSourceLang": "Dil",
+    "titleTranslatedLang": "Çeviri {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Tercüme et",
+    "addTranslations": "çeviriler",
+    "download": "İndir",
+    "copyText": "Metin kopyalandı!",
+    "downloadText": "Metni indirin!",
+    "waiting": "Bekliyorum."
+  },
+  "uploadFile": {
+    "title": "Dosya seçme veya sürükleme",
+    "format": ".json biçiminde"
+  },
+  "placeholder": {
+    "test": "Merhaba",
+    "members":
+      {
+        "name": "Çilekli",
+        "age": "onsekiz",
+        "secretIdentity": "Akrep"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Yanlış CSV formatı",
+    "downloadAllFilesJson": "JSON biçimlerinden birinde sorun",
+    "uploadWrongFormat": "Yanlış dosya biçimi"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "JSON'unuzu biçimlendirmede sorun yaşıyorsanız, işte size birkaç ipucu:",
+      "steps": {
+        "first": "Nesnenizi bir ayraçla başlatın ve bitirin",
+        "second": "'' ifadesi \"\" ile değiştirilmelidir.",
+        "third": "Son satır hariç, satırların sonundaki virgülleri unutmayın.",
+        "forth": "İşte size yardımcı olacak bir örnek:"
+      }
+    }
+  }
+}

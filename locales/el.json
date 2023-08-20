@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Μετάφραση Deepl JSON",
+    "subtitle": "Μεταφράστε το json σας με ευκολία"
+  },
+  "textarea": {
+    "titleSourceLang": "Γλώσσα",
+    "titleTranslatedLang": "Μετάφραση {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Μεταφράστε",
+    "addTranslations": "μεταφράσεις",
+    "download": "Λήψη",
+    "copyText": "Το κείμενο αντιγράφηκε!",
+    "downloadText": "Κατεβάστε το κείμενο!",
+    "waiting": "Περιμένοντας..."
+  },
+  "uploadFile": {
+    "title": "Επιλογή ή σύρσιμο ενός αρχείου",
+    "format": "σε μορφή .json"
+  },
+  "placeholder": {
+    "test": "Γεια σας",
+    "members":
+      {
+        "name": "Φράουλα",
+        "age": "δεκαοκτώ",
+        "secretIdentity": "Σκορπιός"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Λανθασμένη μορφή CSV",
+    "downloadAllFilesJson": "Πρόβλημα σε μία από τις μορφές JSON",
+    "uploadWrongFormat": "Λάθος μορφή αρχείου"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Αν έχετε πρόβλημα με τη μορφοποίηση του JSON σας, ακολουθούν μερικές συμβουλές:",
+      "steps": {
+        "first": "Ξεκινήστε και τελειώστε το αντικείμενό σας με μια παρένθεση",
+        "second": "Το '' πρέπει να αντικατασταθεί από \"\".",
+        "third": "Μην ξεχνάτε τα κόμματα στο τέλος των γραμμών, εκτός από την τελευταία γραμμή.",
+        "forth": "Ακολουθεί ένα παράδειγμα για να σας βοηθήσει:"
+      }
+    }
+  }
+}

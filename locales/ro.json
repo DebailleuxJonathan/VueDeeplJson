@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Traducerea JSON din Deepl",
+    "subtitle": "Traduceți json-ul cu ușurință"
+  },
+  "textarea": {
+    "titleSourceLang": "Limba",
+    "titleTranslatedLang": "Traducere {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Traducere",
+    "addTranslations": "traduceri",
+    "download": "Descărcați",
+    "copyText": "Text copiat!",
+    "downloadText": "Descărcați textul!",
+    "waiting": "Așteptând..."
+  },
+  "uploadFile": {
+    "title": "Selectarea sau tragerea unui fișier",
+    "format": "în format .json"
+  },
+  "placeholder": {
+    "test": "Bună ziua",
+    "members":
+      {
+        "name": "Căpșuni",
+        "age": "optsprezece",
+        "secretIdentity": "Scorpion"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Format CSV incorect",
+    "downloadAllFilesJson": "Problemă într-unul dintre formatele JSON",
+    "uploadWrongFormat": "Format de fișier greșit"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Dacă aveți probleme cu formatarea JSON, iată câteva sfaturi:",
+      "steps": {
+        "first": "Începeți și terminați obiectul cu o acoladă",
+        "second": "'' trebuie înlocuit cu \"\".",
+        "third": "Nu uitați de virgulele de la sfârșitul rândurilor, cu excepția ultimului rând.",
+        "forth": "Iată un exemplu pentru a vă ajuta:"
+      }
+    }
+  }
+}

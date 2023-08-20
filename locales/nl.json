@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON vertaling",
+    "subtitle": "Vertaal je json met gemak"
+  },
+  "textarea": {
+    "titleSourceLang": "Taal",
+    "titleTranslatedLang": "Vertaling {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Vertaal",
+    "addTranslations": "vertalingen",
+    "download": "Downloaden",
+    "copyText": "Tekst gekopieerd!",
+    "downloadText": "Tekst downloaden!",
+    "waiting": "Wachten..."
+  },
+  "uploadFile": {
+    "title": "Een bestand selecteren of slepen",
+    "format": "in .json formaat"
+  },
+  "placeholder": {
+    "test": "Hallo",
+    "members":
+      {
+        "name": "Aardbei",
+        "age": "achttien",
+        "secretIdentity": "Schorpioen"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Onjuist CSV-formaat",
+    "downloadAllFilesJson": "Probleem in een van de JSON-indelingen",
+    "uploadWrongFormat": "Verkeerd bestandsformaat"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Als je problemen hebt met het formatteren van je JSON, zijn hier een paar tips:",
+      "steps": {
+        "first": "Begin en eindig je object met een accolade",
+        "second": "De '' moet worden vervangen door \"\".",
+        "third": "Vergeet de komma's aan het einde van de regels niet, behalve de laatste regel.",
+        "forth": "Hier is een voorbeeld om je te helpen:"
+      }
+    }
+  }
+}

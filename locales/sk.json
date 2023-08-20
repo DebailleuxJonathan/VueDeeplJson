@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl preklad JSON",
+    "subtitle": "Jednoduchý preklad vášho json"
+  },
+  "textarea": {
+    "titleSourceLang": "Jazyk",
+    "titleTranslatedLang": "Preklad {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Preložiť",
+    "addTranslations": "preklady",
+    "download": "Stiahnite si",
+    "copyText": "Text skopírovaný!",
+    "downloadText": "Stiahnite si text!",
+    "waiting": "Čakanie..."
+  },
+  "uploadFile": {
+    "title": "Výber alebo pretiahnutie súboru",
+    "format": "vo formáte .json"
+  },
+  "placeholder": {
+    "test": "Dobrý deň,",
+    "members":
+      {
+        "name": "Jahoda",
+        "age": "osemnásť",
+        "secretIdentity": "Škorpión"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Nesprávny formát CSV",
+    "downloadAllFilesJson": "Problém v jednom z formátov JSON",
+    "uploadWrongFormat": "Nesprávny formát súboru"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Ak máte problémy s formátovaním JSON, tu je niekoľko tipov:",
+      "steps": {
+        "first": "Začnite a ukončite svoj objekt zátvorkou",
+        "second": "Písmeno '' sa musí nahradiť písmenom \"\".",
+        "third": "Nezabudnite na čiarky na konci riadkov, okrem posledného riadku.",
+        "forth": "Tu je príklad, ktorý vám pomôže:"
+      }
+    }
+  }
+}

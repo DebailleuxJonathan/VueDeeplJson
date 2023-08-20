@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON tõlge",
+    "subtitle": "Tõlgi oma json hõlpsasti"
+  },
+  "textarea": {
+    "titleSourceLang": "Keel",
+    "titleTranslatedLang": "Tõlge {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Tõlgi",
+    "addTranslations": "tõlked",
+    "download": "Lae alla",
+    "copyText": "Tekst kopeeritud!",
+    "downloadText": "Lae alla tekst!",
+    "waiting": "Oodates..."
+  },
+  "uploadFile": {
+    "title": "Faili valimine või lohistamine",
+    "format": ".json formaadis"
+  },
+  "placeholder": {
+    "test": "Tere",
+    "members":
+      {
+        "name": "Maasikas",
+        "age": "kaheksateist",
+        "secretIdentity": "Skorpion"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Vale CSV-vorming",
+    "downloadAllFilesJson": "Probleem ühes JSON-vormingus",
+    "uploadWrongFormat": "Vale failiformaat"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Kui teil on probleeme oma JSONi vormindamisega, on siin mõned nõuanded:",
+      "steps": {
+        "first": "Alusta ja lõpeta oma objekt sulgudes",
+        "second": "'' tuleb asendada \"\".",
+        "third": "Ärge unustage komasid ridade lõpus, välja arvatud viimane rida.",
+        "forth": "Siin on teile abiks näide:"
+      }
+    }
+  }
+}

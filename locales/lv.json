@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON tulkojums",
+    "subtitle": "Viegli tulkot savu json"
+  },
+  "textarea": {
+    "titleSourceLang": "Valoda",
+    "titleTranslatedLang": "Tulkojums {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Tulkot",
+    "addTranslations": "tulkojumi",
+    "download": "Lejupielādēt",
+    "copyText": "Kopēts teksts!",
+    "downloadText": "Lejupielādēt tekstu!",
+    "waiting": "Gaidot..."
+  },
+  "uploadFile": {
+    "title": "Faila atlasīšana vai vilkšana",
+    "format": ".json formātā"
+  },
+  "placeholder": {
+    "test": "Sveiki",
+    "members":
+      {
+        "name": "Zemeņu",
+        "age": "astoņpadsmit",
+        "secretIdentity": "Skorpions"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Nepareizs CSV formāts",
+    "downloadAllFilesJson": "Problēma kādā no JSON formātiem",
+    "uploadWrongFormat": "Nepareizs faila formāts"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Ja jums rodas problēmas ar JSON formatēšanu, šeit ir sniegti daži padomi:",
+      "steps": {
+        "first": "Objekta sākums un beigas ar iekavās",
+        "second": "\"' jāaizstāj ar \"\".",
+        "third": "Neaizmirstiet par komatiem rindu beigās, izņemot pēdējo rindu.",
+        "forth": "Šeit ir piemērs, kas jums palīdzēs:"
+      }
+    }
+  }
+}

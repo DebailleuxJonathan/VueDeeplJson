@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON-Übersetzung",
+    "subtitle": "Übersetzen Sie Ihre json ganz einfach"
+  },
+  "textarea": {
+    "titleSourceLang": "Gewählte Sprache",
+    "titleTranslatedLang": "Übersetzung {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Übersetzen",
+    "addTranslations": "Übersetzungen",
+    "download": "Download",
+    "copyText": "Kopierter Text!",
+    "downloadText": "Text hochgeladen!",
+    "waiting": "In der Warteschleife..."
+  },
+  "uploadFile": {
+    "title": "Eine Datei auswählen oder ziehen",
+    "format": "im .json-Format"
+  },
+  "placeholder": {
+    "test": "Kuckuck",
+    "members":
+      {
+        "name": "Fräser",
+        "age": "achtzehn",
+        "secretIdentity": "Skorpion"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Falsches CSV-Format",
+    "downloadAllFilesJson": "Problem in einem der JSON-Formate",
+    "uploadWrongFormat": "Falsches Dateiformat"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Wenn Sie Schwierigkeiten haben, Ihr JSON zu formatieren, hier ein paar Tipps:",
+      "steps": {
+        "first": "Beginnen und beenden Sie Ihr Objekt mit einer geschweiften Klammer",
+        "second": "Die '' müssen durch \"\" ersetzt werden.",
+        "third": "Vergessen Sie die Kommas am Ende der Zeilen nicht, außer in der letzten Zeile",
+        "forth": "Hier ist ein Beispiel, das Ihnen helfen soll:"
+      }
+    }
+  }
+}

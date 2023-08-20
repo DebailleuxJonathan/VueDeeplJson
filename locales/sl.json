@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Prevod Deepl JSON",
+    "subtitle": "Prevedite svoj json z lahkoto"
+  },
+  "textarea": {
+    "titleSourceLang": "Jezik",
+    "titleTranslatedLang": "Prevod {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Prevesti",
+    "addTranslations": "prevodi",
+    "download": "Prenesi",
+    "copyText": "Besedilo je kopirano!",
+    "downloadText": "Prenesi besedilo!",
+    "waiting": "Čakanje..."
+  },
+  "uploadFile": {
+    "title": "Izbira ali vlečenje datoteke",
+    "format": "v formatu .json"
+  },
+  "placeholder": {
+    "test": "Pozdravljeni",
+    "members":
+      {
+        "name": "Jagoda",
+        "age": "osemnajst",
+        "secretIdentity": "Škorpijon"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Nepravilna oblika CSV",
+    "downloadAllFilesJson": "Težava v enem od formatov JSON",
+    "uploadWrongFormat": "Napačen format datoteke"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Če imate težave z oblikovanjem JSON, vam ponujamo nekaj nasvetov:",
+      "steps": {
+        "first": "Objekt začnite in končajte z oklepajem",
+        "second": "Znak '' je treba nadomestiti z \"\".",
+        "third": "Ne pozabite na vejice na koncu vrstic, razen v zadnji vrstici.",
+        "forth": "V pomoč vam je naslednji primer:"
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON vertimas",
+    "subtitle": "Lengvai išverskite savo json"
+  },
+  "textarea": {
+    "titleSourceLang": "Kalba",
+    "titleTranslatedLang": "Vertimas {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Išversti",
+    "addTranslations": "vertimai",
+    "download": "Atsisiųsti",
+    "copyText": "Tekstas nukopijuotas!",
+    "downloadText": "Atsisiųsti tekstą!",
+    "waiting": "Laukimas..."
+  },
+  "uploadFile": {
+    "title": "Failo pasirinkimas arba vilkimas",
+    "format": ".json formatu"
+  },
+  "placeholder": {
+    "test": "Sveiki",
+    "members":
+      {
+        "name": "Braškių",
+        "age": "aštuoniolika",
+        "secretIdentity": "Skorpionas"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Neteisingas CSV formatas",
+    "downloadAllFilesJson": "Vieno iš JSON formatų problema",
+    "uploadWrongFormat": "Neteisingas failo formatas"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Jei kyla sunkumų formatuojant JSON, pateikiame keletą patarimų:",
+      "steps": {
+        "first": "Pradėkite ir užbaigkite objektą kabliataškiu",
+        "second": "\"\" turi būti pakeistas \"\".",
+        "third": "Nepamirškite kablelių eilučių pabaigoje, išskyrus paskutinę eilutę.",
+        "forth": "Štai pavyzdys, kuris jums padės:"
+      }
+    }
+  }
+}

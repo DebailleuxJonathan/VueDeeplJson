@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Terjemahan Deepl JSON",
+    "subtitle": "Terjemahkan json Anda dengan mudah"
+  },
+  "textarea": {
+    "titleSourceLang": "Bahasa",
+    "titleTranslatedLang": "Terjemahan {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Menerjemahkan",
+    "addTranslations": "terjemahan",
+    "download": "Unduh",
+    "copyText": "Teks disalin!",
+    "downloadText": "Unduh teks!",
+    "waiting": "Menunggu..."
+  },
+  "uploadFile": {
+    "title": "Memilih atau menyeret file",
+    "format": "dalam format .json"
+  },
+  "placeholder": {
+    "test": "Halo.",
+    "members":
+      {
+        "name": "Stroberi",
+        "age": "delapan belas",
+        "secretIdentity": "Scorpio"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Format CSV salah",
+    "downloadAllFilesJson": "Masalah dalam salah satu format JSON",
+    "uploadWrongFormat": "Format file salah"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Jika Anda mengalami masalah dalam memformat JSON Anda, berikut adalah beberapa tips:",
+      "steps": {
+        "first": "Memulai dan mengakhiri objek Anda dengan penjepit",
+        "second": "'' harus diganti dengan \"\".",
+        "third": "Jangan lupa tanda koma di akhir baris, kecuali pada baris terakhir.",
+        "forth": "Berikut adalah contoh untuk membantu Anda:"
+      }
+    }
+  }
+}

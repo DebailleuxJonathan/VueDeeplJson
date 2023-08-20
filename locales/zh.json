@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON 翻译",
+    "subtitle": "轻松翻译您的 json"
+  },
+  "textarea": {
+    "titleSourceLang": "语言",
+    "titleTranslatedLang": "翻译 {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "翻译",
+    "addTranslations": "译文",
+    "download": "下载",
+    "copyText": "文本已复制！",
+    "downloadText": "下载文本！",
+    "waiting": "等待..."
+  },
+  "uploadFile": {
+    "title": "选择或拖动文件",
+    "format": ".json 格式"
+  },
+  "placeholder": {
+    "test": "您好",
+    "members":
+      {
+        "name": "草莓",
+        "age": "十八",
+        "secretIdentity": "天蝎座"
+      }
+      },
+  "errors": {
+    "jsonFormat": "不正确的 CSV 格式",
+    "downloadAllFilesJson": "其中一种 JSON 格式存在问题",
+    "uploadWrongFormat": "文件格式错误"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "如果您在格式化 JSON 时遇到困难，这里有一些提示：",
+      "steps": {
+        "first": "用括号开始和结束对象",
+        "second": "''必须用\"\"代替。",
+        "third": "除了最后一行，别忘了行尾的逗号。",
+        "forth": "这里有一个例子可以帮助您："
+      }
+    }
+  }
+}

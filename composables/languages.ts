@@ -30,6 +30,6 @@ export const useLanguages = () => {
         data,
         fetchLanguages,
         languages,
-        getLang
+        getLang,
     }
 }

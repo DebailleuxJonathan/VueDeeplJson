@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON-oversettelse",
+    "subtitle": "Enkel oversettelse av json"
+  },
+  "textarea": {
+    "titleSourceLang": "Språk",
+    "titleTranslatedLang": "Oversettelse {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Oversett",
+    "addTranslations": "oversettelser",
+    "download": "Last ned",
+    "copyText": "Tekst kopiert!",
+    "downloadText": "Last ned tekst!",
+    "waiting": "Venter..."
+  },
+  "uploadFile": {
+    "title": "Velge eller dra en fil",
+    "format": "i .json-format"
+  },
+  "placeholder": {
+    "test": "Hallo",
+    "members":
+      {
+        "name": "Jordbær",
+        "age": "atten",
+        "secretIdentity": "Skorpionen"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Feil CSV-format",
+    "downloadAllFilesJson": "Problem i et av JSON-formatene",
+    "uploadWrongFormat": "Feil filformat"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Hvis du har problemer med å formatere JSON, får du noen tips her:",
+      "steps": {
+        "first": "Begynn og avslutt objektet med en parentes",
+        "second": "'' må erstattes med \"\".",
+        "third": "Ikke glem kommaene på slutten av linjene, med unntak av den siste linjen.",
+        "forth": "Her er et eksempel som kan hjelpe deg:"
+      }
+    }
+  }
+}

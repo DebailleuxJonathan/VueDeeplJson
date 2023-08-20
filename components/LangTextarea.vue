@@ -77,11 +77,12 @@ const copy = async (text: string) => {
       <h1 class="p-2">{{ props.title }}</h1>
       <p v-if="isCopy" :class="isAnimationCopy && 'active'"
          class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded">
-        Texte copié !</p>
+        {{ $t('buttons.copyText') }}</p>
       <p v-if="isDownload" :class="isAnimationDownload && 'active'"
          class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded">
-        Texte téléchargé !</p>
-      <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">En attente...
+        {{ $t('buttons.downloadText') }}</p>
+      <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">
+        {{ $t('buttons.waiting') }}
       </p>
     </div>
     <div class="flex flex-col lg:flex-row gap-4 w-full">
