@@ -45,18 +45,16 @@ export default defineEventHandler(async (e) => {
 
         await getWordTranslatable(body.text, body.targetLang)
 
-        const formatBody = words.join('/;/ ').toString()
-
         const translatedText: translatedText = await $fetch('https://api-free.deepl.com/v2/translate', {
             method: "post", params: {
                 auth_key: process.env.DEEPL_AUTH_KEY,
-                text: formatBody,
+                text: words,
                 source_lang: body.sourceLang,
                 target_lang: body.targetLang
             }
         })
 
-        const splitTranslatedText = translatedText.translations[0].text.split('/;/ ')
+        const translatedTextMap= translatedText.translations.map((trans) => trans.text)
         const replaceJSONValuesWithArray = (json: any, splitTranslatedText: string[]) => {
             let index = 0;
             const translate = (obj: any) => {
@@ -82,6 +80,6 @@ export default defineEventHandler(async (e) => {
             return json;
         };
 
-        return replaceJSONValuesWithArray(body.text, splitTranslatedText)
+        return replaceJSONValuesWithArray(body.text, translatedTextMap)
     }
 })
