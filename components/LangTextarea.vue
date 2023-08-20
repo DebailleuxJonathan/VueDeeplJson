@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<{
   title: string
   placeholder?: string
   data: Languages[]
+  format: string
 }>(), {
   isLoaded: true,
   placeholder: ''
@@ -87,9 +88,10 @@ const copy = async (text: string) => {
     <div class="flex flex-col lg:flex-row gap-4 w-full">
       <div class="flex gap-3 flex-col">
         <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
-        <div class="flex gap-3 w-max">
+        <div class="flex w-max" :class="props.format === 'json' && 'gap-3'">
           <div class="flex flex-col gap-4 w-full justify-end items-center">
             <button
+                v-if="props.format === 'json'"
                 :disabled="value === ''"
                 :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                 class="w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow transition-all duration-300"
@@ -114,11 +116,13 @@ const copy = async (text: string) => {
 
       <div class="relative h-80 w-full">
       <textarea
+          v-if="props.format === 'json'"
           :placeholder="props.placeholder"
           v-model="value"
           type="json"
           class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10"
       />
+        <CsvFormat v-if="props.format === 'csv' && value !== ''" :data="value" />
       </div>
     </div>
   </div>

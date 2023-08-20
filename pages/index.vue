@@ -8,11 +8,12 @@ import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import FormatDropdown from "~/components/FormatDropdown.vue";
 import Languages from "~/types/lang";
 import ErrorPopup from "~/components/ErrorPopup.vue";
+import CsvFormat from "~/components/CsvFormat.vue";
+import Papa from "papaparse/papaparse";
 
 const {fetchLanguages, data, getLang} = useLanguages()
 const {addTranslate} = useDeepl()
 const {downloadFile} = useDownloadFile()
-const {csvToJson} = useConvertToJson()
 
 const translatedLanguages: any = ref([])
 const sourceLang: any = ref(null)
@@ -101,38 +102,27 @@ const updateTargetLang = async (lang: Languages, index: number) => {
 }
 
 const multipleTranslate = async () => {
-  if (format.value === 'json') {
-    try {
-      for (const element of translatedLanguages.value) {
-        const newJson = JSON.parse(jsonText.value)
-        isDisabled.value = true
-        element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
-        element.text = JSON.stringify(res, null, 2);
-        element.isLoaded = true
-      }
+  try {
+    for (const translatedLanguage of translatedLanguages.value) {
+      let newJson
+      newJson = JSON.parse(jsonText.value)
+      console.log(newJson)
+      isDisabled.value = true
+      translatedLanguage.isLoaded = false
+      const res = await addTranslate(newJson, sourceLang.value.language, translatedLanguage.lang.language)
+      translatedLanguage.text = JSON.stringify(res, null, 2);
+      translatedLanguage.isLoaded = true
+    }
+    if (format.value === 'json') {
       jsonText.value = JSON.stringify(JSON.parse(jsonText.value), null, 2)
-      isDisabled.value = false
-    } catch (e) {
-      errorJsonFormatCount.value++
-      errors.value.jsonFormat = 'Format du JSON incorrect'
     }
-  } else if (format.value === 'csv') {
-    try {
-      const newJson = JSON.parse(csvToJson(jsonText.value))
-      jsonText.value = JSON.stringify(newJson, null, 2)
-      for (const element of translatedLanguages.value) {
-        isDisabled.value = true
-        element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
-        element.text = JSON.stringify(res, null, 2);
-        element.isLoaded = true
-      }
-      isDisabled.value = false
-    } catch (e) {
-      errors.value.jsonFormat = 'Format du CSV incorrect'
-    }
+    isDisabled.value = false
+  } catch (e) {
+    console.log(e)
+    errorJsonFormatCount.value++
+    errors.value.jsonFormat = 'Format du JSON incorrect'
   }
+
 }
 
 const textareas: any = ref([])
@@ -207,19 +197,29 @@ const upload = (event: any) => {
 
   if (['application/json', 'text/csv'].includes(file.type)) {
     const reader = new FileReader()
-    reader.onload = () => {
+    reader.onload = (eventReader) => {
       if (reader.result) {
-        jsonText.value = reader.result.toString()
+        const dataReader = eventReader.target!.result;
+        switch (file.type) {
+          case 'application/json':
+            format.value = 'json'
+            jsonText.value = reader.result.toString()
+            return
+          case 'text/csv':
+            format.value = 'csv'
+            Papa.parse(dataReader, {
+              header: true,
+              dynamicTyping: true,
+              complete: (result) => {
+                const k = result.data.filter((res) => Object.values(res)[0])
+                jsonText.value = JSON.stringify(k)
+              }
+            });
+            return
+        }
       }
     }
     reader.readAsText(file)
-
-    switch (file.type) {
-      case 'application/json':
-        return format.value = 'json'
-      case 'text/csv':
-        return format.value = 'csv'
-    }
   } else {
     alert('Mauvais format de fichier')
   }
@@ -238,6 +238,24 @@ const steps: string[] = [
   `${JSON.stringify(placeholder, null, 2)}`
 ]
 
+const changeTab = async (tab: string) => {
+  format.value = ''
+  jsonText.value = ''
+  translatedLanguages.value = [
+    {
+      lang: await getLang(listLanguages.value, 'EN-GB'),
+      text: '',
+      isLoaded: true
+    },
+    {
+      lang: await getLang(listLanguages.value, 'ES'),
+      text: '',
+      isLoaded: true
+    }
+  ]
+  format.value = tab
+}
+
 </script>
 <template>
   <ErrorPopup
@@ -252,7 +270,27 @@ const steps: string[] = [
       <h1 class="text-4xl font-bold">Traduction JSON Deepl</h1>
       <p class="font-light">Traduisez vos json en toute simplicité</p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+
+    <div class="inline-flex rounded-md shadow-sm my-8" role="group">
+      <button
+          type="button"
+          class="w-[70px] inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-green-500"
+          :class="format === 'json' && 'z-10 !bg-green-500 text-white hover:text-white'"
+          @click="changeTab('json')"
+      >
+        JSON
+      </button>
+      <button
+          type="button"
+          class="w-[70px] inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-gray-200 rounded-r-md hover:bg-gray-100 hover:text-blue-500"
+          :class="format === 'csv' && 'z-10 !bg-blue-500 text-white hover:text-white'"
+          @click="changeTab('csv')"
+      >
+        CSV
+      </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="w-full">
         <div class="sticky top-0">
           <div class="flex gap-3">
@@ -265,6 +303,7 @@ const steps: string[] = [
                 :data="listLanguages"
                 title="Langue choisie"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
+                :format="format"
                 @input="errors.jsonFormat = ''"
             />
           </div>
@@ -288,7 +327,6 @@ const steps: string[] = [
                 <PlusIcon class="w-5 h-5"/>
                 {{ 'traductions' }}
               </button>
-              <FormatDropdown class="cursor-pointer rounded-md" :format="format" v-model="format"/>
             </div>
             <div class="w-full sm:w-max">
               <button
@@ -351,6 +389,7 @@ const steps: string[] = [
                   @focus="$event.target.select()"
                   :language="textarea.lang"
                   :is-loaded="textarea.isLoaded"
+                  :format="format"
                   :title="`Traduction ${sourceLang.language} / ${textarea.lang.language}`"
               />
             </div>
