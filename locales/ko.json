@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "심층 JSON 번역",
+    "subtitle": "손쉬운 JSON 번역"
+  },
+  "textarea": {
+    "titleSourceLang": "언어",
+    "titleTranslatedLang": "번역 {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "번역",
+    "addTranslations": "번역",
+    "download": "다운로드",
+    "copyText": "텍스트가 복사되었습니다!",
+    "downloadText": "텍스트 다운로드!",
+    "waiting": "기다리는 중..."
+  },
+  "uploadFile": {
+    "title": "파일 선택 또는 드래그",
+    "format": ".json 형식"
+  },
+  "placeholder": {
+    "test": "안녕하세요",
+    "members":
+      {
+        "name": "딸기",
+        "age": "열여덟",
+        "secretIdentity": "전갈자리"
+      }
+      },
+  "errors": {
+    "jsonFormat": "잘못된 CSV 형식",
+    "downloadAllFilesJson": "JSON 형식 중 하나에 문제가 있습니다.",
+    "uploadWrongFormat": "잘못된 파일 형식"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "JSON 서식을 지정하는 데 문제가 있는 경우 몇 가지 팁을 참조하세요:",
+      "steps": {
+        "first": "괄호로 개체를 시작하고 끝내기",
+        "second": "''는 \"\"로 대체해야 합니다.",
+        "third": "마지막 줄을 제외하고 줄 끝에 쉼표를 넣는 것을 잊지 마세요.",
+        "forth": "다음은 도움이 되는 예시입니다:"
+      }
+    }
+  }
+}

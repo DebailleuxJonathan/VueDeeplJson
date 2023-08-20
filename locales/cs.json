@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON překlad",
+    "subtitle": "Snadný překlad json"
+  },
+  "textarea": {
+    "titleSourceLang": "Jazyk",
+    "titleTranslatedLang": "Překlad {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Přeložit",
+    "addTranslations": "překlady",
+    "download": "Stáhnout",
+    "copyText": "Zkopírovaný text!",
+    "downloadText": "Stáhněte si text!",
+    "waiting": "Čekání..."
+  },
+  "uploadFile": {
+    "title": "Výběr nebo přetažení souboru",
+    "format": "ve formátu .json"
+  },
+  "placeholder": {
+    "test": "Dobrý den,",
+    "members":
+      {
+        "name": "Jahody",
+        "age": "osmnáct",
+        "secretIdentity": "Štír"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Nesprávný formát CSV",
+    "downloadAllFilesJson": "Problém v jednom z formátů JSON",
+    "uploadWrongFormat": "Špatný formát souboru"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Pokud máte problémy s formátováním JSON, zde je několik tipů:",
+      "steps": {
+        "first": "Začínejte a ukončujte objekt závorkou",
+        "second": "Písmeno '' musí být nahrazeno \"\".",
+        "third": "Nezapomeňte na čárky na konci řádků, s výjimkou posledního řádku.",
+        "forth": "Zde je příklad, který vám pomůže:"
+      }
+    }
+  }
+}

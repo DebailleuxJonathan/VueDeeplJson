@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON käännös",
+    "subtitle": "Käännä json helposti"
+  },
+  "textarea": {
+    "titleSourceLang": "Kieli",
+    "titleTranslatedLang": "Käännös {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Käännä",
+    "addTranslations": "käännökset",
+    "download": "Lataa",
+    "copyText": "Teksti kopioitu!",
+    "downloadText": "Lataa teksti!",
+    "waiting": "Odotan..."
+  },
+  "uploadFile": {
+    "title": "Tiedoston valitseminen tai vetäminen",
+    "format": ".json-muodossa"
+  },
+  "placeholder": {
+    "test": "Hei",
+    "members":
+      {
+        "name": "Mansikka",
+        "age": "kahdeksantoista",
+        "secretIdentity": "Skorpioni"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Väärä CSV-muoto",
+    "downloadAllFilesJson": "Ongelma jossakin JSON-muodossa",
+    "uploadWrongFormat": "Väärä tiedostomuoto"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Jos sinulla on ongelmia JSON-muotoilussa, tässä on muutama vinkki:",
+      "steps": {
+        "first": "Aloita ja lopeta objektisi aaltosululla",
+        "second": "'' on korvattava sanalla \"\".",
+        "third": "Älä unohda pilkkuja rivien lopussa, paitsi viimeisellä rivillä.",
+        "forth": "Tässä on esimerkki, joka auttaa sinua:"
+      }
+    }
+  }
+}

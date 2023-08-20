@@ -1,0 +1,46 @@
+{
+  "header": {
+    "title": "Deepl JSON translation",
+    "subtitle": "Translate your json with ease"
+  },
+  "textarea": {
+    "titleSourceLang": "Language",
+    "titleTranslatedLang": "Translation {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Translate",
+    "addTranslations": "translations",
+    "download": "Download",
+    "copyText": "Text copied!",
+    "downloadText": "Download text!",
+    "waiting": "Waiting..."
+  },
+  "uploadFile": {
+    "title": "Select or drag a file",
+    "format": "in .json format"
+  },
+  "placeholder": {
+    "test": "Hello",
+    "members": {
+      "name": "Milling cutter",
+      "age": "eighteen",
+      "secretIdentity": "Scorpio"
+    }
+  },
+  "errors": {
+    "jsonFormat": "Incorrect CSV format",
+    "downloadAllFilesJson": "Problem in one of the JSON formats",
+    "uploadWrongFormat": "Wrong file format"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "If you're having trouble formatting your JSON, here are a few tips:",
+      "steps": {
+        "first": "Start and end your object with a brace",
+        "second": "The '' must be replaced by \"\".",
+        "third": "Don't forget the commas at the end of the lines, except for the last line.",
+        "forth": "Here's an example to help you:"
+      }
+    }
+  }
+}

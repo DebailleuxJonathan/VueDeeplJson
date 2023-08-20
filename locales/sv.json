@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON-översättning",
+    "subtitle": "Översätt din json med lätthet"
+  },
+  "textarea": {
+    "titleSourceLang": "Språk",
+    "titleTranslatedLang": "Översättning {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Översätt",
+    "addTranslations": "översättningar",
+    "download": "Nedladdning",
+    "copyText": "Text kopierad!",
+    "downloadText": "Ladda ner text!",
+    "waiting": "Väntar..."
+  },
+  "uploadFile": {
+    "title": "Markera eller dra en fil",
+    "format": "i .json-format"
+  },
+  "placeholder": {
+    "test": "Hej",
+    "members":
+      {
+        "name": "Jordgubbar",
+        "age": "arton",
+        "secretIdentity": "Skorpionen"
+      }
+  },
+  "errors": {
+    "jsonFormat": "Felaktigt CSV-format",
+    "downloadAllFilesJson": "Problem i ett av JSON-formaten",
+    "uploadWrongFormat": "Felaktigt filformat"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Om du har problem med att formatera din JSON får du några tips här:",
+      "steps": {
+        "first": "Börja och avsluta ditt objekt med ett stag",
+        "second": "\"\" måste ersättas med \"\".",
+        "third": "Glöm inte kommatecknen i slutet av raderna, med undantag för den sista raden.",
+        "forth": "Här är ett exempel som kan hjälpa dig:"
+      }
+    }
+  }
+}

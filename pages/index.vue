@@ -100,6 +100,8 @@ const updateTargetLang = async (lang: Languages, index: number) => {
   tagsListLanguages.value = listLanguages.value
 }
 
+const {t} = useI18n()
+
 const multipleTranslate = async () => {
   if (format.value === 'json') {
     try {
@@ -115,7 +117,7 @@ const multipleTranslate = async () => {
       isDisabled.value = false
     } catch (e) {
       errorJsonFormatCount.value++
-      errors.value.jsonFormat = 'Format du JSON incorrect'
+      errors.value.jsonFormat = t('errors.jsonFormat', {format: format.value})
     }
   } else if (format.value === 'csv') {
     try {
@@ -130,7 +132,7 @@ const multipleTranslate = async () => {
       }
       isDisabled.value = false
     } catch (e) {
-      errors.value.jsonFormat = 'Format du CSV incorrect'
+      errors.value.jsonFormat = t('errors.jsonFormat', {format: format.value})
     }
   }
 }
@@ -138,42 +140,42 @@ const multipleTranslate = async () => {
 const textareas: any = ref([])
 
 const tags: any = ref([])
-
-const objectToTranslate = {
-  "test": "Coucou",
-  "members": [
-    {
-      "name": "Abricot",
-      "age": "dix-neuf",
-      "secretIdentity": "Poisson",
-      "powers": [
-        {
-          "test": "Coucou",
-          "members": [
-            {
-              "name": "Fraise",
-              "age": "dix-huit",
-              "secretIdentity": "Scorpion",
-              "powers": [
-                "Saut",
-                "Pouvoir",
-                "Acrobate"
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+//
+// const objectToTranslate = {
+//   "test": "Coucou",
+//   "members":
+//     {
+//       "name": "Abricot",
+//       "age": "dix-neuf",
+//       "secretIdentity": "Poisson",
+//       "powers": [
+//         {
+//           "test": "Coucou",
+//           "members":
+//             {
+//               "name": "Fraise",
+//               "age": "dix-huit",
+//               "secretIdentity": "Scorpion",
+//               "powers": [
+//                 "Saut",
+//                 "Pouvoir",
+//                 "Acrobate"
+//               ]
+//             }
+//           ]
+//         }
+//       ]
+//     }
+//   ]
+// }
 
 const placeholder = {
-  "test": "Coucou",
+  "test": t('placeholder.test'),
   "members": [
     {
-      "name": "Fraise",
-      "age": "dix-huit",
-      "secretIdentity": "Scorpion"
+      "name": t('placeholder.members.name'),
+      "age": t('placeholder.members.age'),
+      "secretIdentity": t('placeholder.members.secretIdentity')
     }
   ]
 }
@@ -195,7 +197,7 @@ const totalJsonFile = computed(() => {
       return totalJson
     }
   } catch (e) {
-    alert("Problème dans l'un des formats JSON")
+    alert(t('errors.downloadAllFilesJson'))
   }
 })
 
@@ -221,7 +223,7 @@ const upload = (event: any) => {
         return format.value = 'csv'
     }
   } else {
-    alert('Mauvais format de fichier')
+    alert(t('errors.uploadWrongFormat'))
   }
 }
 
@@ -229,12 +231,12 @@ const scrollToElement = (element: HTMLElement) => {
   element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
 }
 
-const advertisement = 'Si vous rencontrez des difficultés pour formater votre JSON voilà quelques conseils :'
+const advertisement = t('notifications.jsonFormatError.advertisement')
 const steps: string[] = [
-  'Commencez votre objet par {}',
-  'Les \'\' doivent être remplacés par des ""',
-  'N\'oubliez pas les virgules à la fin des lignes sauf pour la dernière ligne',
-  'Voici un exemple pour vous aider: ',
+  t('notifications.jsonFormatError.steps.first'),
+  t('notifications.jsonFormatError.steps.second'),
+  t('notifications.jsonFormatError.steps.third'),
+  t('notifications.jsonFormatError.steps.forth'),
   `${JSON.stringify(placeholder, null, 2)}`
 ]
 
@@ -248,9 +250,12 @@ const steps: string[] = [
       title="Note:"
   />
   <div v-if="listLanguages?.length > 0" class="p-5">
-    <div class="w-full p-4 bg-gray-100 rounded-sm">
-      <h1 class="text-4xl font-bold">Traduction JSON Deepl</h1>
-      <p class="font-light">Traduisez vos json en toute simplicité</p>
+    <div class="w-full p-4 bg-gray-100 rounded-sm flex justify-between items-center">
+      <div class="w-full">
+        <h1 class="text-4xl font-bold">{{ $t('header.title') }}</h1>
+        <p class="font-light">{{ $t('header.subtitle') }}</p>
+      </div>
+      <LangSwitcher />
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
@@ -263,7 +268,7 @@ const steps: string[] = [
                 @update:lang="updateSourceLang"
                 :language="sourceLang"
                 :data="listLanguages"
-                title="Langue choisie"
+                :title="$t('textarea.titleSourceLang')"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
                 @input="errors.jsonFormat = ''"
             />
@@ -277,7 +282,7 @@ const steps: string[] = [
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
                   @click="multipleTranslate"
               >
-                Traduire
+                {{$t('buttons.translatedLang')}}
               </button>
               <button
                   :disabled="isDisabled || !(translatedLanguages.length - 2 < tagsListLanguages.length)"
@@ -286,9 +291,8 @@ const steps: string[] = [
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || !(translatedLanguages.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
               >
                 <PlusIcon class="w-5 h-5"/>
-                {{ 'traductions' }}
+                {{ $t('buttons.addTranslations') }}
               </button>
-              <FormatDropdown class="cursor-pointer rounded-md" :format="format" v-model="format"/>
             </div>
             <div class="w-full sm:w-max">
               <button
@@ -298,7 +302,7 @@ const steps: string[] = [
                   :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
               >
                 <ArrowDownTrayIcon class="w-5 h-5"/>
-                Télécharger
+                {{ $t('buttons.download') }}
               </button>
             </div>
           </div>
@@ -332,8 +336,8 @@ const steps: string[] = [
               >
               <div
                   class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
-                <p class="z-20">Sélectionner ou glisser un fichier</p>
-                <span class="z-20 text-xs">au format .json / .csv</span>
+                <p class="z-20">{{ $t('uploadFile.title') }}</p>
+                <span class="z-20 text-xs">{{ $t('uploadFile.format') }}</span>
               </div>
             </div>
           </div>
@@ -351,7 +355,7 @@ const steps: string[] = [
                   @focus="$event.target.select()"
                   :language="textarea.lang"
                   :is-loaded="textarea.isLoaded"
-                  :title="`Traduction ${sourceLang.language} / ${textarea.lang.language}`"
+                  :title="$t('textarea.titleTranslatedLang', {translatedLang: `${sourceLang.language} / ${textarea.lang.language}`})"
               />
             </div>
           </div>

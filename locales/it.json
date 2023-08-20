@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Traduzione JSON di Deepl",
+    "subtitle": "Tradurre il json con facilità"
+  },
+  "textarea": {
+    "titleSourceLang": "Lingua",
+    "titleTranslatedLang": "Traduzione {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Tradurre",
+    "addTranslations": "traduzioni",
+    "download": "Scaricare",
+    "copyText": "Testo copiato!",
+    "downloadText": "Scarica il testo!",
+    "waiting": "In attesa..."
+  },
+  "uploadFile": {
+    "title": "Selezione o trascinamento di un file",
+    "format": "in formato .json"
+  },
+  "placeholder": {
+    "test": "Ciao",
+    "members":
+      {
+        "name": "Fragola",
+        "age": "diciotto",
+        "secretIdentity": "Scorpione"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Formato CSV non corretto",
+    "downloadAllFilesJson": "Problema in uno dei formati JSON",
+    "uploadWrongFormat": "Formato di file errato"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Se avete problemi a formattare il vostro JSON, ecco alcuni suggerimenti:",
+      "steps": {
+        "first": "Iniziare e terminare l'oggetto con una parentesi graffa",
+        "second": "Il \"\" deve essere sostituito da \"\".",
+        "third": "Non dimenticate le virgole alla fine delle righe, tranne l'ultima.",
+        "forth": "Ecco un esempio per aiutarvi:"
+      }
+    }
+  }
+}

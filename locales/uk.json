@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Переклад Deepl JSON",
+    "subtitle": "Перекладайте json з легкістю"
+  },
+  "textarea": {
+    "titleSourceLang": "Мова",
+    "titleTranslatedLang": "Переклад {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Перекласти",
+    "addTranslations": "переклади",
+    "download": "Завантажити",
+    "copyText": "Текст скопійовано!",
+    "downloadText": "Завантажуйте текст!",
+    "waiting": "Чекаю..."
+  },
+  "uploadFile": {
+    "title": "Вибір або перетягування файлу",
+    "format": "у форматі .json"
+  },
+  "placeholder": {
+    "test": "Привіт.",
+    "members":
+      {
+        "name": "Полуничка.",
+        "age": "вісімнадцять",
+        "secretIdentity": "Скорпіон"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Неправильний формат CSV",
+    "downloadAllFilesJson": "Проблема в одному з форматів JSON",
+    "uploadWrongFormat": "Неправильний формат файлу"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Якщо у вас виникли проблеми з форматуванням JSON, ось кілька порад:",
+      "steps": {
+        "first": "Починайте і закінчуйте об'єкт дужкою",
+        "second": "Символ '' має бути замінено на \"\".",
+        "third": "Не забувайте про коми в кінці рядків, окрім останнього рядка.",
+        "forth": "Ось приклад, який вам допоможе:"
+      }
+    }
+  }
+}

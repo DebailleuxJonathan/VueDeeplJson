@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON fordítás",
+    "subtitle": "Fordítsa le jsonját könnyedén"
+  },
+  "textarea": {
+    "titleSourceLang": "Nyelv",
+    "titleTranslatedLang": "Fordítás {translatedLang}"
+  },
+  "buttons": {
+    "translatedLang": "Fordítsd le",
+    "addTranslations": "fordítások",
+    "download": "Letöltés",
+    "copyText": "Szöveg másolva!",
+    "downloadText": "Szöveg letöltése!",
+    "waiting": "Várunk..."
+  },
+  "uploadFile": {
+    "title": "Fájl kiválasztása vagy áthúzása",
+    "format": ".json formátumban"
+  },
+  "placeholder": {
+    "test": "Hello",
+    "members":
+      {
+        "name": "Eper",
+        "age": "tizennyolc",
+        "secretIdentity": "Skorpió"
+      }
+      },
+  "errors": {
+    "jsonFormat": "Helytelen CSV formátum",
+    "downloadAllFilesJson": "Probléma az egyik JSON formátumban",
+    "uploadWrongFormat": "Rossz fájlformátum"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "Ha gondjai vannak a JSON formázásával, íme néhány tipp:",
+      "steps": {
+        "first": "Kezdje és fejezze be az objektumot egy zárójelben",
+        "second": "A '' helyébe \"\" kell írni.",
+        "third": "Ne felejtsd el a vesszőket a sorok végén, kivéve az utolsó sort.",
+        "forth": "Íme egy példa, hogy segítsünk:"
+      }
+    }
+  }
+}

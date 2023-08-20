@@ -3,6 +3,9 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "moduleResolution": "node16"
+    "moduleResolution": "node16",
+    "types": [
+      "@nuxtjs/i18n",
+    ]
   }
 }

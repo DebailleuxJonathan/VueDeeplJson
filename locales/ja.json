@@ -1,0 +1,47 @@
+{
+  "header": {
+    "title": "Deepl JSON翻訳",
+    "subtitle": "jsonを簡単に翻訳"
+  },
+  "textarea": {
+    "titleSourceLang": "言語",
+    "titleTranslatedLang": "翻訳{translatedLang}。"
+  },
+  "buttons": {
+    "translatedLang": "翻訳する",
+    "addTranslations": "翻訳",
+    "download": "ダウンロード",
+    "copyText": "テキストをコピーした！",
+    "downloadText": "テキストをダウンロードする",
+    "waiting": "待っている..."
+  },
+  "uploadFile": {
+    "title": "ファイルの選択またはドラッグ",
+    "format": ".json 形式"
+  },
+  "placeholder": {
+    "test": "こんにちは",
+    "members":
+      {
+        "name": "ストロベリー",
+        "age": "エイティーン",
+        "secretIdentity": "蠍座"
+      }
+      },
+  "errors": {
+    "jsonFormat": "不適切なCSV形式",
+    "downloadAllFilesJson": "JSONフォーマットの1つに問題がある",
+    "uploadWrongFormat": "誤ったファイル形式"
+  },
+  "notifications": {
+    "jsonFormatError": {
+      "advertisement": "JSONのフォーマットに問題がある場合、ここにいくつかのヒントがあります：",
+      "steps": {
+        "first": "中括弧でオブジェクトを開始・終了する",
+        "second": "'」は「\"」に置き換えなければならない。",
+        "third": "最後の行を除き、行末のカンマをお忘れなく。",
+        "forth": "ここに例を挙げよう："
+      }
+    }
+  }
+}
