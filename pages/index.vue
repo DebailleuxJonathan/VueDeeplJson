@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import {useLanguages} from "~/composables/languages";
-import {ref, computed, onMounted} from "vue";
+import {ref, computed, onMounted, ComputedRef} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
@@ -232,16 +232,19 @@ const scrollToElement = (element: HTMLElement) => {
 }
 
 const advertisement = t('notifications.jsonFormatError.advertisement')
-const steps: string[] = [
-  t('notifications.jsonFormatError.steps.first'),
-  t('notifications.jsonFormatError.steps.second'),
-  t('notifications.jsonFormatError.steps.third'),
-  t('notifications.jsonFormatError.steps.forth'),
-  `${JSON.stringify(placeholder, null, 2)}`
-]
+const steps: ComputedRef<any> = computed(() => {
+  return [
+    t('notifications.jsonFormatError.steps.first'),
+    t('notifications.jsonFormatError.steps.second'),
+    t('notifications.jsonFormatError.steps.third'),
+    t('notifications.jsonFormatError.steps.forth'),
+    `${JSON.stringify(placeholder, null, 2)}`
+  ]
+})
 
 </script>
 <template>
+  <LangSwitcher />
   <ErrorPopup
       @reset-counter="() => errorJsonFormatCount = 0"
       :is-visible="errorJsonFormatCount > 1"
