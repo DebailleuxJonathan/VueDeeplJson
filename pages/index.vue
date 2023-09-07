@@ -5,7 +5,6 @@ import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
 import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
-import FormatDropdown from "~/components/FormatDropdown.vue";
 import Languages from "~/types/lang";
 import ErrorPopup from "~/components/ErrorPopup.vue";
 
@@ -244,7 +243,6 @@ const steps: ComputedRef<any> = computed(() => {
 
 </script>
 <template>
-  <LangSwitcher />
   <ErrorPopup
       @reset-counter="() => errorJsonFormatCount = 0"
       :is-visible="errorJsonFormatCount > 1"
@@ -252,8 +250,8 @@ const steps: ComputedRef<any> = computed(() => {
       :steps="steps"
       title="Note:"
   />
-  <div v-if="listLanguages?.length > 0" class="p-5">
-    <div class="w-full p-4 bg-gray-100 rounded-sm flex justify-between items-center">
+  <div v-if="listLanguages?.length > 0" class="p-5 dark:bg-gray-900">
+    <div class="w-full p-4 bg-gray-100 rounded-sm flex justify-between items-center dark:bg-gray-800 dark:text-white ">
       <div class="w-full">
         <h1 class="text-4xl font-bold">{{ $t('header.title') }}</h1>
         <p class="font-light">{{ $t('header.subtitle') }}</p>
@@ -282,7 +280,7 @@ const steps: ComputedRef<any> = computed(() => {
               <button
                   :disabled="isDisabled || !jsonText"
                   class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600 dark:border-blue-900 dark:bg-blue-700' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
                   @click="multipleTranslate"
               >
                 {{$t('buttons.translatedLang')}}
@@ -290,8 +288,8 @@ const steps: ComputedRef<any> = computed(() => {
               <button
                   :disabled="isDisabled || !(translatedLanguages.length - 2 < tagsListLanguages.length)"
                   @click="addTranslatedText"
-                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(translatedLanguages.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(translatedLanguages.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
               >
                 <PlusIcon class="w-5 h-5"/>
                 {{ $t('buttons.addTranslations') }}
@@ -301,8 +299,8 @@ const steps: ComputedRef<any> = computed(() => {
               <button
                   :disabled="isTextareasEmpty"
                   @click="downloadFile(totalJsonFile)"
-                  class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300"
-                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed'"
+                  class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300 dark:border-blue-900 dark:bg-blue-700"
+                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
               >
                 <ArrowDownTrayIcon class="w-5 h-5"/>
                 {{ $t('buttons.download') }}
@@ -315,13 +313,13 @@ const steps: ComputedRef<any> = computed(() => {
                   v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
                 <div v-if="textarea && sourceLang">
                   <div
-                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50">
+                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500">
                     {{ `${sourceLang.language} / ${textarea.lang.language}` }}
                     <span v-if="index === translatedLanguages.length - 1 && index > 1"
                           class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
                     <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 dark:bg-amber-600"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-amber-500 dark:bg-amber-700"></span>
                   </span>
                   </div>
                 </div>
@@ -329,7 +327,7 @@ const steps: ComputedRef<any> = computed(() => {
             </ul>
           </div>
           <div class="flex flex-col gap-4 mt-4">
-            <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow">
+            <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow dark:bg-amber-700 dark:border-amber-900 dark:text-white">
               <input
                   class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
                   ref="file"

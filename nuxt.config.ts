@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     i18n: {
         lazy: true,
         langDir: "locales",
-        strategy: 'prefix_and_default', // Stratégie d'URL pour la localisation
+        strategy: 'prefix_and_default',
         locales: [
             {
                 code: 'fr',
@@ -195,7 +195,7 @@ export default defineNuxtConfig({
                 file: 'zh.json'
             }
         ],
-        defaultLocale: 'fr', // Langue par défaut
+        detectBrowserLanguage: true,
     },
     postcss: {
         plugins: {
