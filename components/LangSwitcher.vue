@@ -11,7 +11,7 @@ const language = computed({
 
 <template>
   <div>
-    <select class="p-4" v-model="language">
+    <select class="p-4 rounded-sm dark:border dark:border-white dark:bg-gray-800" v-model="language">
       <option
           v-for="item in locales"
           :key="typeof item === 'object' ? item.code : item"
