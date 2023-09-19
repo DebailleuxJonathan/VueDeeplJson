@@ -1,7 +1,12 @@
 export default defineNuxtConfig({
     modules: [
         '@nuxtjs/i18n',
+        '@nuxtjs/tailwindcss',
+        '@nuxtjs/color-mode',
     ],
+    colorMode: {
+        classSuffix: '',
+    },
     css: ['~/assets/css/main.css'],
     i18n: {
         lazy: true,

@@ -5,8 +5,12 @@ import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
 import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
+import {SunIcon, MoonIcon} from "@heroicons/vue/24/solid"
 import Languages from "~/types/lang";
 import ErrorPopup from "~/components/ErrorPopup.vue";
+import Toggle from "~/components/Toggle.vue";
+
+const colorMode = useColorMode()
 
 const {fetchLanguages, data, getLang} = useLanguages()
 const {addTranslate} = useDeepl()
@@ -241,6 +245,16 @@ const steps: ComputedRef<any> = computed(() => {
   ]
 })
 
+const toggleIconsThemeMode = [SunIcon, MoonIcon]
+
+const setColorTheme = (themeMode) => {
+  colorMode.value = themeMode ? 'light' : 'dark'
+}
+
+watch(colorMode, () => {
+  console.log(colorMode)
+})
+
 </script>
 <template>
   <ErrorPopup
@@ -251,12 +265,20 @@ const steps: ComputedRef<any> = computed(() => {
       title="Note:"
   />
   <div v-if="listLanguages?.length > 0" class="p-5 dark:bg-gray-900">
-    <div class="w-full p-4 bg-gray-100 rounded-sm flex justify-between items-center dark:bg-gray-800 dark:text-white ">
-      <div class="w-full">
-        <h1 class="text-4xl font-bold">{{ $t('header.title') }}</h1>
-        <p class="font-light">{{ $t('header.subtitle') }}</p>
+    <div
+        class="w-full gap-3 p-4 bg-gray-100 rounded-sm flex flex-col justify-between items-center dark:bg-gray-800 dark:text-white ">
+      <div class="flex justify-between w-full">
+        <div class="w-full">
+          <h1 class="text-4xl font-bold">{{ $t('header.title') }}</h1>
+          <p class="font-light">{{ $t('header.subtitle') }}</p>
+        </div>
+        <div class="flex flex-col gap-2">
+          <LangSwitcher/>
+        </div>
       </div>
-      <LangSwitcher />
+      <div class="w-full flex justify-start">
+        <Toggle @toggleValue="setColorTheme" :icons="toggleIconsThemeMode" :value="colorMode.value === 'dark'"/>
+      </div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
@@ -283,7 +305,7 @@ const steps: ComputedRef<any> = computed(() => {
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600 dark:border-blue-900 dark:bg-blue-700' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
                   @click="multipleTranslate"
               >
-                {{$t('buttons.translatedLang')}}
+                {{ $t('buttons.translatedLang') }}
               </button>
               <button
                   :disabled="isDisabled || !(translatedLanguages.length - 2 < tagsListLanguages.length)"
@@ -327,7 +349,8 @@ const steps: ComputedRef<any> = computed(() => {
             </ul>
           </div>
           <div class="flex flex-col gap-4 mt-4">
-            <div class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow dark:bg-amber-700 dark:border-amber-900 dark:text-white">
+            <div
+                class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow dark:bg-amber-700 dark:border-amber-900 dark:text-white">
               <input
                   class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
                   ref="file"
@@ -365,3 +388,8 @@ const steps: ComputedRef<any> = computed(() => {
     </div>
   </div>
 </template>
+<style lang="postcss">
+body {
+  @apply min-h-screen bg-white dark:bg-gray-900
+}
+</style>
