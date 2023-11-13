@@ -45,17 +45,31 @@ export default defineEventHandler(async (e) => {
 
         await getWordTranslatable(body.text, body.targetLang)
 
-        const translatedText: translatedText = await $fetch('https://api-free.deepl.com/v2/translate', {
-            method: "post", params: {
-                auth_key: process.env.DEEPL_AUTH_KEY,
-                text: words,
-                source_lang: body.sourceLang,
-                target_lang: body.targetLang
+        const chunkArray = (array: any, size: number) => {
+            const chunkedArr = [];
+            for (let i = 0; i < array.length; i += size) {
+                chunkedArr.push(array.slice(i, i + size));
             }
-        })
+            return chunkedArr;
+        };
 
-        const translatedTextMap= translatedText.translations.map((trans) => trans.text)
-        const replaceJSONValuesWithArray = (json: any, splitTranslatedText: string[]) => {
+        const chunkedWords = chunkArray(words, 100);
+
+
+        const translateWords = async (wordChunk: string) => {
+            const translatedTexts = await $fetch('https://api-free.deepl.com/v2/translate', {
+                method: "post",
+                params: {
+                    auth_key: process.env.DEEPL_AUTH_KEY,
+                    text: wordChunk,
+                    source_lang: body.sourceLang,
+                    target_lang: body.targetLang
+                }
+            });
+            return translatedTexts.translations.map(translatedText => translatedText.text);
+        };
+
+        const replaceJSONValues = (json: any, splitTranslatedText: string[]) => {
             let index = 0;
             const translate = (obj: any) => {
                 for (const prop in obj) {
@@ -80,6 +94,15 @@ export default defineEventHandler(async (e) => {
             return json;
         };
 
-        return replaceJSONValuesWithArray(body.text, translatedTextMap)
+        const processChunks = async () => {
+            let allTranslatedText: string[] = [];
+            for (const chunk of chunkedWords) {
+                const translatedChunk = await translateWords(chunk);
+                allTranslatedText = allTranslatedText.concat(translatedChunk);
+            }
+            return replaceJSONValues(body.text, allTranslatedText);
+        };
+
+        return await processChunks();
     }
 })
