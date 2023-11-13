@@ -53,7 +53,7 @@ export default defineEventHandler(async (e) => {
             return chunkedArr;
         };
 
-        const chunkedWords = chunkArray(words, 100);
+        const chunkedWords = chunkArray(words, 75);
 
 
         const translateWords = async (wordChunk: string) => {
