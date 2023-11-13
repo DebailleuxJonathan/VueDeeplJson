@@ -57,7 +57,7 @@ export default defineEventHandler(async (e) => {
 
 
         const translateWords = async (wordChunk: string) => {
-            const translatedTexts = await $fetch('https://api.deepl.com/v2/translate', {
+            const translatedTexts: translatedText = await $fetch('https://api.deepl.com/v2/translate', {
                 method: "post",
                 params: {
                     auth_key: process.env.DEEPL_AUTH_KEY,
