@@ -39,17 +39,12 @@ onMounted(async () => {
       lang: await getLang(listLanguages.value, 'EN-GB'),
       text: '',
       isLoaded: true
-    },
-    {
-      lang: await getLang(listLanguages.value, 'ES'),
-      text: '',
-      isLoaded: true
     }
   ]
 
   sourceLang.value = await getLang(listLanguages.value, 'FR')
 
-  languagesUsed.value.push('FR', 'EN-GB', 'ES')
+  languagesUsed.value.push('FR', 'EN-GB')
   for (const languageUsed of languagesUsed.value) {
     removeLanguage(languageUsed)
   }
