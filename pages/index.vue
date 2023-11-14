@@ -9,11 +9,12 @@ import {SunIcon, MoonIcon} from "@heroicons/vue/24/solid"
 import Languages from "~/types/lang";
 import ErrorPopup from "~/components/ErrorPopup.vue";
 import Toggle from "~/components/Toggle.vue";
+import ProgressBar from "~/components/ProgressBar.vue";
 
 const colorMode = useColorMode()
 
 const {fetchLanguages, data, getLang} = useLanguages()
-const {addTranslate} = useDeepl()
+const {addTranslate, showUsage, fetchUsageDeepl} = useDeepl()
 const {downloadFile} = useDownloadFile()
 const {csvToJson} = useConvertToJson()
 
@@ -31,6 +32,7 @@ const languagesUsed = ref<string[]>([])
 
 onMounted(async () => {
   await fetchLanguages()
+  await fetchUsageDeepl()
   listLanguages.value = data.value
   tagsListLanguages.value = [...listLanguages.value]
 
@@ -246,10 +248,6 @@ const setColorTheme = (themeMode) => {
   colorMode.value = themeMode ? 'light' : 'dark'
 }
 
-watch(colorMode, () => {
-  console.log(colorMode)
-})
-
 </script>
 <template>
   <ErrorPopup
@@ -274,6 +272,9 @@ watch(colorMode, () => {
       <div class="w-full flex justify-start">
         <Toggle @toggleValue="setColorTheme" :icons="toggleIconsThemeMode" :value="colorMode.value === 'dark'"/>
       </div>
+    </div>
+    <div class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
+      <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit" />
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
