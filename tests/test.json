@@ -1,0 +1,8 @@
+{
+  "test": "Coucou {moi}",
+  "test2": "Merci {roi}",
+  "couleurs": [
+    "Rouge {rouge}",
+    "Bleu {bleu}"
+  ]
+}

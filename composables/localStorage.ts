@@ -1,5 +1,5 @@
 import {RemovableRef, useStorage} from "@vueuse/core";
-import Languages from "~/types/lang";
+import type {Languages} from "~/types/lang.js";
 
 const languages: RemovableRef<Languages[]> = useStorage('languages', [])
 

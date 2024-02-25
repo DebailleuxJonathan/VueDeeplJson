@@ -1,15 +1,15 @@
 <script setup lang='ts'>
 import {useLanguages} from "~/composables/languages";
-import {ref, computed, onMounted, ComputedRef} from "vue";
+import {ref, computed, onMounted} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
 import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
 import {SunIcon, MoonIcon} from "@heroicons/vue/24/solid"
-import Languages from "~/types/lang";
 import ErrorPopup from "~/components/ErrorPopup.vue";
 import Toggle from "~/components/Toggle.vue";
 import ProgressBar from "~/components/ProgressBar.vue";
+import type {Languages} from "~/types/lang.js";
 
 const colorMode = useColorMode()
 
@@ -92,7 +92,7 @@ const addTranslatedText = async () => {
   }, 50)
 }
 
-const updateTargetLang = async (lang: Languages, index: number) => {
+const updateTargetLang = async (lang: any, index: number) => {
   translatedLanguages.value[index].lang = await getLang(listLanguages.value, lang)
   let mapTranslatedLanguage = translatedLanguages.value.map(translatedLanguage => translatedLanguage.lang.language);
   const sortTranslatedLanguage = listLanguages.value.filter(objet => !mapTranslatedLanguage.includes(objet.language));
@@ -142,31 +142,29 @@ const textareas: any = ref([])
 const tags: any = ref([])
 //
 // const objectToTranslate = {
-//   "test": "Coucou",
-//   "members":
-//     {
-//       "name": "Abricot",
-//       "age": "dix-neuf",
-//       "secretIdentity": "Poisson",
-//       "powers": [
+// "test": "Coucou",
+//     "members":
+// {
+//   "name": "Abricot",
+//     "age": "dix-neuf",
+//     "secretIdentity": "Poisson",
+//     "powers": [
+//   {
+//     "test": "Coucou",
+//     "members":
 //         {
-//           "test": "Coucou",
-//           "members":
-//             {
-//               "name": "Fraise",
-//               "age": "dix-huit",
-//               "secretIdentity": "Scorpion",
-//               "powers": [
-//                 "Saut",
-//                 "Pouvoir",
-//                 "Acrobate"
-//               ]
-//             }
+//           "name": "Fraise",
+//           "age": "dix-huit",
+//           "secretIdentity": "Scorpion",
+//           "powers": [
+//             "Saut",
+//             "Pouvoir",
+//             "Acrobate"
 //           ]
 //         }
-//       ]
-//     }
-//   ]
+//   }
+// ]
+// }
 // }
 
 const placeholder = {
@@ -232,7 +230,7 @@ const scrollToElement = (element: HTMLElement) => {
 }
 
 const advertisement = t('notifications.jsonFormatError.advertisement')
-const steps: ComputedRef<any> = computed(() => {
+const steps: any = computed(() => {
   return [
     t('notifications.jsonFormatError.steps.first'),
     t('notifications.jsonFormatError.steps.second'),
@@ -244,7 +242,7 @@ const steps: ComputedRef<any> = computed(() => {
 
 const toggleIconsThemeMode = [SunIcon, MoonIcon]
 
-const setColorTheme = (themeMode) => {
+const setColorTheme = (themeMode: "light" | "dark") => {
   colorMode.value = themeMode ? 'light' : 'dark'
 }
 
@@ -384,7 +382,7 @@ const setColorTheme = (themeMode) => {
     </div>
   </div>
 </template>
-<style lang="postcss">
+<style>
 body {
   @apply min-h-screen bg-white dark:bg-gray-900
 }

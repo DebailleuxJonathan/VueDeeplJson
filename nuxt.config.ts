@@ -1,8 +1,9 @@
 export default defineNuxtConfig({
     modules: [
         '@nuxtjs/i18n',
-        '@nuxtjs/tailwindcss',
         '@nuxtjs/color-mode',
+        '@nuxt/test-utils/module',
+        '@nuxt/ui'
     ],
     colorMode: {
         classSuffix: '',
@@ -201,11 +202,5 @@ export default defineNuxtConfig({
             }
         ],
         detectBrowserLanguage: true,
-    },
-    postcss: {
-        plugins: {
-            tailwindcss: {},
-            autoprefixer: {},
-        },
     },
 })

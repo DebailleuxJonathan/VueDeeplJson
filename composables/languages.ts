@@ -1,5 +1,5 @@
 import {ref} from 'vue'
-import Languages from "~/types/lang";
+import type {Languages} from "~/types/lang.js";
 import useLocalStorage from "~/composables/localStorage";
 
 export const useLanguages = () => {

@@ -2,7 +2,7 @@
 import {ref, watch, computed} from "vue";
 import {ClipboardIcon, ArrowDownTrayIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
-import Languages from "~/types/lang";
+import type {Languages} from "~/types/lang.js";
 
 const props = withDefaults(defineProps<{
   language: any

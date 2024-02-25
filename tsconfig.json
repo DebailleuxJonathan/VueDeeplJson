@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node16",
     "types": [
-      "@nuxtjs/i18n",
+      "@nuxtjs/i18n"
     ]
   }
 }
