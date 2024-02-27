@@ -9,7 +9,7 @@ import {SunIcon, MoonIcon} from "@heroicons/vue/24/solid"
 import ErrorPopup from "~/components/ErrorPopup.vue";
 import Toggle from "~/components/Toggle.vue";
 import ProgressBar from "~/components/ProgressBar.vue";
-import type {Languages} from "~/types/lang.js";
+import type {Languages, TextareaLanguageConfigs} from "~/types/lang.js";
 
 const colorMode = useColorMode()
 
@@ -17,9 +17,11 @@ const {fetchLanguages, data, getLang} = useLanguages()
 const {addTranslate, showUsage, fetchUsageDeepl} = useDeepl()
 const {downloadFile} = useDownloadFile()
 const {csvToJson} = useConvertToJson()
+const toast = useToast()
+const {t} = useI18n()
 
-const translatedLanguages: any = ref([])
-const sourceLang: any = ref(null)
+const textAreaLanguageConfigs = ref<TextareaLanguageConfigs[]>([])
+const baseLanguage: any = ref(null)
 const jsonText = ref('')
 const errorJsonFormatCount = ref(0)
 const errors = ref<any>({
@@ -29,6 +31,8 @@ const isDisabled = ref(false)
 const listLanguages = ref<Languages[]>([])
 const tagsListLanguages = ref<Languages[]>([])
 const languagesUsed = ref<string[]>([])
+const countNotLoaded = ref(0);
+
 
 onMounted(async () => {
   await fetchLanguages()
@@ -36,7 +40,7 @@ onMounted(async () => {
   listLanguages.value = data.value
   tagsListLanguages.value = [...listLanguages.value]
 
-  translatedLanguages.value = [
+  textAreaLanguageConfigs.value = [
     {
       lang: await getLang(listLanguages.value, 'EN-GB'),
       text: '',
@@ -44,74 +48,79 @@ onMounted(async () => {
     }
   ]
 
-  sourceLang.value = await getLang(listLanguages.value, 'FR')
+  baseLanguage.value = await getLang(listLanguages.value, 'FR')
 
   languagesUsed.value.push('FR', 'EN-GB')
   for (const languageUsed of languagesUsed.value) {
-    removeLanguage(languageUsed)
+    removeLanguageFromTagsList(languageUsed)
   }
 })
 
-const removeLanguage = (languageUsed: string) => {
-  const remove = tagsListLanguages.value.findIndex(language => language.language === languageUsed)
+const removeLanguageFromTagsList = (languageUsed: string) => {
+  const remove = tagsListLanguages.value.findIndex(tagsListLanguage => tagsListLanguage.language === languageUsed)
   tagsListLanguages.value.splice(remove, 1)
 }
 
-const isTextareasEmpty = computed(() => {
-  for (let i = 0; i < translatedLanguages.value.length; i++) {
-    if (translatedLanguages.value[i].text !== '') {
+const removeTextArea = (id: number) => {
+  textAreaLanguageConfigs.value.splice(id, 1)
+}
+
+const isTextAreasEmpty = computed(() => {
+  for (let i = 0; i < textAreaLanguageConfigs.value.length; i++) {
+    if (textAreaLanguageConfigs.value[i].text !== '') {
       return false
     }
   }
   return true
 })
 
-const updateSourceLang = async (lang: string) => {
+const updateBaseLanguage = async (lang: string) => {
   if (listLanguages.value) {
-    sourceLang.value = await getLang(listLanguages.value, lang)
+    baseLanguage.value = await getLang(listLanguages.value, lang)
   }
 }
 
-const startIndex = ref(translatedLanguages.value.length)
+const startIndexByLength = ref(textAreaLanguageConfigs.value.length)
 
 const format = ref('json')
 
-const addTranslatedText = async () => {
-  languagesUsed.value.push(tagsListLanguages.value[startIndex.value].language)
+const addTextArea = async () => {
+  languagesUsed.value.push(tagsListLanguages.value[startIndexByLength.value].language)
 
-  translatedLanguages.value.push({
-    lang: tagsListLanguages.value[startIndex.value],
+  textAreaLanguageConfigs.value.push({
+    lang: tagsListLanguages.value[startIndexByLength.value],
     text: '',
     isLoaded: true
   })
 
-  startIndex.value++
+  startIndexByLength.value++
 
   setTimeout(() => {
-    scrollToElement(tags.value[startIndex.value + 1])
+    scrollToElement(tags.value[startIndexByLength.value + 1])
   }, 50)
 }
 
-const updateTargetLang = async (lang: any, index: number) => {
-  translatedLanguages.value[index].lang = await getLang(listLanguages.value, lang)
-  let mapTranslatedLanguage = translatedLanguages.value.map(translatedLanguage => translatedLanguage.lang.language);
+const updateTargetLanguage = async (lang: any, index: number) => {
+  textAreaLanguageConfigs.value[index].lang = await getLang(listLanguages.value, lang)
+  let mapTranslatedLanguage = textAreaLanguageConfigs.value.map(translatedLanguage => translatedLanguage.lang.language);
   const sortTranslatedLanguage = listLanguages.value.filter(objet => !mapTranslatedLanguage.includes(objet.language));
-  listLanguages.value = sortTranslatedLanguage.filter(objet => sourceLang.value.language !== objet.language);
+  listLanguages.value = sortTranslatedLanguage.filter(objet => baseLanguage.value.language !== objet.language);
   tagsListLanguages.value = listLanguages.value
 }
 
-const {t} = useI18n()
 
-const multipleTranslate = async () => {
+const submitTranslations = async () => {
+  toast.add({id: 'loading', title: 'En cours de traduction...', timeout: 0})
   if (format.value === 'json') {
     try {
-      for (const element of translatedLanguages.value) {
+      for (const element of textAreaLanguageConfigs.value) {
         const newJson = JSON.parse(jsonText.value)
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
+        const res = await addTranslate(newJson, baseLanguage.value.language, element.lang.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
+        countNotLoaded.value++
       }
       jsonText.value = JSON.stringify(JSON.parse(jsonText.value), null, 2)
       isDisabled.value = false
@@ -123,10 +132,10 @@ const multipleTranslate = async () => {
     try {
       const newJson = JSON.parse(csvToJson(jsonText.value))
       jsonText.value = JSON.stringify(newJson, null, 2)
-      for (const element of translatedLanguages.value) {
+      for (const element of textAreaLanguageConfigs.value) {
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, sourceLang.value.language, element.lang.language)
+        const res = await addTranslate(newJson, baseLanguage.value.language, element.lang.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
       }
@@ -135,9 +144,10 @@ const multipleTranslate = async () => {
       errors.value.jsonFormat = t('errors.jsonFormat', {format: format.value})
     }
   }
+  toast.remove('loading')
 }
 
-const textareas: any = ref([])
+const textAreasRef: any = ref([])
 
 const tags: any = ref([])
 //
@@ -183,13 +193,13 @@ const totalJsonFile = computed(() => {
   try {
     if (jsonText.value) {
       totalJson.push({
-        lang: sourceLang.value.language,
+        lang: baseLanguage.value.language,
         ...JSON.parse(jsonText.value)
       })
-      for (const el in translatedLanguages.value) {
+      for (const el in textAreaLanguageConfigs.value) {
         totalJson.push({
-          lang: translatedLanguages.value[el].lang.language,
-          ...JSON.parse(translatedLanguages.value[el].text)
+          lang: textAreaLanguageConfigs.value[el].lang.language,
+          ...JSON.parse(textAreaLanguageConfigs.value[el].text)
         })
       }
       return totalJson
@@ -272,21 +282,22 @@ const setColorTheme = (themeMode: "light" | "dark") => {
       </div>
     </div>
     <div class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
-      <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit" />
+      <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit"/>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
       <div class="w-full">
         <div class="sticky top-0">
           <div class="flex gap-3">
             <LangTextarea
-                v-if="sourceLang"
+                v-if="baseLanguage"
                 id="sourceLangTitle"
                 v-model="jsonText"
-                @update:lang="updateSourceLang"
-                :language="sourceLang"
+                @update:lang="updateBaseLanguage"
+                :language="baseLanguage"
                 :data="listLanguages"
                 :title="$t('textarea.titleSourceLang')"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
+                :can-be-delete="false"
                 @input="errors.jsonFormat = ''"
             />
           </div>
@@ -297,15 +308,15 @@ const setColorTheme = (themeMode: "light" | "dark") => {
                   :disabled="isDisabled || !jsonText"
                   class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
                   :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600 dark:border-blue-900 dark:bg-blue-700' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
-                  @click="multipleTranslate"
+                  @click="submitTranslations"
               >
                 {{ $t('buttons.translatedLang') }}
               </button>
               <button
-                  :disabled="isDisabled || !(translatedLanguages.length - 2 < tagsListLanguages.length)"
-                  @click="addTranslatedText"
+                  :disabled="isDisabled || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length)"
+                  @click="addTextArea"
                   class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(translatedLanguages.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
+                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
               >
                 <PlusIcon class="w-5 h-5"/>
                 {{ $t('buttons.addTranslations') }}
@@ -313,10 +324,10 @@ const setColorTheme = (themeMode: "light" | "dark") => {
             </div>
             <div class="w-full sm:w-max">
               <button
-                  :disabled="isTextareasEmpty"
+                  :disabled="isTextAreasEmpty"
                   @click="downloadFile(totalJsonFile)"
                   class="border w-full bg-blue-500 text-white rounded-lg cursor-pointer py-2 px-3 flex justify-center gap-3 hover:bg-blue-600 shadow transition-all duration-300 dark:border-blue-900 dark:bg-blue-700"
-                  :class="isTextareasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
+                  :class="isTextAreasEmpty && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
               >
                 <ArrowDownTrayIcon class="w-5 h-5"/>
                 {{ $t('buttons.download') }}
@@ -326,12 +337,12 @@ const setColorTheme = (themeMode: "light" | "dark") => {
           <div class="relative flex items-center w-full gap-3 top-0 z-40">
             <ul class="flex overflow-x-auto w-full">
               <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
-                  v-for="(textarea, index) in translatedLanguages" @click="scrollToElement(textareas[index])">
-                <div v-if="textarea && sourceLang">
+                  v-for="(textarea, index) in textAreaLanguageConfigs" @click="scrollToElement(textAreasRef[index])">
+                <div v-if="textarea && baseLanguage">
                   <div
                       class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500">
-                    {{ `${sourceLang.language} / ${textarea.lang.language}` }}
-                    <span v-if="index === translatedLanguages.length - 1 && index > 1"
+                    {{ `${baseLanguage.language} / ${textarea.lang.language}` }}
+                    <span v-if="index === textAreaLanguageConfigs.length - 1 && index > 1"
                           class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
                     <span
                         class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75 dark:bg-amber-600"></span>
@@ -363,17 +374,19 @@ const setColorTheme = (themeMode: "light" | "dark") => {
       </div>
       <div class="w-full">
         <div class="flex flex-col w-full">
-          <div :ref="el => { textareas[index] = el }" v-for="(textarea, index) in translatedLanguages">
-            <div v-if="textarea && sourceLang">
+          <div :ref="el => { textAreasRef[index] = el }" v-for="(textarea, index) in textAreaLanguageConfigs">
+            <div v-if="textarea && baseLanguage">
               <LangTextarea
                   v-if="textarea"
                   :data="listLanguages"
                   v-model="textarea.text"
-                  @update:lang="updateTargetLang($event, index)"
+                  @update:lang="updateTargetLanguage($event, index)"
                   @focus="$event.target.select()"
+                  @delete="removeTextArea(index)"
                   :language="textarea.lang"
                   :is-loaded="textarea.isLoaded"
-                  :title="$t('textarea.titleTranslatedLang', {translatedLang: `${sourceLang.language} / ${textarea.lang.language}`})"
+                  :can-be-delete="textAreaLanguageConfigs.length > 1"
+                  :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.lang.language}`})"
               />
             </div>
           </div>
@@ -381,6 +394,11 @@ const setColorTheme = (themeMode: "light" | "dark") => {
       </div>
     </div>
   </div>
+  <UNotifications>
+    <template #description>
+      <p>En cours {{ countNotLoaded }} / {{ startIndexByLength + 1 }}</p>
+    </template>
+  </UNotifications>
 </template>
 <style>
 body {
