@@ -1,7 +1,7 @@
 {
   "header": {
-    "title": "Deepl JSON翻訳",
-    "subtitle": "jsonを簡単に翻訳"
+    "title": "DevGlot",
+    "subtitle": "Just translate"
   },
   "textarea": {
     "titleSourceLang": "言語",

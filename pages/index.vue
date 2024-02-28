@@ -271,17 +271,18 @@ const setColorTheme = (themeMode: "light" | "dark") => {
     <div
         class="w-full gap-3 p-4 bg-gray-100 rounded-sm flex flex-col justify-between items-center dark:bg-gray-800 dark:text-white ">
       <div class="flex justify-between w-full">
-        <div class="w-full">
+        <div class="flex flex-col w-full justify-center">
           <h1 class="text-4xl font-bold">{{ $t('header.title') }}</h1>
           <p class="font-light">{{ $t('header.subtitle') }}</p>
         </div>
         <div class="flex flex-col gap-2">
           <LangSwitcher/>
+          <div class="w-full flex justify-end">
+            <Toggle @toggleValue="setColorTheme" :icons="toggleIconsThemeMode" :value="colorMode.value === 'dark'"/>
+          </div>
         </div>
       </div>
-      <div class="w-full flex justify-start">
-        <Toggle @toggleValue="setColorTheme" :icons="toggleIconsThemeMode" :value="colorMode.value === 'dark'"/>
-      </div>
+
     </div>
     <div class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
       <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit"/>
