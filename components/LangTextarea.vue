@@ -1,6 +1,6 @@
 <script setup lang='ts'>
-import {ref, watch, computed} from "vue";
-import {ClipboardIcon, ArrowDownTrayIcon, XMarkIcon} from "@heroicons/vue/24/outline"
+import {computed, ref, watch} from "vue";
+import {ArrowDownTrayIcon, ArrowPathRoundedSquareIcon, ClipboardIcon, XMarkIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
 import type {Languages} from "~/types/lang.js";
 
@@ -12,10 +12,12 @@ const props = withDefaults(defineProps<{
   placeholder?: string
   data: Languages[]
   canBeDelete?: boolean
+  canBeReformat?: boolean
 }>(), {
   isLoaded: true,
   placeholder: '',
-  canBeDelete: true
+  canBeDelete: true,
+  canBeReformat: false
 })
 
 const {downloadFile} = useDownloadFile()
@@ -72,29 +74,66 @@ const copy = async (text: string) => {
   isCopy.value = false
 }
 
+const correctJsonIncludingQuotes = (jsonString: string) => {
+  // Étape 1: Encapsule le JSON s'il manque des accolades
+  let correctedString = jsonString.trim();
+  if (!correctedString.startsWith('{')) {
+    correctedString = `{${correctedString}`;
+  }
+  if (!correctedString.endsWith('}')) {
+    correctedString += '}';
+  }
+
+  // Étape 2: Corrige les virgules supplémentaires et les guillemets manquants autour des clés
+  correctedString = correctedString.replace(/,\s*}/g, '}').replace(/,\s*\]/g, ']');
+  correctedString = correctedString.replace(/([{,]\s*)([^\s"{:]+)\s*:/g, '$1"$2":');
+
+  // Étape 3: Tente de corriger les valeurs avec des guillemets ouvrants non fermés
+  correctedString = correctedString.replace(/:\s*"([^"]*)$/gm, (_, match) => `: "${match}"`);
+  correctedString = correctedString.replace(/:\s*"([^"]*),\s*"/gm, (_, match) => `: "${match}", "`);
+
+  return correctedString;
+}
+
+const reformat = (text: string) => {
+  // Applique la correction améliorée
+  const correctedJson = correctJsonIncludingQuotes(text);
+  try {
+    // Tente de parser le JSON corrigé pour vérifier s'il est valide
+    const parsed = JSON.parse(correctedJson);
+    // Reformate le JSON valide pour une meilleure lisibilité
+    value.value = JSON.stringify(parsed, null, 2);
+  } catch (error) {
+    // Retourne le message d'erreur si le JSON corrigé est toujours invalide
+    return "Le JSON corrigé est toujours invalide : " + error;
+  }
+}
+
 </script>
 <template>
   <div v-if="props.language"
        class="z-10 flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-    <div class="flex justify-between items-center">
-      <div class="flex w-full justify-between items-center">
-        <h1 class="p-2">{{ props.title }}</h1>
-        <p v-if="isCopy" :class="isAnimationCopy && 'active'"
-           class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded dark:bg-amber-700">
-          {{ $t('buttons.copyText') }}</p>
-        <p v-if="isDownload" :class="isAnimationDownload && 'active'"
-           class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded dark:bg-blue-700">
-          {{ $t('buttons.downloadText') }}</p>
-        <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">
-          {{ $t('buttons.waiting') }}
-        </p>
+    <div>
+      <div class="flex justify-between items-center">
+        <div class="flex w-full justify-between items-center">
+          <h1 class="p-2">{{ props.title }}</h1>
+          <p v-if="isCopy" :class="isAnimationCopy && 'active'"
+             class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded dark:bg-amber-700">
+            {{ $t('buttons.copyText') }}</p>
+          <p v-if="isDownload" :class="isAnimationDownload && 'active'"
+             class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded dark:bg-blue-700">
+            {{ $t('buttons.downloadText') }}</p>
+          <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">
+            {{ $t('buttons.waiting') }}
+          </p>
+        </div>
+        <XMarkIcon v-if="canBeDelete" @click="emit('delete')" class="h-5 cursor-pointer"/>
       </div>
-      <XMarkIcon v-if="canBeDelete" @click="emit('delete')" class="h-5 cursor-pointer"/>
+      <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
     </div>
-    <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
 
     <div class="flex gap-3 flex-col">
-      <div class="flex gap-3 w-max">
+      <div class="flex gap-3 w-max items-center">
         <div class="flex flex-col gap-4 w-full justify-end items-center">
           <button
               :disabled="value === ''"
@@ -114,6 +153,17 @@ const copy = async (text: string) => {
               :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
           >
             <ArrowDownTrayIcon class="w-5 h-5"/>
+          </button>
+        </div>
+        <div v-if="props.canBeReformat" class="flex gap-2 w-full">
+          <button
+              class="w-max p-2 flex items-center gap-2 bg-purple-500 hover:bg-pruple-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-purple-900 dark:bg-purple-700"
+              @click="reformat(value)"
+              :disabled="value === ''"
+              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
+          >
+            <ArrowPathRoundedSquareIcon class="w-5 h-5"/>
+            <span class="text-sm">Formatter</span>
           </button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import {ref, computed, onMounted} from "vue";
 import useDeepl from "~/composables/useDeepl";
 import useDownloadFile from "~/composables/downloadFile";
 import useConvertToJson from "~/composables/convertToJson";
-import {ArrowDownTrayIcon, PlusIcon} from "@heroicons/vue/24/outline"
+import {ArrowDownTrayIcon, PlusIcon, ArrowUpTrayIcon} from "@heroicons/vue/24/outline"
 import {SunIcon, MoonIcon} from "@heroicons/vue/24/solid"
 import ErrorPopup from "~/components/ErrorPopup.vue";
 import Toggle from "~/components/Toggle.vue";
@@ -32,6 +32,7 @@ const listLanguages = ref<Languages[]>([])
 const tagsListLanguages = ref<Languages[]>([])
 const languagesUsed = ref<string[]>([])
 const countNotLoaded = ref(0);
+const isOpen = ref(false)
 
 
 onMounted(async () => {
@@ -96,7 +97,7 @@ const addTextArea = async () => {
   startIndexByLength.value++
 
   setTimeout(() => {
-    scrollToElement(tags.value[startIndexByLength.value + 1])
+    scrollToElement(tags.value[startIndexByLength.value])
   }, 50)
 }
 
@@ -233,6 +234,7 @@ const upload = (event: any) => {
   } else {
     alert(t('errors.uploadWrongFormat'))
   }
+  isOpen.value = false
 }
 
 const scrollToElement = (element: HTMLElement) => {
@@ -298,6 +300,7 @@ const setColorTheme = (themeMode: "light" | "dark") => {
                 :title="$t('textarea.titleSourceLang')"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
                 :can-be-delete="false"
+                :can-be-reformat="true"
                 @input="errors.jsonFormat = ''"
             />
           </div>
@@ -320,6 +323,13 @@ const setColorTheme = (themeMode: "light" | "dark") => {
               >
                 <PlusIcon class="w-5 h-5"/>
                 {{ $t('buttons.addTranslations') }}
+              </button>
+              <button
+                  @click="isOpen = true"
+                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
+              >
+                <ArrowUpTrayIcon class="w-5 h-5"/>
+                <span>Import</span>
               </button>
             </div>
             <div class="w-full sm:w-max">
@@ -353,23 +363,6 @@ const setColorTheme = (themeMode: "light" | "dark") => {
               </li>
             </ul>
           </div>
-          <div class="flex flex-col gap-4 mt-4">
-            <div
-                class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow dark:bg-amber-700 dark:border-amber-900 dark:text-white">
-              <input
-                  class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
-                  ref="file"
-                  accept='application/json, text/csv'
-                  @change="upload($event)"
-                  type="file"
-              >
-              <div
-                  class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
-                <p class="z-20">{{ $t('uploadFile.title') }}</p>
-                <span class="z-20 text-xs">{{ $t('uploadFile.format') }}</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="w-full">
@@ -394,6 +387,34 @@ const setColorTheme = (themeMode: "light" | "dark") => {
       </div>
     </div>
   </div>
+  <UModal v-model="isOpen">
+    <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            Importer votre fichier
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+        </div>
+      </template>
+      <div
+          class="relative h-56 bg-amber-50 border border-amber-300 rounded-md shadow dark:bg-amber-700 dark:border-amber-900 dark:text-white">
+        <input
+            class="cursor-pointer relative block opacity-0 z-10 h-full w-full"
+            ref="file"
+            accept='application/json, text/csv'
+            @change="upload($event)"
+            type="file"
+        >
+        <div
+            class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
+          <p class="z-20">{{ $t('uploadFile.title') }}</p>
+          <span class="z-20 text-xs">{{ $t('uploadFile.format') }}</span>
+        </div>
+
+      </div>
+    </UCard>
+  </UModal>
   <UNotifications>
     <template #description>
       <p>En cours {{ countNotLoaded }} / {{ startIndexByLength + 1 }}</p>
