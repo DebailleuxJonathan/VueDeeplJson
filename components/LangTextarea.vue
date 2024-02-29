@@ -1,6 +1,6 @@
 <script setup lang='ts'>
 import {computed, ref, watch} from "vue";
-import {ArrowDownTrayIcon, ArrowPathRoundedSquareIcon, ClipboardIcon, XMarkIcon} from "@heroicons/vue/24/outline"
+import {ArrowDownTrayIcon, ArrowPathRoundedSquareIcon, ClipboardIcon, TrashIcon} from "@heroicons/vue/24/outline"
 import useDownloadFile from "~/composables/downloadFile";
 import type {Languages} from "~/types/lang.js";
 
@@ -13,11 +13,13 @@ const props = withDefaults(defineProps<{
   data: Languages[]
   canBeDelete?: boolean
   canBeReformat?: boolean
+  isOpen: boolean
 }>(), {
   isLoaded: true,
   placeholder: '',
   canBeDelete: true,
-  canBeReformat: false
+  canBeReformat: false,
+  isOpen: true
 })
 
 const {downloadFile} = useDownloadFile()
@@ -34,6 +36,10 @@ watch(lang, () => {
   emit('update:lang', lang.value)
 })
 
+watch(props, () => {
+  lang.value = props.language
+  items.value.forEach((item) => item.defaultOpen = props.isOpen)
+})
 const value = computed({
   get() {
     return props.modelValue
@@ -109,77 +115,178 @@ const reformat = (text: string) => {
   }
 }
 
+const items = ref([{
+  slot: 'translate',
+  defaultOpen: props.isOpen
+}])
+
 </script>
 <template>
-  <div v-if="props.language"
+  <div v-if="lang"
        class="z-10 flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:text-white">
-    <div>
-      <div class="flex justify-between items-center">
-        <div class="flex w-full justify-between items-center">
-          <h1 class="p-2">{{ props.title }}</h1>
-          <p v-if="isCopy" :class="isAnimationCopy && 'active'"
-             class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded dark:bg-amber-700">
-            {{ $t('buttons.copyText') }}</p>
-          <p v-if="isDownload" :class="isAnimationDownload && 'active'"
-             class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded dark:bg-blue-700">
-            {{ $t('buttons.downloadText') }}</p>
-          <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">
-            {{ $t('buttons.waiting') }}
-          </p>
-        </div>
-        <XMarkIcon v-if="canBeDelete" @click="emit('delete')" class="h-5 cursor-pointer"/>
-      </div>
-      <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
-    </div>
+    <UAccordion :key="props.isOpen" :default-open="props.isOpen" :items="items">
+      <template #default="{ item, index, open }">
+        <UButton color="gray" variant="ghost" class="" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+          <span class="truncate text-md font-bold">{{props.title }}</span>
+          <template #trailing>
+            <div class="flex items-center gap-4 ms-auto">
+              <div class="h-9"></div>
+              <button
+                  v-if="props.canBeDelete"
+                  class="z-50 w-max p-2 bg-red-500 hover:bg-red-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-red-900 dark:bg-red-700"
+                  @click="emit('delete')"
+              >
+                <TrashIcon class="h-5 cursor-pointer"/>
+              </button>
+              <UIcon
+                  name="i-heroicons-chevron-right-20-solid"
+                  class="w-5 h-5 transform transition-transform duration-200"
+                  :class="[open && 'rotate-90']"
+              />
+            </div>
+          </template>
+        </UButton>
+      </template>
+      <template #translate>
+        <div
+            class="z-10 flex flex-col gap-6 w-full">
+          <div>
+            <div class="flex justify-between items-center">
+              <div class="flex w-full justify-between items-center">
+                <p v-if="isCopy" :class="isAnimationCopy && 'active'"
+                   class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded dark:bg-amber-700">
+                  {{ $t('buttons.copyText') }}</p>
+                <p v-if="isDownload" :class="isAnimationDownload && 'active'"
+                   class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded dark:bg-blue-700">
+                  {{ $t('buttons.downloadText') }}</p>
+                <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">
+                  {{ $t('buttons.waiting') }}
+                </p>
+              </div>
+            </div>
+            <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>
+          </div>
 
-    <div class="flex gap-3 flex-col">
-      <div class="flex gap-3 w-max items-center">
-        <div class="flex flex-col gap-4 w-full justify-end items-center">
-          <button
-              :disabled="value === ''"
-              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
-              class="w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-amber-900 dark:bg-amber-700"
-              @click="copy(value)"
-          >
-            <ClipboardIcon class="w-5 h-5"/>
-          </button>
+          <div class="flex gap-3 flex-col">
+            <div class="flex gap-3 w-max items-center">
+              <div class="flex flex-col gap-4 w-full justify-end items-center">
+                <button
+                    :disabled="value === ''"
+                    :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
+                    class="w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-amber-900 dark:bg-amber-700"
+                    @click="copy(value)"
+                >
+                  <ClipboardIcon class="w-5 h-5"/>
+                </button>
 
-        </div>
-        <div class="flex gap-2 w-full justify-end items-center">
-          <button
-              class="w-max p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-blue-900 dark:bg-blue-700"
-              @click="download"
-              :disabled="value === ''"
-              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
-          >
-            <ArrowDownTrayIcon class="w-5 h-5"/>
-          </button>
-        </div>
-        <div v-if="props.canBeReformat" class="flex gap-2 w-full">
-          <button
-              class="w-max p-2 flex items-center gap-2 bg-purple-500 hover:bg-pruple-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-purple-900 dark:bg-purple-700"
-              @click="reformat(value)"
-              :disabled="value === ''"
-              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
-          >
-            <ArrowPathRoundedSquareIcon class="w-5 h-5"/>
-            <span class="text-sm">Formatter</span>
-          </button>
-        </div>
-      </div>
-    </div>
+              </div>
+              <div class="flex gap-2 w-full justify-end items-center">
+                <button
+                    class="w-max p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-blue-900 dark:bg-blue-700"
+                    @click="download"
+                    :disabled="value === ''"
+                    :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
+                >
+                  <ArrowDownTrayIcon class="w-5 h-5"/>
+                </button>
+              </div>
+              <div v-if="props.canBeReformat" class="flex gap-2 w-full">
+                <button
+                    class="w-max p-2 flex items-center gap-2 bg-purple-500 hover:bg-pruple-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-purple-900 dark:bg-purple-700"
+                    @click="reformat(value)"
+                    :disabled="value === ''"
+                    :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"
+                >
+                  <ArrowPathRoundedSquareIcon class="w-5 h-5"/>
+                  <span class="text-sm">Formatter</span>
+                </button>
+              </div>
+            </div>
+          </div>
 
-    <div class="flex flex-col lg:flex-row gap-4 w-full">
+          <div class="flex flex-col lg:flex-row gap-4 w-full">
 
-      <div class="relative h-80 w-full">
-        <textarea
-            :placeholder="props.placeholder"
-            v-model="value"
-            type="json"
-            class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10 dark:text-white dark:bg-gray-700 dark:border-gray-700"
-        />
-      </div>
-    </div>
+            <div class="relative h-80 w-full">
+                <textarea
+                    :placeholder="props.placeholder"
+                    v-model="value"
+                    type="json"
+                    class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10 dark:text-white dark:bg-gray-700 dark:border-gray-700"
+                />
+            </div>
+          </div>
+        </div>
+
+      </template>
+    </UAccordion>
+
+    <!--    <div>-->
+    <!--      <div class="flex justify-between items-center">-->
+    <!--        <div class="flex w-full justify-between items-center">-->
+    <!--          <h1 class="p-2">{{ props.title }}</h1>-->
+    <!--          <p v-if="isCopy" :class="isAnimationCopy && 'active'"-->
+    <!--             class="pointer-events-none text-container text-sm p-2 bg-amber-500 text-white transition-all duration-300 rounded dark:bg-amber-700">-->
+    <!--            {{ $t('buttons.copyText') }}</p>-->
+    <!--          <p v-if="isDownload" :class="isAnimationDownload && 'active'"-->
+    <!--             class="pointer-events-none text-container text-sm p-2 bg-blue-500 text-white transition-all duration-300 rounded dark:bg-blue-700">-->
+    <!--            {{ $t('buttons.downloadText') }}</p>-->
+    <!--          <p v-if="!props.isLoaded" class="block text-sm font-medium leading-6 text-green-900">-->
+    <!--            {{ $t('buttons.waiting') }}-->
+    <!--          </p>-->
+    <!--        </div>-->
+    <!--        <XMarkIcon v-if="canBeDelete" @click="emit('delete')" class="h-5 cursor-pointer"/>-->
+    <!--      </div>-->
+    <!--      <LangDropdown :data="data" :title="props.title" :is-loaded="props.isLoaded" :lang="lang" v-model="lang"/>-->
+    <!--    </div>-->
+
+    <!--    <div class="flex gap-3 flex-col">-->
+    <!--      <div class="flex gap-3 w-max items-center">-->
+    <!--        <div class="flex flex-col gap-4 w-full justify-end items-center">-->
+    <!--          <button-->
+    <!--              :disabled="value === ''"-->
+    <!--              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"-->
+    <!--              class="w-max p-2 bg-amber-500 hover:bg-amber-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-amber-900 dark:bg-amber-700"-->
+    <!--              @click="copy(value)"-->
+    <!--          >-->
+    <!--            <ClipboardIcon class="w-5 h-5"/>-->
+    <!--          </button>-->
+
+    <!--        </div>-->
+    <!--        <div class="flex gap-2 w-full justify-end items-center">-->
+    <!--          <button-->
+    <!--              class="w-max p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-blue-900 dark:bg-blue-700"-->
+    <!--              @click="download"-->
+    <!--              :disabled="value === ''"-->
+    <!--              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"-->
+    <!--          >-->
+    <!--            <ArrowDownTrayIcon class="w-5 h-5"/>-->
+    <!--          </button>-->
+    <!--        </div>-->
+    <!--        <div v-if="props.canBeReformat" class="flex gap-2 w-full">-->
+    <!--          <button-->
+    <!--              class="w-max p-2 flex items-center gap-2 bg-purple-500 hover:bg-pruple-600 text-white rounded-md cursor-pointer shadow transition-all duration-300 dark:border-purple-900 dark:bg-purple-700"-->
+    <!--              @click="reformat(value)"-->
+    <!--              :disabled="value === ''"-->
+    <!--              :class="value === '' && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600'"-->
+    <!--          >-->
+    <!--            <ArrowPathRoundedSquareIcon class="w-5 h-5"/>-->
+    <!--            <span class="text-sm">Formatter</span>-->
+    <!--          </button>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <!--    <div class="flex flex-col lg:flex-row gap-4 w-full">-->
+
+    <!--      <div class="relative h-80 w-full">-->
+    <!--        <textarea-->
+    <!--            :placeholder="props.placeholder"-->
+    <!--            v-model="value"-->
+    <!--            type="json"-->
+    <!--            class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10 dark:text-white dark:bg-gray-700 dark:border-gray-700"-->
+    <!--        />-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 <style>

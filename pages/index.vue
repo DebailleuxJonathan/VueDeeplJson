@@ -258,6 +258,8 @@ const setColorTheme = (themeMode: "light" | "dark") => {
   colorMode.value = themeMode ? 'light' : 'dark'
 }
 
+const allOpen = ref(true)
+
 </script>
 <template>
   <ErrorPopup
@@ -287,7 +289,9 @@ const setColorTheme = (themeMode: "light" | "dark") => {
     <div class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
       <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit"/>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="w-full">
         <div class="sticky top-0">
           <div class="flex gap-3">
@@ -306,6 +310,9 @@ const setColorTheme = (themeMode: "light" | "dark") => {
             />
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
+          <div class="w-full flex mt-2">
+            <UButton color="gray" @click="() => allOpen = !allOpen">{{ allOpen ? "Tout cacher" : "Tout montrer" }}</UButton>
+          </div>
           <div class="flex flex-col w-full lg:flex-row gap-3 justify-between mt-4">
             <div class="w-full flex-wrap flex flex-col sm:flex-row gap-3">
               <button
@@ -380,6 +387,7 @@ const setColorTheme = (themeMode: "light" | "dark") => {
                   :language="textarea.lang"
                   :is-loaded="textarea.isLoaded"
                   :can-be-delete="textAreaLanguageConfigs.length > 1"
+                  :is-open="allOpen"
                   :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.lang.language}`})"
               />
             </div>
