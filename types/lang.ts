@@ -1,11 +1,13 @@
 export interface Languages {
     language: string
     name: string
-    supports_formality: boolean
+    supports_formality: boolean,
+    isUsed: boolean
 }
 
 export interface TextareaLanguageConfigs {
+    id: number
     isLoaded: boolean
-    lang: any
+    configs: any
     text: string
 }

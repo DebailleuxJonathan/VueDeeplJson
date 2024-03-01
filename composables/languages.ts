@@ -9,20 +9,25 @@ export const useLanguages = () => {
 
     const fetchLanguages = async () => {
         if (cachedData.length > 0) {
+            await cachedData.forEach((language: Languages) => language.isUsed = false)
             data.value = cachedData
         } else {
             const res = await $fetch('/api/languages', {
                 method: "get"
             })
 
+            await res.forEach((language: Languages) => language.isUsed = false)
             data.value = res
             languages.value = res
+            languages.value.forEach((language: Languages) => language.isUsed = false)
         }
     }
 
-    const getLang = async (res: any, lang: any) => {
-        if (res.length > 0) {
-            return res.find((key: Languages) => key.language === (typeof lang === "string" ? lang : lang.language))
+    const getLang = (lang: any) => {
+        if (languages.value.length > 0) {
+            const currentLanguage = languages.value.find((key: Languages) => key.language === (typeof lang === "string" ? lang : lang.language))
+            currentLanguage.isUsed = true
+            return currentLanguage
         }
     }
 

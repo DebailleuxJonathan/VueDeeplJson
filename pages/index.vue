@@ -10,6 +10,7 @@ import ErrorPopup from "~/components/ErrorPopup.vue";
 import Toggle from "~/components/Toggle.vue";
 import ProgressBar from "~/components/ProgressBar.vue";
 import type {Languages, TextareaLanguageConfigs} from "~/types/lang.js";
+import {isUsedLanguage, setUsedLanguage} from "~/composables/listLanguages.js";
 
 const colorMode = useColorMode()
 
@@ -30,7 +31,7 @@ const errors = ref<any>({
 const isDisabled = ref(false)
 const listLanguages = ref<Languages[]>([])
 const tagsListLanguages = ref<Languages[]>([])
-const languagesUsed = ref<string[]>([])
+// const languagesUsed = ref<string[]>([])
 const countNotLoaded = ref(0);
 const isOpen = ref(false)
 
@@ -38,33 +39,23 @@ const isOpen = ref(false)
 onMounted(async () => {
   await fetchLanguages()
   await fetchUsageDeepl()
-  listLanguages.value = data.value
-  tagsListLanguages.value = [...listLanguages.value]
+  listLanguages.value = await data.value
+  if (listLanguages.value) {
 
-  textAreaLanguageConfigs.value = [
-    {
-      lang: await getLang(listLanguages.value, 'EN-GB'),
-      text: '',
-      isLoaded: true
-    }
-  ]
+    textAreaLanguageConfigs.value = [
+      {
+        id: startIndexByLength.value,
+        configs: getLang('EN-GB'),
+        text: '',
+        isLoaded: true,
+      }
+    ]
 
-  baseLanguage.value = await getLang(listLanguages.value, 'FR')
+    baseLanguage.value = getLang('FR')
 
-  languagesUsed.value.push('FR', 'EN-GB')
-  for (const languageUsed of languagesUsed.value) {
-    removeLanguageFromTagsList(languageUsed)
+    tagsListLanguages.value = [...listLanguages.value.filter((language) => !language.isUsed)]
   }
 })
-
-const removeLanguageFromTagsList = (languageUsed: string) => {
-  const remove = tagsListLanguages.value.findIndex(tagsListLanguage => tagsListLanguage.language === languageUsed)
-  tagsListLanguages.value.splice(remove, 1)
-}
-
-const removeTextArea = (id: number) => {
-  textAreaLanguageConfigs.value.splice(id, 1)
-}
 
 const isTextAreasEmpty = computed(() => {
   for (let i = 0; i < textAreaLanguageConfigs.value.length; i++) {
@@ -75,9 +66,9 @@ const isTextAreasEmpty = computed(() => {
   return true
 })
 
-const updateBaseLanguage = async (lang: string) => {
+const updateBaseLanguage = (lang: string) => {
   if (listLanguages.value) {
-    baseLanguage.value = await getLang(listLanguages.value, lang)
+    baseLanguage.value = getLang(lang)
   }
 }
 
@@ -86,27 +77,49 @@ const startIndexByLength = ref(textAreaLanguageConfigs.value.length)
 const format = ref('json')
 
 const addTextArea = async () => {
-  languagesUsed.value.push(tagsListLanguages.value[startIndexByLength.value].language)
+  if (!isUsedLanguage(tagsListLanguages.value[startIndexByLength.value].language)) {
+    const uniqueId = Date.now()
+    textAreaLanguageConfigs.value.push({
+      id: uniqueId,
+      configs: tagsListLanguages.value[startIndexByLength.value],
+      text: '',
+      isLoaded: true
+    })
 
-  textAreaLanguageConfigs.value.push({
-    lang: tagsListLanguages.value[startIndexByLength.value],
-    text: '',
-    isLoaded: true
-  })
+    setUsedLanguage(textAreaLanguageConfigs.value[startIndexByLength.value + 1].configs.language, true)
+
+    setTimeout(() => {
+      scrollToElement(tags.value[startIndexByLength.value])
+    }, 50)
+  }
 
   startIndexByLength.value++
 
-  setTimeout(() => {
-    scrollToElement(tags.value[startIndexByLength.value])
-  }, 50)
 }
 
-const updateTargetLanguage = async (lang: any, index: number) => {
-  textAreaLanguageConfigs.value[index].lang = await getLang(listLanguages.value, lang)
-  let mapTranslatedLanguage = textAreaLanguageConfigs.value.map(translatedLanguage => translatedLanguage.lang.language);
-  const sortTranslatedLanguage = listLanguages.value.filter(objet => !mapTranslatedLanguage.includes(objet.language));
-  listLanguages.value = sortTranslatedLanguage.filter(objet => baseLanguage.value.language !== objet.language);
-  tagsListLanguages.value = listLanguages.value
+const removeTextArea = (id: number) => {
+  // console.log(textAreaLanguageConfigs.value[id])
+  // setUsedLanguage(textAreaLanguageConfigs.value[id]?.configs.language, false)
+
+  const index = textAreaLanguageConfigs.value.findIndex(ta => ta.id === id);
+  setUsedLanguage(textAreaLanguageConfigs.value[index]?.configs.language, false)
+  if (index !== -1) {
+    textAreaLanguageConfigs.value.splice(index, 1);
+  }
+
+  startIndexByLength.value--
+}
+
+const updateTargetLanguage = (lang: any, index: number) => {
+  const currentTextArea = textAreaLanguageConfigs.value.find((textArea) => textArea.id === index)
+  if (currentTextArea) {
+    currentTextArea.configs = getLang(lang)
+    let mapTranslatedLanguage = textAreaLanguageConfigs.value.map(translatedLanguage => translatedLanguage.configs.language);
+    const sortTranslatedLanguage = listLanguages.value.filter(objet => !mapTranslatedLanguage.includes(objet.language));
+    listLanguages.value = sortTranslatedLanguage.filter(objet => baseLanguage.value.language !== objet.language);
+    tagsListLanguages.value = listLanguages.value
+  }
+
 }
 
 
@@ -118,7 +131,7 @@ const submitTranslations = async () => {
         const newJson = JSON.parse(jsonText.value)
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, baseLanguage.value.language, element.lang.language)
+        const res = await addTranslate(newJson, baseLanguage.value.language, element.configs.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
         countNotLoaded.value++
@@ -136,7 +149,7 @@ const submitTranslations = async () => {
       for (const element of textAreaLanguageConfigs.value) {
         isDisabled.value = true
         element.isLoaded = false
-        const res = await addTranslate(newJson, baseLanguage.value.language, element.lang.language)
+        const res = await addTranslate(newJson, baseLanguage.value.language, element.configs.language)
         element.text = JSON.stringify(res, null, 2);
         element.isLoaded = true
       }
@@ -145,6 +158,7 @@ const submitTranslations = async () => {
       errors.value.jsonFormat = t('errors.jsonFormat', {format: format.value})
     }
   }
+  countNotLoaded.value = 0
   toast.remove('loading')
 }
 
@@ -199,7 +213,7 @@ const totalJsonFile = computed(() => {
       })
       for (const el in textAreaLanguageConfigs.value) {
         totalJson.push({
-          lang: textAreaLanguageConfigs.value[el].lang.language,
+          lang: textAreaLanguageConfigs.value[el].configs.language,
           ...JSON.parse(textAreaLanguageConfigs.value[el].text)
         })
       }
@@ -286,8 +300,9 @@ const allOpen = ref(true)
       </div>
 
     </div>
-    <div class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
-      <ProgressBar class="mr-auto" :value="showUsage.character_count" :max="showUsage.character_limit"/>
+    <div v-if="showUsage?.character_count"
+         class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
+      <ProgressBar class="mr-auto" :value="showUsage?.character_count" :max="showUsage.character_limit"/>
     </div>
 
 
@@ -311,7 +326,10 @@ const allOpen = ref(true)
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
           <div class="w-full flex mt-2">
-            <UButton color="gray" @click="() => allOpen = !allOpen">{{ allOpen ? "Tout cacher" : "Tout montrer" }}</UButton>
+            <UButton color="gray" @click="() => allOpen = !allOpen">{{
+                allOpen ? "Tout cacher" : "Tout montrer"
+              }}
+            </UButton>
           </div>
           <div class="flex flex-col w-full lg:flex-row gap-3 justify-between mt-4">
             <div class="w-full flex-wrap flex flex-col sm:flex-row gap-3">
@@ -358,8 +376,11 @@ const allOpen = ref(true)
                   v-for="(textarea, index) in textAreaLanguageConfigs" @click="scrollToElement(textAreasRef[index])">
                 <div v-if="textarea && baseLanguage">
                   <div
-                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500">
-                    {{ `${baseLanguage.language} / ${textarea.lang.language}` }}
+                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500"
+                  >
+                    <span v-if="textarea && textarea.configs && baseLanguage && baseLanguage.language">
+                      {{ `${baseLanguage.language} / ${textarea.configs.language}` }}
+                    </span>
                     <span v-if="index === textAreaLanguageConfigs.length - 1 && index > 1"
                           class="flex absolute h-3 w-3 top-0 right-0 -mt-1 -mr-1">
                     <span
@@ -375,23 +396,25 @@ const allOpen = ref(true)
       </div>
       <div class="w-full">
         <div class="flex flex-col w-full">
-          <div :ref="el => { textAreasRef[index] = el }" v-for="(textarea, index) in textAreaLanguageConfigs">
-            <div v-if="textarea && baseLanguage">
-              <LangTextarea
-                  v-if="textarea"
-                  :data="listLanguages"
-                  v-model="textarea.text"
-                  @update:lang="updateTargetLanguage($event, index)"
-                  @focus="$event.target.select()"
-                  @delete="removeTextArea(index)"
-                  :language="textarea.lang"
-                  :is-loaded="textarea.isLoaded"
-                  :can-be-delete="textAreaLanguageConfigs.length > 1"
-                  :is-open="allOpen"
-                  :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.lang.language}`})"
-              />
+          <transition-group name="list" tag="div">
+            <div class="transition-transform transform" :ref="el => { textAreasRef[index] = el }"
+                 v-for="(textarea, index) in textAreaLanguageConfigs">
+              <div v-if="textarea && baseLanguage">
+                <LangTextarea
+                    v-if="textarea"
+                    :data="listLanguages"
+                    v-model="textarea.text"
+                    @update:lang="updateTargetLanguage($event, textarea.id)"
+                    @delete="removeTextArea(textarea.id)"
+                    :language="textarea.configs"
+                    :is-loaded="textarea.isLoaded"
+                    :can-be-delete="textAreaLanguageConfigs.length > 1"
+                    :is-open="false"
+                    :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.configs.language}`})"
+                />
+              </div>
             </div>
-          </div>
+          </transition-group>
         </div>
       </div>
     </div>
@@ -403,7 +426,8 @@ const allOpen = ref(true)
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
             Importer votre fichier
           </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="isOpen = false" />
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                   @click="isOpen = false"/>
         </div>
       </template>
       <div
@@ -433,5 +457,18 @@ const allOpen = ref(true)
 <style>
 body {
   @apply min-h-screen bg-white dark:bg-gray-900
+}
+
+.list-enter-active, .list-leave-active {
+  transition: all 0.5s ease;
+  background: #0047e1;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.list-enter-to, .list-leave {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
