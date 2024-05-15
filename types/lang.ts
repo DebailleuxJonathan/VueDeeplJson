@@ -10,4 +10,5 @@ export interface TextareaLanguageConfigs {
     isLoaded: boolean
     configs: any
     text: string
+    isOpen: boolean
 }

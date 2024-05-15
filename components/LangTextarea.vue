@@ -123,7 +123,7 @@ const updateCurrentLanguage = (newLang: any)  => {
 </script>
 <template>
   <div v-if="currentLanguage"
-       class="group z-10 flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 p-4 border border-gray-100 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:text-white">
+       class="group z-10 flex flex-col gap-6 sm:mt-4 w-full bg-gray-50 px-3 border border-gray-100 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 dark:text-white">
     <UAccordion :key="props.isOpen" :default-open="props.isOpen" :items="items">
       <template #default="{ item, index, open }">
         <UButton color="gray" variant="ghost" class="" :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
@@ -204,8 +204,7 @@ const updateCurrentLanguage = (newLang: any)  => {
             </div>
           </div>
 
-          <div class="flex flex-col lg:flex-row gap-4 w-full">
-
+          <div class="flex flex-col gap-4 w-full">
             <div class="relative h-80 w-full">
                 <textarea
                     :placeholder="props.placeholder"
@@ -214,6 +213,7 @@ const updateCurrentLanguage = (newLang: any)  => {
                     class="w-full h-full border border-gray-200 rounded-lg py-1.5 pl-3 resize-none shadow-inner -z-10 dark:text-white dark:bg-gray-700 dark:border-gray-700"
                 />
             </div>
+            <slot />
           </div>
         </div>
 
