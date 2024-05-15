@@ -48,6 +48,7 @@ onMounted(async () => {
         configs: getLang('EN-GB'),
         text: '',
         isLoaded: true,
+        isOpen: true
       }
     ]
 
@@ -83,7 +84,8 @@ const addTextArea = async () => {
       id: uniqueId,
       configs: tagsListLanguages.value[startIndexByLength.value],
       text: '',
-      isLoaded: true
+      isLoaded: true,
+      isOpen: false
     })
 
     setUsedLanguage(textAreaLanguageConfigs.value[startIndexByLength.value + 1].configs.language, true)
@@ -98,8 +100,6 @@ const addTextArea = async () => {
 }
 
 const removeTextArea = (id: number) => {
-  // console.log(textAreaLanguageConfigs.value[id])
-  // setUsedLanguage(textAreaLanguageConfigs.value[id]?.configs.language, false)
 
   const index = textAreaLanguageConfigs.value.findIndex(ta => ta.id === id);
   setUsedLanguage(textAreaLanguageConfigs.value[index]?.configs.language, false)
@@ -272,7 +272,12 @@ const setColorTheme = (themeMode: "light" | "dark") => {
   colorMode.value = themeMode ? 'light' : 'dark'
 }
 
-const allOpen = ref(true)
+const allOpenState = ref(true)
+
+const allOpen = () => {
+  textAreaLanguageConfigs.value.forEach((config) => config.isOpen = allOpenState.value)
+  allOpenState.value = !allOpenState.value
+}
 
 </script>
 <template>
@@ -322,42 +327,34 @@ const allOpen = ref(true)
                 :can-be-delete="false"
                 :can-be-reformat="true"
                 @input="errors.jsonFormat = ''"
-            />
+            >
+              <div class="flex justify-end gap-3">
+                <button
+                    :disabled="isDisabled || !jsonText"
+                    class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
+                    :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600 dark:border-blue-900 dark:bg-blue-700' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
+                    @click="submitTranslations"
+                >
+                  {{ $t('buttons.translatedLang') }}
+                </button>
+                <button
+                    @click="isOpen = true"
+                    class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
+                >
+                  <ArrowUpTrayIcon class="w-5 h-5"/>
+                  <span>Import</span>
+                </button>
+              </div>
+            </LangTextarea>
           </div>
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
           <div class="w-full flex mt-2">
-            <UButton color="gray" @click="() => allOpen = !allOpen">{{
-                allOpen ? "Tout cacher" : "Tout montrer"
+            <UButton color="gray" @click="allOpen">{{
+                allOpenState ? "Tout montrer" : "Tout cacher"
               }}
             </UButton>
           </div>
-          <div class="flex flex-col w-full lg:flex-row gap-3 justify-between mt-4">
-            <div class="w-full flex-wrap flex flex-col sm:flex-row gap-3">
-              <button
-                  :disabled="isDisabled || !jsonText"
-                  class="border border-gray-200 rounded-lg cursor-pointer py-2 px-3 shadow"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || jsonText ? 'bg-blue-500 text-white hover:bg-blue-600 dark:border-blue-900 dark:bg-blue-700' : 'bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
-                  @click="submitTranslations"
-              >
-                {{ $t('buttons.translatedLang') }}
-              </button>
-              <button
-                  :disabled="isDisabled || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length)"
-                  @click="addTextArea"
-                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
-                  :class="isDisabled && 'bg-gray-50 cursor-wait' || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
-              >
-                <PlusIcon class="w-5 h-5"/>
-                {{ $t('buttons.addTranslations') }}
-              </button>
-              <button
-                  @click="isOpen = true"
-                  class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
-              >
-                <ArrowUpTrayIcon class="w-5 h-5"/>
-                <span>Import</span>
-              </button>
-            </div>
+          <div class="flex flex-col w-full lg:flex-row gap-3 justify-between mt-3">
             <div class="w-full sm:w-max">
               <button
                   :disabled="isTextAreasEmpty"
@@ -370,13 +367,22 @@ const allOpen = ref(true)
               </button>
             </div>
           </div>
-          <div class="relative flex items-center w-full gap-3 top-0 z-40">
-            <ul class="flex overflow-x-auto w-full">
+          <div class="relative flex items-center w-full gap-3 top-0 z-40 mt-3">
+            <button
+                :disabled="isDisabled || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length)"
+                @click="addTextArea"
+                class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
+                :class="isDisabled && 'bg-gray-50 cursor-wait' || !(textAreaLanguageConfigs.length - 2 < tagsListLanguages.length) && '!bg-gray-50 !text-gray-400 !cursor-not-allowed dark:!bg-gray-700 dark:!text-gray-600 dark:!border-gray-600'"
+            >
+              <PlusIcon class="w-5 h-5"/>
+              {{ $t('buttons.addTranslations') }}
+            </button>
+            <ul class="flex overflow-x-auto w-full py-2">
               <li :ref="el => { tags[index] = el }" class="pr-2 cursor-pointer"
                   v-for="(textarea, index) in textAreaLanguageConfigs" @click="scrollToElement(textAreasRef[index])">
                 <div v-if="textarea && baseLanguage">
                   <div
-                      class="w-max bg-white border border-gray-300 mt-4 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500"
+                      class="w-max bg-white border border-gray-300 px-4 py-2 rounded-lg relative inline-flex hover:bg-gray-50 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-500"
                   >
                     <span v-if="textarea && textarea.configs && baseLanguage && baseLanguage.language">
                       {{ `${baseLanguage.language} / ${textarea.configs.language}` }}
@@ -409,7 +415,7 @@ const allOpen = ref(true)
                     :language="textarea.configs"
                     :is-loaded="textarea.isLoaded"
                     :can-be-delete="textAreaLanguageConfigs.length > 1"
-                    :is-open="false"
+                    :is-open="textarea.isOpen"
                     :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.configs.language}`})"
                 />
               </div>
