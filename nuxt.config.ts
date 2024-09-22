@@ -5,6 +5,7 @@ export default defineNuxtConfig({
         '@nuxt/test-utils/module',
         '@nuxt/ui'
     ],
+    plugins: ['~/plugins/firebase.ts'],
     colorMode: {
         classSuffix: '',
     },
