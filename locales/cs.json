@@ -13,10 +13,14 @@
     "download": "Stáhnout",
     "copyText": "Zkopírovaný text!",
     "downloadText": "Stáhněte si text!",
-    "waiting": "Čekání..."
+    "waiting": "Čekání...",
+    "show": "Zobrazit všechny",
+    "hide": "Skrýt vše",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Výběr nebo přetažení souboru",
+    "title": "Importovat soubor",
+    "description": "Výběr nebo přetažení souboru",
     "format": "ve formátu .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Nezapomeňte na čárky na konci řádků, s výjimkou posledního řádku.",
         "forth": "Zde je příklad, který vám pomůže:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "V překladu..."
+    },
+    "ongoing": "Probíhá"
   }
 }

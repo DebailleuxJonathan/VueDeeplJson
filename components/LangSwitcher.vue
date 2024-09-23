@@ -1,24 +1,33 @@
 <script setup lang="ts">
-const { locales, locale, setLocale } = useI18n();
+import useLocalStorage from "~/composables/localStorage";
 
-const language = computed({
-  get: () => locale.value,
-  set: (value) => {
-    setLocale(value);
-  },
+const {locale, setLocale} = useI18n()
+const {languages, localeLanguage} = useLocalStorage()
+
+const formattedLanguages = ref(languages.value.map(lang => {
+  return { name: lang.name, value: lang.language.toLowerCase() };
+}))
+
+const language = computed(() => {
+ return formattedLanguages.value.find((language) => language.value.toLowerCase() === locale.value.toLowerCase())
 });
+
+const selectedOption = ref(language.value.value);
+
+const handleSelect = () => {
+  setLocale(selectedOption.value)
+  localeLanguage.value = selectedOption.value
+}
 </script>
 
 <template>
   <div>
-    <select class="p-4 rounded-sm dark:border dark:border-white dark:bg-gray-800" v-model="language">
-      <option
-          v-for="item in locales"
-          :key="typeof item === 'object' ? item.code : item"
-          :value="typeof item === 'object' ? item.code : item"
-      >
-        {{ typeof item === "object" ? item.name : item }}
-      </option>
-    </select>
+    <USelect
+        size="lg"
+        v-model="selectedOption"
+        :options="formattedLanguages"
+        option-attribute="name"
+        @change="handleSelect"
+    />
   </div>
 </template>

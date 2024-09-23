@@ -13,10 +13,14 @@
     "download": "Lae alla",
     "copyText": "Tekst kopeeritud!",
     "downloadText": "Lae alla tekst!",
-    "waiting": "Oodates..."
+    "waiting": "Oodates...",
+    "show": "Näita kõiki",
+    "hide": "Peida kõik ära",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Faili valimine või lohistamine",
+    "title": "Impordi oma faili",
+    "description": "Faili valimine või lohistamine",
     "format": ".json formaadis"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Ärge unustage komasid ridade lõpus, välja arvatud viimane rida.",
         "forth": "Siin on teile abiks näide:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Tõlkes..."
+    },
+    "ongoing": "Käimas"
   }
 }

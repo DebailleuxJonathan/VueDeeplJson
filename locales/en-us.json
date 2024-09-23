@@ -13,10 +13,14 @@
     "download": "Download",
     "copyText": "Text copied!",
     "downloadText": "Download text!",
-    "waiting": "Waiting..."
+    "waiting": "Waiting...",
+    "show": "Show all",
+    "hide": "Hide all",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Select or drag a file",
+    "title": "Import your file",
+    "description": "Select or drag a file",
     "format": "in .json format"
   },
   "placeholder": {
@@ -41,6 +45,10 @@
         "third": "Don't forget the commas at the end of the lines, except for the last line.",
         "forth": "Here's an example to help you:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "In translation..."
+    },
+    "ongoing": "In progress"
   }
 }

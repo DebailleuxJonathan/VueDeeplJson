@@ -13,10 +13,14 @@
     "download": "다운로드",
     "copyText": "텍스트가 복사되었습니다!",
     "downloadText": "텍스트 다운로드!",
-    "waiting": "기다리는 중..."
+    "waiting": "기다리는 중...",
+    "show": "모두 보기",
+    "hide": "모든 항목 숨기기",
+    "import": "가져오기"
   },
   "uploadFile": {
-    "title": "파일 선택 또는 드래그",
+    "title": "파일 가져오기",
+    "description": "파일 선택 또는 끌기",
     "format": ".json 형식"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "마지막 줄을 제외하고 줄 끝에 쉼표를 넣는 것을 잊지 마세요.",
         "forth": "다음은 도움이 되는 예시입니다:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "번역 중..."
+    },
+    "ongoing": "진행 중"
   }
 }

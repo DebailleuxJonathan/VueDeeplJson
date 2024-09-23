@@ -13,10 +13,14 @@
     "download": "İndir",
     "copyText": "Metin kopyalandı!",
     "downloadText": "Metni indirin!",
-    "waiting": "Bekliyorum."
+    "waiting": "Bekliyorum.",
+    "show": "Hepsini göster",
+    "hide": "Her şeyi saklayın",
+    "import": "İthalat"
   },
   "uploadFile": {
-    "title": "Dosya seçme veya sürükleme",
+    "title": "Dosyanızı içe aktarın",
+    "description": "Dosya seçme veya sürükleme",
     "format": ".json biçiminde"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Son satır hariç, satırların sonundaki virgülleri unutmayın.",
         "forth": "İşte size yardımcı olacak bir örnek:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Çeviride..."
+    },
+    "ongoing": "Devam ediyor"
   }
 }

@@ -9,14 +9,18 @@
   },
   "buttons": {
     "translatedLang": "Oversæt",
-    "addTranslations": "Oversættelser",
+    "addTranslations": "oversættelser",
     "download": "Download",
     "copyText": "Tekst kopieret!",
     "downloadText": "Download tekst!",
-    "waiting": "Venter..."
+    "waiting": "Venter...",
+    "show": "Vis alle",
+    "hide": "Skjul alting",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Vælge eller trække en fil",
+    "title": "Importer din fil",
+    "description": "Vælge eller trække en fil",
     "format": "i .json-format"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Glem ikke kommaerne i slutningen af linjerne, undtagen den sidste linje.",
         "forth": "Her er et eksempel, der kan hjælpe dig:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "I oversættelse..."
+    },
+    "ongoing": "Igangværende"
   }
 }

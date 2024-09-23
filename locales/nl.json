@@ -13,10 +13,14 @@
     "download": "Downloaden",
     "copyText": "Tekst gekopieerd!",
     "downloadText": "Tekst downloaden!",
-    "waiting": "Wachten..."
+    "waiting": "Wachten...",
+    "show": "Alles weergeven",
+    "hide": "Verberg alles",
+    "import": "Importeren"
   },
   "uploadFile": {
-    "title": "Een bestand selecteren of slepen",
+    "title": "Importeer je bestand",
+    "description": "Een bestand selecteren of slepen",
     "format": "in .json formaat"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Vergeet de komma's aan het einde van de regels niet, behalve de laatste regel.",
         "forth": "Hier is een voorbeeld om je te helpen:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "In vertaling..."
+    },
+    "ongoing": "In uitvoering"
   }
 }

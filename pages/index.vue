@@ -20,6 +20,9 @@ const {downloadFile} = useDownloadFile()
 const {csvToJson} = useConvertToJson()
 const toast = useToast()
 const {t} = useI18n()
+const user = useSupabaseUser()
+const client = useSupabaseClient()
+const router = useRouter()
 
 const textAreaLanguageConfigs = ref<TextareaLanguageConfigs[]>([])
 const baseLanguage: any = ref(null)
@@ -31,10 +34,8 @@ const errors = ref<any>({
 const isDisabled = ref(false)
 const listLanguages = ref<Languages[]>([])
 const tagsListLanguages = ref<Languages[]>([])
-// const languagesUsed = ref<string[]>([])
 const countNotLoaded = ref(0);
 const isOpen = ref(false)
-
 
 onMounted(async () => {
   await fetchLanguages()
@@ -124,7 +125,7 @@ const updateTargetLanguage = (lang: any, index: number) => {
 
 
 const submitTranslations = async () => {
-  toast.add({id: 'loading', title: 'En cours de traduction...', timeout: 0})
+  toast.add({id: 'loading', title: t('notifications.toast.ongoingTrad'), timeout: 0})
   if (format.value === 'json') {
     try {
       for (const element of textAreaLanguageConfigs.value) {
@@ -279,6 +280,16 @@ const allOpen = () => {
   allOpenState.value = !allOpenState.value
 }
 
+const handleLogout = async () => {
+  try {
+    const {error} = await client.auth.signOut()
+    await router.push('/login')
+    if (error) throw error
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 </script>
 <template>
   <ErrorPopup
@@ -305,6 +316,13 @@ const allOpen = () => {
       </div>
 
     </div>
+
+    <div
+        v-if="user"
+        class="w-full gap-3 p-4 bg-gray-100 rounded-sm flex items-center dark:bg-gray-800 dark:text-white mt-4">
+      <p>{{ user?.email }}</p>
+      <UButton @click="handleLogout">Logout</UButton>
+    </div>
     <div v-if="showUsage?.character_count"
          class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
       <ProgressBar class="mr-auto" :value="showUsage?.character_count" :max="showUsage.character_limit"/>
@@ -322,7 +340,7 @@ const allOpen = () => {
                 @update:lang="updateBaseLanguage"
                 :language="baseLanguage"
                 :data="listLanguages"
-                :title="$t('textarea.titleSourceLang')"
+                :title="t('textarea.titleSourceLang')"
                 :placeholder="'Ex: ' + JSON.stringify(placeholder, null, 2)"
                 :can-be-delete="false"
                 :can-be-reformat="true"
@@ -342,7 +360,7 @@ const allOpen = () => {
                     class="flex items-center justify-center border border-gray-200 rounded-lg cursor-pointer py-2 px-3 bg-white gap-3 hover:bg-gray-50 shadow dark:!bg-gray-700 dark:text-white dark:!border-gray-600 dark:hover:!bg-gray-500"
                 >
                   <ArrowUpTrayIcon class="w-5 h-5"/>
-                  <span>Import</span>
+                  <span>{{ t('buttons.import') }}</span>
                 </button>
               </div>
             </LangTextarea>
@@ -350,7 +368,7 @@ const allOpen = () => {
           <span v-if="errors?.jsonFormat" class="text-red-600">{{ errors.jsonFormat }}</span>
           <div class="w-full flex mt-2">
             <UButton color="gray" @click="allOpen">{{
-                allOpenState ? "Tout montrer" : "Tout cacher"
+                allOpenState ? t('buttons.show') : t('buttons.hide')
               }}
             </UButton>
           </div>
@@ -416,7 +434,7 @@ const allOpen = () => {
                     :is-loaded="textarea.isLoaded"
                     :can-be-delete="textAreaLanguageConfigs.length > 1"
                     :is-open="textarea.isOpen"
-                    :title="$t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.configs.language}`})"
+                    :title="t('textarea.titleTranslatedLang', {translatedLang: `${baseLanguage.language} / ${textarea.configs.language}`})"
                 />
               </div>
             </div>
@@ -430,7 +448,7 @@ const allOpen = () => {
       <template #header>
         <div class="flex items-center justify-between">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            Importer votre fichier
+            {{ t('uploadFile.title') }}
           </h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
                    @click="isOpen = false"/>
@@ -447,8 +465,8 @@ const allOpen = () => {
         >
         <div
             class="absolute text-center top-0 left-0 right-0 m-auto h-full flex flex-col justify-center pointer-events-none">
-          <p class="z-20">{{ $t('uploadFile.title') }}</p>
-          <span class="z-20 text-xs">{{ $t('uploadFile.format') }}</span>
+          <p class="z-20">{{ t('uploadFile.description') }}</p>
+          <span class="z-20 text-xs">{{ t('uploadFile.format') }}</span>
         </div>
 
       </div>
@@ -456,7 +474,7 @@ const allOpen = () => {
   </UModal>
   <UNotifications>
     <template #description>
-      <p>En cours {{ countNotLoaded }} / {{ startIndexByLength + 1 }}</p>
+      <p> {{ `${t('notifications.ongoing')} ${countNotLoaded} / ${startIndexByLength + 1}` }}</p>
     </template>
   </UNotifications>
 </template>
@@ -469,10 +487,12 @@ body {
   transition: all 0.5s ease;
   background: #0047e1;
 }
+
 .list-enter, .list-leave-to {
   opacity: 0;
   transform: translateY(10px);
 }
+
 .list-enter-to, .list-leave {
   opacity: 1;
   transform: translateY(0);

@@ -1,5 +1,3 @@
-import {aw} from "~/.output/public/_nuxt/entry.39823149";
-
 const useDeepl = () => {
     const showUsage = ref()
     const addTranslate: any = async (text: any, sourceLang: string, targetLang: string) => {

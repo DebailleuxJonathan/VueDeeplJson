@@ -13,10 +13,14 @@
     "download": "Unduh",
     "copyText": "Teks disalin!",
     "downloadText": "Unduh teks!",
-    "waiting": "Menunggu..."
+    "waiting": "Menunggu...",
+    "show": "Tampilkan semua",
+    "hide": "Sembunyikan semuanya",
+    "import": "Impor"
   },
   "uploadFile": {
-    "title": "Memilih atau menyeret file",
+    "title": "Impor file Anda",
+    "description": "Memilih atau menyeret file",
     "format": "dalam format .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Jangan lupa tanda koma di akhir baris, kecuali pada baris terakhir.",
         "forth": "Berikut adalah contoh untuk membantu Anda:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Dalam terjemahan..."
+    },
+    "ongoing": "Sedang berlangsung"
   }
 }

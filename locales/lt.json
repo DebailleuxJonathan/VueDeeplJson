@@ -13,10 +13,14 @@
     "download": "Atsisiųsti",
     "copyText": "Tekstas nukopijuotas!",
     "downloadText": "Atsisiųsti tekstą!",
-    "waiting": "Laukimas..."
+    "waiting": "Laukimas...",
+    "show": "Rodyti visus",
+    "hide": "Paslėpti viską",
+    "import": "Importas"
   },
   "uploadFile": {
-    "title": "Failo pasirinkimas arba vilkimas",
+    "title": "Importuokite failą",
+    "description": "Failo pasirinkimas arba vilkimas",
     "format": ".json formatu"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Nepamirškite kablelių eilučių pabaigoje, išskyrus paskutinę eilutę.",
         "forth": "Štai pavyzdys, kuris jums padės:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Vertimas..."
+    },
+    "ongoing": "Vykdoma"
   }
 }

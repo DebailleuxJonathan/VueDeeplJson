@@ -13,10 +13,14 @@
     "download": "Download",
     "copyText": "Kopierter Text!",
     "downloadText": "Text hochgeladen!",
-    "waiting": "In der Warteschleife..."
+    "waiting": "In der Warteschleife...",
+    "show": "Alles zeigen",
+    "hide": "Alles verbergen",
+    "import": "Importieren"
   },
   "uploadFile": {
-    "title": "Eine Datei auswählen oder ziehen",
+    "title": "Ihre Datei importieren",
+    "description": "Eine Datei auswählen oder ziehen",
     "format": "im .json-Format"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Vergessen Sie die Kommas am Ende der Zeilen nicht, außer in der letzten Zeile",
         "forth": "Hier ist ein Beispiel, das Ihnen helfen soll:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Wird gerade übersetzt..."
+    },
+    "ongoing": "In Arbeit"
   }
 }

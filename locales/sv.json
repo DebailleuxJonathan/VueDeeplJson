@@ -9,14 +9,18 @@
   },
   "buttons": {
     "translatedLang": "Översätt",
-    "addTranslations": "översättningar",
-    "download": "Nedladdning",
-    "copyText": "Text kopierad!",
+    "addTranslations": "Översättningar",
+    "download": "Nedladdningar",
+    "copyText": "Texten kopierad!",
     "downloadText": "Ladda ner text!",
-    "waiting": "Väntar..."
+    "waiting": "Väntar...",
+    "show": "Visa alla",
+    "hide": "Dölj allt",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Markera eller dra en fil",
+    "title": "Importera din fil",
+    "description": "Markera eller dra en fil",
     "format": "i .json-format"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Glöm inte kommatecknen i slutet av raderna, med undantag för den sista raden.",
         "forth": "Här är ett exempel som kan hjälpa dig:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "I översättning..."
+    },
+    "ongoing": "Pågående arbete"
   }
 }

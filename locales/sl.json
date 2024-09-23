@@ -13,10 +13,14 @@
     "download": "Prenesi",
     "copyText": "Besedilo je kopirano!",
     "downloadText": "Prenesi besedilo!",
-    "waiting": "Čakanje..."
+    "waiting": "Čakanje...",
+    "show": "Pokaži vse",
+    "hide": "Skrijte vse",
+    "import": "Uvoz"
   },
   "uploadFile": {
-    "title": "Izbira ali vlečenje datoteke",
+    "title": "Uvozite svojo datoteko",
+    "description": "Izbira ali vlečenje datoteke",
     "format": "v formatu .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Ne pozabite na vejice na koncu vrstic, razen v zadnji vrstici.",
         "forth": "V pomoč vam je naslednji primer:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "V prevodu..."
+    },
+    "ongoing": "V teku"
   }
 }

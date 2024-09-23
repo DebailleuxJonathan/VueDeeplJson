@@ -13,10 +13,14 @@
     "download": "Pobierz",
     "copyText": "Tekst skopiowany!",
     "downloadText": "Pobierz tekst!",
-    "waiting": "Czekam..."
+    "waiting": "Czekam...",
+    "show": "Pokaż wszystko",
+    "hide": "Ukryj wszystko",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Wybieranie lub przeciąganie pliku",
+    "title": "Importowanie pliku",
+    "description": "Wybieranie lub przeciąganie pliku",
     "format": "w formacie .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Nie zapomnij o przecinkach na końcu wierszy, z wyjątkiem ostatniego wiersza.",
         "forth": "Oto przykład, który może ci pomóc:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "W tłumaczeniu..."
+    },
+    "ongoing": "W toku"
   }
 }

@@ -8,15 +8,19 @@
     "titleTranslatedLang": "Traducere {translatedLang}"
   },
   "buttons": {
-    "translatedLang": "Traducere",
+    "translatedLang": "Tradu",
     "addTranslations": "traduceri",
-    "download": "Descărcați",
+    "download": "Descărcare",
     "copyText": "Text copiat!",
     "downloadText": "Descărcați textul!",
-    "waiting": "Așteptând..."
+    "waiting": "Aștept...",
+    "show": "Arată toate",
+    "hide": "Ascundeți totul",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Selectarea sau tragerea unui fișier",
+    "title": "Importați fișierul dvs.",
+    "description": "Selectarea sau glisarea unui fișier",
     "format": "în format .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Nu uitați de virgulele de la sfârșitul rândurilor, cu excepția ultimului rând.",
         "forth": "Iată un exemplu pentru a vă ajuta:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "În traducere..."
+    },
+    "ongoing": "În curs de desfășurare"
   }
 }
