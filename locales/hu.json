@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Probléma az egyik JSON formátumban",
     "uploadWrongFormat": "Rossz fájlformátum"
   },
+  "login": {
+    "labels": {
+      "email": "E-mail",
+      "password": "Jelszó",
+      "confirmPassword": "Jelszó megerősítése"
+    },
+    "redirect": {
+      "toLogin": "Ha még nincs fiókod ? Regisztráljon a",
+      "toRegister": "Van fiókja? Jelentkezzen be a"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Ha gondjai vannak a JSON formázásával, íme néhány tipp:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Fordításban..."
+      "ongoingTrad": "Fordításban...",
+      "wrongPassword": "A jelszavak nem egyeznek",
+      "registerSuccess": "Ellenőrizze e-mailjét a fiók megerősítéséhez"
     },
     "ongoing": "Folyamatban"
   }

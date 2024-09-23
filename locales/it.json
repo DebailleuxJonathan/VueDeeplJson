@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problema in uno dei formati JSON",
     "uploadWrongFormat": "Formato di file errato"
   },
+  "login": {
+    "labels": {
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confermare la password"
+    },
+    "redirect": {
+      "toLogin": "Se non hai ancora un account? Registratevi su",
+      "toRegister": "Avete un account? Accedete a"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Se avete problemi a formattare il vostro JSON, ecco alcuni suggerimenti:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "In traduzione..."
+      "ongoingTrad": "In traduzione...",
+      "wrongPassword": "Le password non corrispondono",
+      "registerSuccess": "Controllare l'e-mail per confermare l'account"
     },
     "ongoing": "In corso"
   }

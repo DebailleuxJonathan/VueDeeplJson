@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Težava v enem od formatov JSON",
     "uploadWrongFormat": "Napačen format datoteke"
   },
+  "login": {
+    "labels": {
+      "email": "E-pošta",
+      "password": "Geslo",
+      "confirmPassword": "Potrdite svoje geslo"
+    },
+    "redirect": {
+      "toLogin": "Če še nimate računa ? se registrirajte na",
+      "toRegister": "Imate račun? Prijavite se v"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Če imate težave z oblikovanjem JSON, vam ponujamo nekaj nasvetov:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "V prevodu..."
+      "ongoingTrad": "V prevodu...",
+      "wrongPassword": "Vaša gesla se ne ujemajo",
+      "registerSuccess": "Preverite svoje e-poštno sporočilo in potrdite svoj račun"
     },
     "ongoing": "V teku"
   }

@@ -61,8 +61,6 @@ export const sortBracketValue = async (text: string, body: any) => {
     const regex = /\{.*?\}/g;
     let matches = text.match(regex);
 
-    console.log(matches)
-
     if (matches) {
         let tempText = text;
         const placeholders: any = {};

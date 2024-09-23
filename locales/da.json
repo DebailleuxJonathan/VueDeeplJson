@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problem i et af JSON-formaterne",
     "uploadWrongFormat": "Forkert filformat"
   },
+  "login": {
+    "labels": {
+      "email": "E-mail",
+      "password": "Adgangskode",
+      "confirmPassword": "Bekræft din adgangskode"
+    },
+    "redirect": {
+      "toLogin": "Hvis du ikke har en konto endnu? Registrer dig på",
+      "toRegister": "Har du en konto? Log ind på"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Hvis du har problemer med at formatere din JSON, får du her et par tips:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "I oversættelse..."
+      "ongoingTrad": "I oversættelse...",
+      "wrongPassword": "Dine adgangskoder matcher ikke",
+      "registerSuccess": "Tjek din e-mail for at bekræfte din konto"
     },
     "ongoing": "Igangværende"
   }

@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Probleem in een van de JSON-indelingen",
     "uploadWrongFormat": "Verkeerd bestandsformaat"
   },
+  "login": {
+    "labels": {
+      "email": "E-mail",
+      "password": "Wachtwoord",
+      "confirmPassword": "Bevestig je wachtwoord"
+    },
+    "redirect": {
+      "toLogin": "Heb je nog geen account? Registreer je dan bij",
+      "toRegister": "Heb je een account? Log in op"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Als je problemen hebt met het formatteren van je JSON, zijn hier een paar tips:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "In vertaling..."
+      "ongoingTrad": "In vertaling...",
+      "wrongPassword": "Je wachtwoorden komen niet overeen",
+      "registerSuccess": "Controleer je e-mail om je account te bevestigen"
     },
     "ongoing": "In uitvoering"
   }

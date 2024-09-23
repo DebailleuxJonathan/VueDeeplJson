@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import type {Languages} from "~/types/lang.js";
+import {Languages} from "~/types/lang";
 import useLocalStorage from "~/composables/localStorage";
 import {isUsedLanguage} from "~/composables/listLanguages.js";
 
@@ -15,21 +15,6 @@ const {languages} = useLocalStorage()
 
 
 const currentLanguage = ref<Languages>(props.lang)
-
-// const availableLanguagesList = ref([])
-
-// const availableLanguages = computed<Languages[]>(() => {
-//   props.data.forEach((data) => {
-//     availableLanguagesList.value.push({
-//       language: data.language,
-//       name: `${data.language} - ${data.name}`,
-//       supports_formality: data.supports_formality,
-//       isUsed: data.isUsed
-//     })
-//   })
-//
-//   return availableLanguagesList.value
-// })
 
 const emit = defineEmits<{
   (event: 'update:lang', newLang: any): void

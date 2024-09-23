@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "JSONフォーマットの1つに問題がある",
     "uploadWrongFormat": "誤ったファイル形式"
   },
+  "login": {
+    "labels": {
+      "email": "電子メール",
+      "password": "パスワード",
+      "confirmPassword": "パスワードの確認"
+    },
+    "redirect": {
+      "toLogin": "まだアカウントをお持ちでない方は？登録はこちらから",
+      "toRegister": "アカウントをお持ちですか？ログイン"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "JSONのフォーマットに問題がある場合、ここにいくつかのヒントがあります：",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "翻訳すると..."
+      "ongoingTrad": "翻訳すると...",
+      "wrongPassword": "パスワードが一致しない",
+      "registerSuccess": "アカウントを確認するためにメールをチェックする"
     },
     "ongoing": "進行中"
   }

@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Проблем в един от форматите JSON",
     "uploadWrongFormat": "Неправилен файлов формат"
   },
+  "login": {
+    "labels": {
+      "email": "Имейл",
+      "password": "Парола",
+      "confirmPassword": "Потвърдете паролата си"
+    },
+    "redirect": {
+      "toLogin": "Ако все още нямате акаунт ? Регистрирайте се в",
+      "toRegister": "Имате ли акаунт? Влезте в"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Ако имате проблеми с форматирането на JSON, ето няколко съвета:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "В превод..."
+      "ongoingTrad": "В превод...",
+      "wrongPassword": "Паролите ви не съвпадат",
+      "registerSuccess": "Проверете имейла си, за да потвърдите акаунта си"
     },
     "ongoing": "В процес на изпълнение"
   }

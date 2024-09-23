@@ -1,6 +1,7 @@
 const useDeepl = () => {
     const showUsage = ref()
     const addTranslate: any = async (text: any, sourceLang: string, targetLang: string) => {
+        console.log(text)
         try {
             await fetchUsageDeepl()
             return await $fetch('/api/translate', {
@@ -20,7 +21,6 @@ const useDeepl = () => {
             showUsage.value = await $fetch('/api/usage', {
                 method: "get"
             })
-            console.log(showUsage.value)
         } catch (e) {
             console.log(e)
         }

@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problemă într-unul dintre formatele JSON",
     "uploadWrongFormat": "Format de fișier greșit"
   },
+  "login": {
+    "labels": {
+      "email": "E-mail",
+      "password": "Parolă",
+      "confirmPassword": "Confirmați parola"
+    },
+    "redirect": {
+      "toLogin": "Dacă nu aveți încă un cont ? Înregistrați-vă la",
+      "toRegister": "Aveți un cont? Conectați-vă la"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Dacă aveți probleme cu formatarea JSON, iată câteva sfaturi:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "În traducere..."
+      "ongoingTrad": "În traducere...",
+      "wrongPassword": "Parolele dvs. nu se potrivesc",
+      "registerSuccess": "Verificați e-mailul pentru a vă confirma contul"
     },
     "ongoing": "În curs de desfășurare"
   }
