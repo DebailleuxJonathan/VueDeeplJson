@@ -52,7 +52,9 @@ const signIn = async () => {
           Login
         </button>
       </form>
-      <div class="text-black cursor-pointer" @click="$router.push('/register')">Si vous n'avez pas encore de compte Inscrivez vous</div>
+      <div class="text-black cursor-pointer" @click="$router.push('/register')">Si vous n'avez pas encore de compte
+        Inscrivez vous
+      </div>
     </div>
   </div>
 </template>

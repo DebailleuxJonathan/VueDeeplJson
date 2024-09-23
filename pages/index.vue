@@ -20,6 +20,9 @@ const {downloadFile} = useDownloadFile()
 const {csvToJson} = useConvertToJson()
 const toast = useToast()
 const {t} = useI18n()
+const user = useSupabaseUser()
+const client = useSupabaseClient()
+const router = useRouter()
 
 const textAreaLanguageConfigs = ref<TextareaLanguageConfigs[]>([])
 const baseLanguage: any = ref(null)
@@ -31,10 +34,8 @@ const errors = ref<any>({
 const isDisabled = ref(false)
 const listLanguages = ref<Languages[]>([])
 const tagsListLanguages = ref<Languages[]>([])
-// const languagesUsed = ref<string[]>([])
 const countNotLoaded = ref(0);
 const isOpen = ref(false)
-
 
 onMounted(async () => {
   await fetchLanguages()
@@ -279,6 +280,16 @@ const allOpen = () => {
   allOpenState.value = !allOpenState.value
 }
 
+const handleLogout = async () => {
+  try {
+    const {error} = await client.auth.signOut()
+    await router.push('/login')
+    if (error) throw error
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 </script>
 <template>
   <ErrorPopup
@@ -304,6 +315,13 @@ const allOpen = () => {
         </div>
       </div>
 
+    </div>
+
+    <div
+        v-if="user"
+        class="w-full gap-3 p-4 bg-gray-100 rounded-sm flex items-center dark:bg-gray-800 dark:text-white mt-4">
+      <p>{{ user?.email }}</p>
+      <UButton @click="handleLogout">Logout</UButton>
     </div>
     <div v-if="showUsage?.character_count"
          class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">

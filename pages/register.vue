@@ -21,7 +21,7 @@ const signUp = async () => {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-      <h1 class="text-2xl font-semibold text-center mb-6">Login</h1>
+      <h1 class="text-2xl font-semibold text-center mb-6">Register</h1>
       <form @submit.prevent="signUp">
         <div class="mb-4">
           <label for="email" class="block text-sm font-medium text-gray-700">Email</label>

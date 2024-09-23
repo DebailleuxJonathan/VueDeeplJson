@@ -8,6 +8,6 @@ export default function useLocalStorage() {
 
     return {
         languages,
-        localeLanguage
+        localeLanguage,
     }
 }
