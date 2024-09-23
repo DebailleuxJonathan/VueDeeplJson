@@ -13,10 +13,14 @@
     "download": "Scaricare",
     "copyText": "Testo copiato!",
     "downloadText": "Scarica il testo!",
-    "waiting": "In attesa..."
+    "waiting": "In attesa...",
+    "show": "Mostra tutti",
+    "hide": "Nascondere tutto",
+    "import": "Importazione"
   },
   "uploadFile": {
-    "title": "Selezione o trascinamento di un file",
+    "title": "Importazione del file",
+    "description": "Selezione o trascinamento di un file",
     "format": "in formato .json"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Non dimenticate le virgole alla fine delle righe, tranne l'ultima.",
         "forth": "Ecco un esempio per aiutarvi:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "In traduzione..."
+    },
+    "ongoing": "In corso"
   }
 }

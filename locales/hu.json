@@ -13,10 +13,14 @@
     "download": "Letöltés",
     "copyText": "Szöveg másolva!",
     "downloadText": "Szöveg letöltése!",
-    "waiting": "Várunk..."
+    "waiting": "Várunk...",
+    "show": "Mindent megmutatni",
+    "hide": "Rejts el mindent",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Fájl kiválasztása vagy áthúzása",
+    "title": "Importálja a fájlt",
+    "description": "Fájl kiválasztása vagy áthúzása",
     "format": ".json formátumban"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Ne felejtsd el a vesszőket a sorok végén, kivéve az utolsó sort.",
         "forth": "Íme egy példa, hogy segítsünk:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Fordításban..."
+    },
+    "ongoing": "Folyamatban"
   }
 }

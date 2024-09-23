@@ -13,10 +13,14 @@
     "download": "Lejupielādēt",
     "copyText": "Kopēts teksts!",
     "downloadText": "Lejupielādēt tekstu!",
-    "waiting": "Gaidot..."
+    "waiting": "Gaidot...",
+    "show": "Rādīt visu",
+    "hide": "Paslēpt visu",
+    "import": "Importēt"
   },
   "uploadFile": {
-    "title": "Faila atlasīšana vai vilkšana",
+    "title": "Importējiet savu failu",
+    "description": "Faila atlasīšana vai vilkšana",
     "format": ".json formātā"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Neaizmirstiet par komatiem rindu beigās, izņemot pēdējo rindu.",
         "forth": "Šeit ir piemērs, kas jums palīdzēs:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Tulkojumā..."
+    },
+    "ongoing": "Izstrādes procesā"
   }
 }

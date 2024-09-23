@@ -13,10 +13,14 @@
     "download": "Télécharger",
     "copyText": "Texte copié !",
     "downloadText": "Texte téléchargé !",
-    "waiting": "En attente..."
+    "waiting": "En attente...",
+    "show": "Tout montrer",
+    "hide": "Tout cacher",
+    "import": "Importer"
   },
   "uploadFile": {
-    "title": "Sélectionner ou glisser un fichier",
+    "title": "Importer votre fichier",
+    "description": "Sélectionner ou glisser un fichier",
     "format": "au format .json"
   },
   "placeholder": {
@@ -41,6 +45,10 @@
         "third": "N'oubliez pas les virgules à la fin des lignes sauf pour la dernière ligne",
         "forth": "Voici un exemple pour vous aider:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "En cours de traduction..."
+    },
+    "ongoing": "En cours"
   }
 }

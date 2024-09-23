@@ -41,6 +41,10 @@
         "third": "Don't forget the commas at the end of the lines, except for the last line.",
         "forth": "Here's an example to help you:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "In translation..."
+    },
+    "ongoing": "In progress"
   }
 }

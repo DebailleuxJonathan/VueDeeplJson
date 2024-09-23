@@ -13,10 +13,14 @@
     "download": "下载",
     "copyText": "文本已复制！",
     "downloadText": "下载文本！",
-    "waiting": "等待..."
+    "waiting": "等待...",
+    "show": "显示全部",
+    "hide": "隐藏一切",
+    "import": "进口"
   },
   "uploadFile": {
-    "title": "选择或拖动文件",
+    "title": "导入文件",
+    "description": "选择或拖动文件",
     "format": ".json 格式"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "除了最后一行，别忘了行尾的逗号。",
         "forth": "这里有一个例子可以帮助您："
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "翻译..."
+    },
+    "ongoing": "进行中"
   }
 }

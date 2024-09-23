@@ -13,10 +13,14 @@
     "download": "Last ned",
     "copyText": "Tekst kopiert!",
     "downloadText": "Last ned tekst!",
-    "waiting": "Venter..."
+    "waiting": "Venter...",
+    "show": "Vis alle",
+    "hide": "Skjul alt",
+    "import": "Import"
   },
   "uploadFile": {
-    "title": "Velge eller dra en fil",
+    "title": "Importer filen din",
+    "description": "Velge eller dra en fil",
     "format": "i .json-format"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Ikke glem kommaene på slutten av linjene, med unntak av den siste linjen.",
         "forth": "Her er et eksempel som kan hjelpe deg:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "I oversettelse..."
+    },
+    "ongoing": "Pågående"
   }
 }

@@ -13,10 +13,14 @@
     "download": "Lataa",
     "copyText": "Teksti kopioitu!",
     "downloadText": "Lataa teksti!",
-    "waiting": "Odotan..."
+    "waiting": "Odotan...",
+    "show": "Näytä kaikki",
+    "hide": "Piilota kaikki",
+    "import": "Tuo"
   },
   "uploadFile": {
-    "title": "Tiedoston valitseminen tai vetäminen",
+    "title": "Tuo tiedostosi",
+    "description": "Tiedoston valitseminen tai vetäminen",
     "format": ".json-muodossa"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "Älä unohda pilkkuja rivien lopussa, paitsi viimeisellä rivillä.",
         "forth": "Tässä on esimerkki, joka auttaa sinua:"
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "Käännöksenä..."
+    },
+    "ongoing": "Käynnissä"
   }
 }

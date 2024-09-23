@@ -13,10 +13,14 @@
     "download": "ダウンロード",
     "copyText": "テキストをコピーした！",
     "downloadText": "テキストをダウンロードする",
-    "waiting": "待っている..."
+    "waiting": "待っている...",
+    "show": "すべて表示",
+    "hide": "すべてを隠す",
+    "import": "輸入"
   },
   "uploadFile": {
-    "title": "ファイルの選択またはドラッグ",
+    "title": "ファイルをインポートする",
+    "description": "ファイルの選択またはドラッグ",
     "format": ".json 形式"
   },
   "placeholder": {
@@ -42,6 +46,10 @@
         "third": "最後の行を除き、行末のカンマをお忘れなく。",
         "forth": "ここに例を挙げよう："
       }
-    }
+    },
+    "toast": {
+      "ongoingTrad": "翻訳すると..."
+    },
+    "ongoing": "進行中"
   }
 }
