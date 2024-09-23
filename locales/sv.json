@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problem i ett av JSON-formaten",
     "uploadWrongFormat": "Felaktigt filformat"
   },
+  "login": {
+    "labels": {
+      "email": "E-post",
+      "password": "Lösenord",
+      "confirmPassword": "Bekräfta ditt lösenord"
+    },
+    "redirect": {
+      "toLogin": "Om du inte har ett konto ännu ? Registrera dig på",
+      "toRegister": "Har du ett konto? Logga in på"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Om du har problem med att formatera din JSON får du några tips här:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "I översättning..."
+      "ongoingTrad": "I översättning...",
+      "wrongPassword": "Dina lösenord stämmer inte överens",
+      "registerSuccess": "Kontrollera din e-post för att bekräfta ditt konto"
     },
     "ongoing": "Pågående arbete"
   }

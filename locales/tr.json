@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "JSON biçimlerinden birinde sorun",
     "uploadWrongFormat": "Yanlış dosya biçimi"
   },
+  "login": {
+    "labels": {
+      "email": "E-posta",
+      "password": "Şifre",
+      "confirmPassword": "Şifrenizi onaylayın"
+    },
+    "redirect": {
+      "toLogin": "Henüz bir hesabınız yoksa ? Şu adresten kaydolun",
+      "toRegister": "Hesabınız var mı? Giriş yapın"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "JSON'unuzu biçimlendirmede sorun yaşıyorsanız, işte size birkaç ipucu:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Çeviride..."
+      "ongoingTrad": "Çeviride...",
+      "wrongPassword": "Şifreleriniz eşleşmiyor",
+      "registerSuccess": "Hesabınızı onaylamak için e-postanızı kontrol edin"
     },
     "ongoing": "Devam ediyor"
   }

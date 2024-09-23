@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Vieno iš JSON formatų problema",
     "uploadWrongFormat": "Neteisingas failo formatas"
   },
+  "login": {
+    "labels": {
+      "email": "El. paštas",
+      "password": "Slaptažodis",
+      "confirmPassword": "Patvirtinkite savo slaptažodį"
+    },
+    "redirect": {
+      "toLogin": "Jei dar neturite paskyros ? Užsiregistruokite",
+      "toRegister": "Ar turite paskyrą? Prisijunkite prie"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Jei kyla sunkumų formatuojant JSON, pateikiame keletą patarimų:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Vertimas..."
+      "ongoingTrad": "Vertimas...",
+      "wrongPassword": "Jūsų slaptažodžiai nesutampa",
+      "registerSuccess": "Patikrinkite savo el. paštą, kad patvirtintumėte paskyrą"
     },
     "ongoing": "Vykdoma"
   }

@@ -1,5 +1,5 @@
 import {createError, defineEventHandler, readBody, sendError} from "h3";
-import {chunkArray, processChunks} from "~/server/utils/translate/index";
+import {chunkArray, processChunks} from '../../utils/translate/index'
 
 export default defineEventHandler(async (e) => {
     const method = e.node.req.method

@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problēma kādā no JSON formātiem",
     "uploadWrongFormat": "Nepareizs faila formāts"
   },
+  "login": {
+    "labels": {
+      "email": "E-pasts",
+      "password": "Parole",
+      "confirmPassword": "Paroles apstiprināšana"
+    },
+    "redirect": {
+      "toLogin": "Ja jums vēl nav konta ? Reģistrējieties vietnē",
+      "toRegister": "Vai jums ir konts? Piesakieties"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Ja jums rodas problēmas ar JSON formatēšanu, šeit ir sniegti daži padomi:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Tulkojumā..."
+      "ongoingTrad": "Tulkojumā...",
+      "wrongPassword": "Jūsu paroles nesakrīt",
+      "registerSuccess": "Pārbaudiet savu e-pastu, lai apstiprinātu savu kontu"
     },
     "ongoing": "Izstrādes procesā"
   }

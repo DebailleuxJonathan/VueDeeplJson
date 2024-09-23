@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Problém v jednom z formátov JSON",
     "uploadWrongFormat": "Nesprávny formát súboru"
   },
+  "login": {
+    "labels": {
+      "email": "E-mail",
+      "password": "Heslo",
+      "confirmPassword": "Potvrdenie hesla"
+    },
+    "redirect": {
+      "toLogin": "Ak ešte nemáte účet ? Zaregistrujte sa na",
+      "toRegister": "Máte účet? Prihláste sa na"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Ak máte problémy s formátovaním JSON, tu je niekoľko tipov:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "V preklade..."
+      "ongoingTrad": "V preklade...",
+      "wrongPassword": "Vaše heslá sa nezhodujú",
+      "registerSuccess": "Skontrolujte svoj e-mail a potvrďte svoje konto"
     },
     "ongoing": "Prebieha"
   }

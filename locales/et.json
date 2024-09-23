@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Probleem ühes JSON-vormingus",
     "uploadWrongFormat": "Vale failiformaat"
   },
+  "login": {
+    "labels": {
+      "email": "E-post",
+      "password": "Parool",
+      "confirmPassword": "Kinnitage oma parool"
+    },
+    "redirect": {
+      "toLogin": "Kui sul ei ole veel kontot ? Registreeru aadressil",
+      "toRegister": "Kas teil on konto? Logi sisse aadressil"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Kui teil on probleeme oma JSONi vormindamisega, on siin mõned nõuanded:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Tõlkes..."
+      "ongoingTrad": "Tõlkes...",
+      "wrongPassword": "Teie paroolid ei sobi",
+      "registerSuccess": "Kontrollige oma e-posti aadressi, et kinnitada oma kontot"
     },
     "ongoing": "Käimas"
   }

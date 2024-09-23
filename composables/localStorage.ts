@@ -1,8 +1,8 @@
 import {RemovableRef, useStorage} from "@vueuse/core";
-import type {Languages} from "~/types/lang.js";
+import { Languages } from '~/types/lang'
 
 const languages: RemovableRef<Languages[]> = useStorage('languages', [])
-const localeLanguage: RemovableRef<Languages[]> = useStorage('localeLanguage', null)
+const localeLanguage: RemovableRef<string> = useStorage('localeLanguage', null)
 
 export default function useLocalStorage() {
 

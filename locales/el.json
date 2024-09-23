@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Πρόβλημα σε μία από τις μορφές JSON",
     "uploadWrongFormat": "Λάθος μορφή αρχείου"
   },
+  "login": {
+    "labels": {
+      "email": "Ηλεκτρονικό ταχυδρομείο",
+      "password": "Κωδικός πρόσβασης",
+      "confirmPassword": "Επιβεβαιώστε τον κωδικό πρόσβασής σας"
+    },
+    "redirect": {
+      "toLogin": "Αν δεν έχετε ακόμη λογαριασμό ? Εγγραφείτε στο",
+      "toRegister": "Έχετε λογαριασμό; Συνδεθείτε στο"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Αν έχετε πρόβλημα με τη μορφοποίηση του JSON σας, ακολουθούν μερικές συμβουλές:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Σε μετάφραση..."
+      "ongoingTrad": "Σε μετάφραση...",
+      "wrongPassword": "Οι κωδικοί σας δεν ταιριάζουν",
+      "registerSuccess": "Ελέγξτε το email σας για να επιβεβαιώσετε το λογαριασμό σας"
     },
     "ongoing": "Σε εξέλιξη"
   }

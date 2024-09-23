@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Ongelma jossakin JSON-muodossa",
     "uploadWrongFormat": "Väärä tiedostomuoto"
   },
+  "login": {
+    "labels": {
+      "email": "Sähköposti",
+      "password": "Salasana",
+      "confirmPassword": "Vahvista salasanasi"
+    },
+    "redirect": {
+      "toLogin": "Jos sinulla ei ole vielä tiliä ? Rekisteröidy osoitteessa",
+      "toRegister": "Onko sinulla tili? Kirjaudu sisään osoitteessa"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Jos sinulla on ongelmia JSON-muotoilussa, tässä on muutama vinkki:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Käännöksenä..."
+      "ongoingTrad": "Käännöksenä...",
+      "wrongPassword": "Salasanat eivät täsmää",
+      "registerSuccess": "Tarkista sähköpostisi vahvistaaksesi tilisi"
     },
     "ongoing": "Käynnissä"
   }

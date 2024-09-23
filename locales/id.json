@@ -37,6 +37,17 @@
     "downloadAllFilesJson": "Masalah dalam salah satu format JSON",
     "uploadWrongFormat": "Format file salah"
   },
+  "login": {
+    "labels": {
+      "email": "Email",
+      "password": "Kata sandi",
+      "confirmPassword": "Konfirmasikan kata sandi Anda"
+    },
+    "redirect": {
+      "toLogin": "Jika Anda belum memiliki akun? Daftar di",
+      "toRegister": "Apakah Anda memiliki akun? Masuk ke"
+    }
+  },
   "notifications": {
     "jsonFormatError": {
       "advertisement": "Jika Anda mengalami masalah dalam memformat JSON Anda, berikut adalah beberapa tips:",
@@ -48,7 +59,9 @@
       }
     },
     "toast": {
-      "ongoingTrad": "Dalam terjemahan..."
+      "ongoingTrad": "Dalam terjemahan...",
+      "wrongPassword": "Kata sandi Anda tidak cocok",
+      "registerSuccess": "Periksa email Anda untuk mengonfirmasi akun Anda"
     },
     "ongoing": "Sedang berlangsung"
   }
