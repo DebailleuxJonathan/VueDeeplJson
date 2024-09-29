@@ -286,7 +286,7 @@ onMounted(async () => {
         v-if="user"
         class="w-full gap-3 p-4 bg-gray-100 rounded-sm flex items-center dark:bg-gray-800 dark:text-white mt-4">
       <p>{{ user?.email }}</p>
-      <UButton @click="handleLogout">Logout</UButton>
+      <Button @click="handleLogout">Logout</Button>
     </div>
     <div v-if="showUsage?.character_count"
          class="w-full gap-3 p-4 bg-gray-100 rounded-sm mt-8 dark:bg-gray-800 dark:text-white">
