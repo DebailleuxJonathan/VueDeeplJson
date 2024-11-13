@@ -13,7 +13,7 @@ const props = withDefaults(defineProps<{
   data: Languages[]
   canBeDelete?: boolean
   canBeReformat?: boolean
-  isOpen: boolean
+  isOpen?: boolean
 }>(), {
   isLoaded: true,
   placeholder: '',

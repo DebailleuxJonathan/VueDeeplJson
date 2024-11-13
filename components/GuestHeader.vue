@@ -7,7 +7,7 @@
       <div class="relative flex justify-between h-16 mx-auto lg:container lg:px-16 xl:px-20">
         <div class="flex items-center justify-between px-6 lg:px-0 flex-1 sm:items-stretch">
           <div class="flex items-center">
-            <img class="w-24 h-24" src="/img/devglt_logo_dark_theme.png" alt="logo"/>
+            <Logo />
           </div>
           <div class="flex items-center gap-4">
             <NuxtLink to="/login">
