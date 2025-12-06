@@ -20,7 +20,7 @@ export const chunkArray = (array: string[], size: number) => {
 };
 
 export const translateWords = async (wordChunk: string, body: { sourceLang: string, targetLang: string }) => {
-    const translatedTexts: TranslatedText = await $fetch('https://api.deepl.com/v2/translate', {
+    const translatedTexts: TranslatedText = await $fetch('${process.env.DEEPL_URL}/translate', {
         method: "post",
         params: {
             auth_key: process.env.DEEPL_AUTH_KEY,
