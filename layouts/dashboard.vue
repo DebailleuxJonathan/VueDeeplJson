@@ -1,10 +1,12 @@
 <template>
   <div class="grid sm:flex items-start">
     <div>
-      <Sidebar />
+      <SidebarProvider>
+        <AppSidebar/>
+      </SidebarProvider>
     </div>
     <div class="h-screen w-full overflow-scroll p-4">
-      <slot />
+      <slot/>
     </div>
   </div>
 </template>
